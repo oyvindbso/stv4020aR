@@ -1,9 +1,12 @@
 #' ---
 #' title: "Seminar 1"
 #' author: "Martin Søyland"
-#' date: "`r format(Sys.time(), '%d %B, %Y')`"
-#' output: pdf_document
+#' output:
+#'   pdf_document: default
+#'   html_document: html_notebook
 #' urlcolor: cyan
+#' header-includes:
+#'     - \usepackage{setspace}\doublespacing
 #' ---
 #' 
 ## ----setup, include=FALSE------------------------------------------------
@@ -113,25 +116,65 @@ ABC[c(3,1,2)]
 
 
 #' 
-#' ## Datasett
-#' Det vi jobber mest med er to-dimensjonale dataset: variabler er kolonner, enheter er rader og hver celle er en verdi. Nedenfor laster vi inn et datasett vi kan jobbe med videre dette seminaret. Data er passasjerer fra Titanic og variabler på om de overlevde, klasse, pris, osv.
+#' ## Working directory og paths
+#' De fleste av dere kommer til å jobbe med data som ligger lokalt på datamaskinen deres. Det er derfor viktig at vi skjønner hvordan mappestrukturen på dataen er bygget opp (dette varier mellom mac/windows/linux). Hele tiden når vi skal "snakke" med filer i R, er det viktig å vite hvor i mappestrukturen R mener at vi befinner oss. Koden under får R til å vise oss hvor R jobber fra:
+## ----wd------------------------------------------------------------------
+getwd() # get working directory
+
 #' 
+#' Vi kan også endre dette (her er det viktig å skille mellom mac/windows/linux):
+#' 
+## ----setwd, eval=FALSE---------------------------------------------------
+## # Mac/Linux:
+## setwd("~/R/der/du/vil/jobbe/fra")
+## 
+## # Windows
+## setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")
+
+#' 
+#' Etter dette kan du sjekke hvilke filer og mapper som ligger i mappen du jobber fra -- da jobber vi med relative paths:
+## ----ls------------------------------------------------------------------
+list.files()
+
+# En mappe under:
+list.files("../")
+
+# En mappe under, og i mappen scripts
+list.files("../scripts")
+
+
+#' 
+#' Det kan være lurt å sette seg inn i jobbe med prosjekter (den blå kuben helt øverst til høyre i R-studio), men vi får dessverre ikke tid å gå gjennom det her.
+#' 
+#' ## Datasett
+#' Det vi jobber mest med er to-dimensjonale dataset: variabler er kolonner, enheter er rader og hver celle er en verdi. Nedenfor laster vi inn et datasett vi kan jobbe med videre dette seminaret. Data er passasjerer fra Titanic og variabler på om de overlevde, klasse, pris, osv. Dere kan enten laste ned data ved å skrive inn nettaddressen under i nettleseren og legge denne filen i mappen dere jobber fra:
+#' 
+## ----Titanic2, eval=FALSE------------------------------------------------
+## setwd("~/Der/du/vil/jobbe/fra")
+## 
+## passengers <- read.csv("titanic.csv")
+## 
+
+#' 
+#' Eller dere kan laste den direkte inn i R via linken:
 ## ----Titanic-------------------------------------------------------------
-data_url <- "https://folk.uio.no/martigso/stv4020/titanic.csv"
-passengers <- read.csv(data_url)
 
-class(passengers)
+passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv")
 
-head(passengers)
-# tail(passengers)
-colnames(passengers)
+#' 
+#' La oss se på noen helt basic funksjoner vi kan bruke på datasettet:
+## ----dataset_basic, eval=FALSE-------------------------------------------
+## class(passengers)
+## head(passengers)
+## tail(passengers)
+## colnames(passengers)
 
 #' 
 ## ----View, eval = FALSE--------------------------------------------------
 ## View(passengers) # Denne gir et vindu med data i.
 
 #' 
-#' Allerede nå er det kommet mange **funksjone** vi bruker. Funksjoner er en slags "sort-boks" vi sender informasjon til, for så å få ut det funksjonen er definert til å gi oss, gitt data vi putter inn. Funksjonen *head()* for eksempel er definert til å vise de første enhetene i en vektor, dataset, matrise eller tabell. Det er veldig nyttig å se på hjelpefilene til funksjonene man bruker:
+#' Allerede nå er det kommet mange **funksjoner** vi bruker. Funksjoner er en slags "sort-boks" vi sender informasjon til, for så å få ut det funksjonen er definert til å gi oss, gitt data vi putter inn. Funksjonen *head()* for eksempel er definert til å vise de første enhetene i en vektor, dataset, matrise eller tabell. Det er veldig nyttig å se på hjelpefilene til funksjonene man bruker:
 #' 
 ## ----Hjelp, eval = FALSE, tidy = FALSE-----------------------------------
 ## ?head
@@ -219,7 +262,7 @@ cor.test(passengers$age_cent, passengers$Survived, use = "complete.obs")
 #' 
 #' Også her må vi håndtere missingverdier (ref første linje over). Men med korrelasjon er det, som dere vet, forskjellige måter å håndere missing på: pairwise og listwise exclusion. Dette er ikke viktig med korrelasjon mellom bare to variabler, men med flere variabler er det viktig:
 #' 
-## ------------------------------------------------------------------------
+## ----korrelasjon_missing, results='hold'---------------------------------
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "complete.obs")
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "pairwise.complete.obs")
 
@@ -234,6 +277,10 @@ pass_reg <- lm(Survived ~ age_cent, data = passengers)
 summary(pass_reg)
 
 #' 
-#' Kan dere tenke dere noen variabler som er viktigere her?
+#' Kan dere tenke dere noen variabler som vi burde inkludere i denne regresjonen?
 #' 
+## ----ikketenkpådenne, eval=FALSE-----------------------------------------
+## knitr::purl("./docs/seminar1.Rmd", output = "./scripts/1seminar.R", documentation = 2)
+## 
+
 #' 
