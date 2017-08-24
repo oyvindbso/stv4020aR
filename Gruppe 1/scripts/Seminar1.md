@@ -227,7 +227,7 @@ x <- 3  # lager objektet x
 y <- 6  # lager objektet y
 z <- x + y  # man kan lage objekter fra andre objekter
 ```
-Når vi lager objekter, returnerer ikke R en verdi slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
+Når vi lager objekter, returnerer ikke R en verdi i Console slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
 
 ```r
 z
@@ -242,15 +242,6 @@ Vi kan også gi navn til objekter med ´=´. Jeg oppfordrer dere imidlertid inst
 Dersom dere ser i øverste vindu til høyre (global environment), ser dere fire linjer under values: R, x, y og z. Når vi oppretter et nytt objekt vises det her.
 
 
-### Navngivning av objekter
-Man kan spare mye tid og krefter på å gi lure navn til objekter. Her er noen regler, for flere tips, se [Stilguide for R](https://google.github.io/styleguide/Rguide.xml):
-
-* R er sensitivt til store og små bokstaver (Forsøk å kjøre Y). Min anbefaling er derfor: bruk små bokstaver så langt det er mulig.
-* Ikke gi objekter det samme navnet som en funksjon. Hvordan kan du teste om et navn ikke er brukt på en funksjon? 
-* Bruk meningsfulle, men ganske korte navn. 
-* Følg et system for navngivning *slavisk*. Eksempel:
-     + Skill mellom ord i et objektnavn med `_`
-     + Skill mellom ord i et variabelnavn med `.` 
 
 ### Vektorer:
 Det er mulig å opprette mange forskjellige objekttyper i R. Et naturlig steg videre fra å opprette objekter som representerer et enkelt tall, er å opprette en vektor. I R kan en vektor defineres som en ordnet liste av verdier, dvs. at verdiene kommer i en bestemt rekkefølge. Det finnes flere måter å lage vektorer på:
@@ -531,16 +522,16 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 
 ```
 ##    x  y           z     w q
-## 1  1  2 -1.81321095 tekst 1
-## 2  1  4  0.11128998 tekst 2
-## 3  1  6 -0.44735668 tekst 1
-## 4  1  8 -0.01762820 tekst 2
-## 5  1 10  0.08591139 tekst 1
-## 6  0 12  0.09948895 tekst 2
-## 7  0 14 -0.96398981 tekst 1
-## 8  0 16 -1.27409135 tekst 2
-## 9  0 18  0.71641818 tekst 1
-## 10 0 20  0.05563350 tekst 2
+## 1  1  2 -0.76973742 tekst 1
+## 2  1  4  0.58337775 tekst 2
+## 3  1  6 -0.81623555 tekst 1
+## 4  1  8 -0.76783117 tekst 2
+## 5  1 10  1.86004586 tekst 1
+## 6  0 12 -0.56941930 tekst 2
+## 7  0 14 -1.19430057 tekst 1
+## 8  0 16 -1.08030378 tekst 2
+## 9  0 18  0.06598191 tekst 1
+## 10 0 20 -1.46649690 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 

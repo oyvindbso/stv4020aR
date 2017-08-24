@@ -36,6 +36,16 @@ Sammen med meningsfulle overskrifter, et innebygget søkesystem og godt kommente
 
 Jeg anbefaler at dere starter R script med en overskrift, samt en kort beskrivelse av R scriptet etter headingen deres ved hjelp av `#`. 
 
+### Navngivning
+Man kan spare mye tid og krefter på å gi lure navn til objekter. Her er noen regler, for flere tips, se [Stilguide for R](https://google.github.io/styleguide/Rguide.xml):
+
+* R er sensitivt til store og små bokstaver (Forsøk å kjøre Y). Min anbefaling er derfor: bruk små bokstaver så langt det er mulig.
+* Ikke gi objekter det samme navnet som en funksjon. Hvordan kan du teste om et navn ikke er brukt på en funksjon? 
+* Bruk meningsfulle, men ganske korte navn. 
+* Følg et system for navngivning *slavisk*. Eksempel:
+     + Skill mellom ord i et objektnavn med `_`
+     + Skill mellom ord i et variabelnavn med `.` 
+
 ### Renske R.
 Dersom vi skal kjøre et nytt script, er det ofte ønskelig å fjerne objekter/arbeid fra andre script vi jobber med. Dette kan vi gjøre med `rm()`. Jeg pleier å benytte `rm(list=ls())`, som fjerner alle objekter vi har lagret i R.
 R-scriptet deres bør fungere etter denne kommandoen, dere bør ikke skrive i flere script, på en slik måte at scriptene må kjøres i en spesiell rekkefølge for å fungere (unntaket er dersom dere kjører andre R-script med kode).
@@ -212,7 +222,7 @@ str(my_data)
 ```
 ## 'data.frame':	200 obs. of  3 variables:
 ##  $ gender: Factor w/ 2 levels "female","male": 1 2 1 2 1 2 1 2 1 2 ...
-##  $ v2    : num  -1.396 -1.668 0.171 0.106 1.463 ...
+##  $ v2    : num  -1.212 -0.799 -0.189 0.393 -1.306 ...
 ##  $ v3    : int  1 2 3 4 5 6 7 8 9 10 ...
 ```
 
