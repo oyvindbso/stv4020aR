@@ -83,7 +83,7 @@ knitr::include_graphics("../pics/Rstudio.png")
 ```
 
 
-Det vitkigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
+Det viktigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
 
 ## R som kalkulator <a name="kalkulator"></a>
 ### R kan brukes som en kalkulator:
@@ -106,7 +106,7 @@ exp(3)
 
 
 ### Logiske operatorer
-R kan også brukes til å evaluere om logiske utsagn er sanne. Til dette bruker vi logiske operatorer.
+R kan også brukes til å evaluere om logiske utsagn er sanne. Til dette bruker vi logiske operatorer, som `==` og `>`.
 ```{r}
 6+3==9      # bruk ==, ikke = for å teste ekvivalens. Forsøk 3=2 selv.
 6+3==9.2    # . er kommasymbol når vi skriver tall i r.

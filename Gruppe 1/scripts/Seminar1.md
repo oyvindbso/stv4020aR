@@ -69,7 +69,7 @@ Rstudio er en IDE (integrated development environment) til R. Rstudio gjør R me
 ![](../pics/Rstudio.png)<!-- -->
 
 
-Det vitkigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
+Det viktigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
 
 ## R som kalkulator <a name="kalkulator"></a>
 ### R kan brukes som en kalkulator:
@@ -151,7 +151,7 @@ exp(3)
 
 
 ### Logiske operatorer
-R kan også brukes til å evaluere om logiske utsagn er sanne. Til dette bruker vi logiske operatorer.
+R kan også brukes til å evaluere om logiske utsagn er sanne. Til dette bruker vi logiske operatorer, som `==` og `>`.
 
 ```r
 6 + 3 == 9  # bruk ==, ikke = for å teste ekvivalens. Forsøk 3=2 selv.
@@ -529,16 +529,16 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 
 ```
 ##    x  y          z     w q
-## 1  1  2 -1.0105472 tekst 1
-## 2  1  4  0.6129642 tekst 2
-## 3  1  6  0.0487391 tekst 1
-## 4  1  8 -0.9930886 tekst 2
-## 5  1 10  0.6751641 tekst 1
-## 6  0 12 -1.1908381 tekst 2
-## 7  0 14 -0.7717401 tekst 1
-## 8  0 16  0.4839949 tekst 2
-## 9  0 18  0.7846268 tekst 1
-## 10 0 20  1.2741519 tekst 2
+## 1  1  2 -2.0055457 tekst 1
+## 2  1  4  0.4079542 tekst 2
+## 3  1  6 -0.9547722 tekst 1
+## 4  1  8 -0.8067421 tekst 2
+## 5  1 10  0.7354837 tekst 1
+## 6  0 12 -1.0560398 tekst 2
+## 7  0 14 -0.6332924 tekst 1
+## 8  0 16 -0.6119554 tekst 2
+## 9  0 18 -0.1280464 tekst 1
+## 10 0 20  1.0084484 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 
