@@ -1,0 +1,416 @@
+---
+title: "Første R-Seminar"
+author: "Erlend Langørgen"
+date: "28 august 2017"
+output:
+  html_document:
+    keep_md: TRUE
+    self_contained: no
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
+
+```
+
+# Velkommen!
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/welcome.jpg")
+```
+
+
+# Seminaropplegg
+
+## Seminarene
+
+| Dato              | Tid             | Aktivitet                         | Sted                |
+|-------------------|-----------------|-----------------------------------|---------------------|
+| ma. 28. aug.      | 08:15–10:00     | Seminar i databehandling R 1      | ES PC-stue 351      |
+| ti. 29. sep.      | 09:15–11:00	    | Seminar i databehandling R 1      | **HH PC-rom 035**	  |
+| to. 14. sep.      | 14:15–16:00   	| Seminar i databehandling R 1      | ES PC-stue 351      |
+| to. 21. sep.      | 14:15–16:00	    | Seminar i databehandling R 1      | ES PC-stue 351	    |
+| to. 28. sep.      | 14:15–16:00	    | Seminar i databehandling R 1      | ES PC-stue 351	    |
+| to. 5. okt.       | 14:15–16:00	    | Seminar i databehandling R 1      | ES PC-stue 351	    |
+| **to. 12. okt.**  | **14:15–16:00** | **Obligatorisk prøve**            | **ES PC-stue 351**	|
+
+## Linker
+- [Last ned R](http://cran.uib.no/)
+- [Last ned Rstudio](https://www.rstudio.com/products/rstudio/download/#download)
+- [Last ned R og Rstudio til PC på UiO](https://software.uio.no)
+- [Gratis innføringsbok på nett](http://r4ds.had.co.nz/)
+- [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
+- [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+- [Mappestruktureringsforslag](https://nicercode.github.io/blog/2013-04-05-projects/)
+- [Guide til ggplot2](http://docs.ggplot2.org/current/)
+- [Facebookgruppe for R](https://www.facebook.com/groups/427792970608618/)
+
+## Undervisningsopplegg
+* Jeg vil at dere skal skrive mest mulig kode i seminarene. Dere må skrive kode for å lære R. 
+    + I de to første seminarene fokuserer vi på grunnleggende ferdigheter i R. Vi skal gå gjennom ferdighetene dere trenger, ut over statistisk analyse, for å kunne skrive hjemmeoppgave med R.
+    + I andre halvdel av seminar 2 og i de påfølgende seminarene fokuserer vi på å løse oppgaver knyttet til statistikkpensum og R-prøven.
+* Undervisningsmateriell blir lastet opp på [github](https://github.com/martigso/stv4020aR). Der kan dere også se det Martin laster opp. Jeg kommer i hvert fall til å laste opp:
+    + R-script til seminarene, vil inneholde kommenterte løsninger på oppgavene i seminaret. 
+    + Oversiktsdokumenter med forklaringer til seminarene. Disse vil inneholde mer inngående forklaringer av koden vi gjennomgår i seminarene, samt mer generelle forklaringer av hvordan R fungerer. Disse dokumentene vil ikke inneholde oppgavene fra seminaret. Jeg vil trolig legge inn en del ekstra som kan være nyttig til å skrive hjemmeoppgave.
+    + Kanskje noen tilleggsdokumenter, kom gjerne med forespørsler.
+* Inspirasjonskilder for stilen i undervisningsopplegget er i hovedsak diskusjon med tidligere/andre seminarledere og [R for Data Science](http://r4ds.had.co.nz/).   
+
+## Dagens seminar: R basics - en myk start
+Jeg håper alle har fått installert R og Rstudio. Dersom dere ikke har gjort dette, [Åpne Rstudio i kiosk](https://kiosk.uio.no). Dere kan installere Rstudio i pausen.   
+
+Dagens seminar er organisert som en **code-along**, jeg vil at dere skal teste all koden vi går gjennom underveis, dere vil også få noen småoppgaver.
+
+Dersom koden deres ikke virker i løpet av dagens seminar, start med å se etter **skrivefeil**. Sammenlign så koden din med naboens kode, se om hun/han/hen kan hjelpe deg. R er svært pirkete på skrivefeil, parenteser, komma og små/store bokstaver. Dersom koden fortsatt ikke virker, spør dere meg om hjelp. Ikke nøl med å spørre meg, jeg vil ikke at dere skal sitte og lete lenge etter løsningen på egenhånd i dagens seminar.    
+
+Plan for i dag (så mye vi rekker):
+
+1. [Åpne Rstudio](#Rstudio)
+2. [R som kalkulator](#kalkulator)
+3. [Objekter, vektorer og indeksering](#objekter)
+4. [Kort om funksjoner og pakker](#funksjoner)
+5. [Datasett](#datasett)
+6. [Deskriptiv statistikk og visualisering](#deskriptiv)
+7. [Lineær regresjonsanalyse (OLS)](#ols)
+
+## Åpne Rstudio <a name="Rstudio"></a>
+Rstudio er en IDE (integrated development environment) til R. Rstudio gjør R mer brukervennlig, og har en del tilleggsfunksjonalitet som er nyttig. Derfor bruker vi Rstudio. Rstudio består av 3 vinduer første gang dere åpner det. Til venstre ser dere console. Her vises kode som vi kjører. Oppe til høyre er environment, hvor objekter vi har opprettet vises. Nede til høyre vises filer i mappen vi jobber fra. Fra menyen over vinduet nede til høyre, ser vi at "plot", "packages" og "Help" også vises i dette vinduet. Mer om dette i løpet av dagens seminar.
+
+![](Rstudio.png)
+
+Det vitkigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
+
+## R som kalkulator <a name="kalkulator"></a>
+### R kan brukes som en kalkulator:
+
+```{r}
+6 + 3 
+6 - 3
+6*3
+6/3
+6^3
+```
+
+### R kan brukes som en kalkulator 2:
+```{r}
+6/3 + 3
+6/(3+3) # Parentesregler fra skolen gjelder også i R.
+log(3)
+exp(3)
+```
+
+
+### Logiske operatorer
+R kan også brukes til å evaluere om logiske utsagn er sanne. Til dette bruker vi logiske operatorer.
+```{r}
+6+3==9      # bruk ==, ikke = for å teste ekvivalens. Forsøk 3=2 selv.
+6+3==9.2    # . er kommasymbol når vi skriver tall i r.
+6+3<9.2     # mindre enn
+6+3<=9.2    # mindre eller lik 
+
+"SPSS"=="R" # == kan også brukes til å teste utsagn som ikke handler om tall  
+"R"=="R"
+```
+
+### Vi kan også teste mer komplekse utsagn:
+```{r}
+6+3==9 | 6+3==9.2 # | står for "eller" (alt + 7 på norsk mac)
+6+3==9 & 6+3==9.2 # & står for "og"
+```
+Google "logical operators r" for å få en mer komplett oversikt, kan dere finne den logiske operatoren for "ikke lik"? 
+
+
+## Objekter og vektorer <a name="objekter"></a>   
+Objekter er grunnleggende byggesteiner i R. Vi kan lagre ulike typer verdier, som regresjonskoeffisienter, tekst og tall i objekter. Vi lager objekter ved hjelp av "<-" :
+```{r}
+x <- 3     # lager objektet x
+y <- 6     # lager objektet y
+z <- x + y # man kan lage objekter fra andre objekter
+```
+Når vi lager objekter, returnerer ikke R en verdi slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
+```{r}
+z
+```
+
+Vi kan også gi navn til objekter med ´=´. Jeg oppfordrer dere imidlertid instendig til å alltid bruke `<-` for å gi navn til objekter, **alle** følger denne konvensjonen.   
+
+Dersom dere ser i øverste vindu til høyre (global environment), ser dere fire linjer under values: R, x, y og z. Når vi oppretter et nytt objekt vises det her.
+
+
+### Navngivning av objekter
+Man kan spare mye tid og krefter på å gi lure navn til objekter. Her er noen regler, for flere tips, se [Stilguide for R](https://google.github.io/styleguide/Rguide.xml):
+
+* R er sensitivt til store og små bokstaver (Forsøk å kjøre Y). Min anbefaling er derfor: bruk små bokstaver så langt det er mulig.
+* Ikke gi objekter det samme navnet som en funksjon. Hvordan kan du teste om et navn ikke er brukt på en funksjon? 
+* Bruk meningsfulle, men ganske korte navn. 
+* Følg et system for navngivning *slavisk*. Eksempel:
+     + Skill mellom ord i et objektnavn med `_`
+     + Skill mellom ord i et variabelnavn med `.` 
+
+### Vektorer:
+Det er mulig å opprette mange forskjellige objekttyper i R. Et naturlig steg videre fra å opprette objekter som representerer et enkelt tall, er å opprette en vektor. I R kan en vektor defineres som en ordnet liste av verdier, dvs. at verdiene kommer i en bestemt rekkefølge. Det finnes flere måter å lage vektorer på:
+
+```{r}
+## Ved å bruke parenteser rundt denne koden oppretter jeg objektet samtidig som jeg printer innholdet i objektet i console.
+(x <- 1:5)          # med : teller vi på heltall mellom de to tallene
+(y <- c(1,2,4,3,5)) # med c() kan vi kombinere ulike tall i den rekkefølgen vi vil.
+```
+Legg merke til at vi nå har overskrevet de tidligere verdiene til x og y, uten at R gir oss noen advarsel. Dette illustrerer viktigheten av å gi navn på en lur måte.  
+
+Vi kan også bruke `c()` til å lage vektorer med forskjellige typer innhold, som tekst. 
+```{r}
+(z <- c(1,2,"tre","fire",5))
+```
+
+Vi kan utføre matematiske operasjoner på vektorer som bare består av tall. Her er noen eksempler:
+```{r}
+x*y 
+x+y
+x*2
+```
+Dette fungerer naturlig nok ikke på vektorer som inneholder andre typer verdier enn tall. Forsøk `x*z` for å kontrollere. En vektor som bare består av en type verdier (f.eks, bare tall), kalles **atomic vector**. En vektor som består av forskjellige typer verdier (f.eks. både tall og tekst) kalles **list**.
+
+
+
+
+### Ulike typer vektorer i R - grov inndeling:    
+
+------------------------------------------------------------
+
+atomic vector | List
+------------- | -------------
+numeric       | Blanding
+integer       | 
+character     | 
+factor        | 
+               
+Her må jeg forklare nærmere om **atomic vector** og **list**. En hyppig årsak til at kode ikke fungerer, er at en vektor ikke er i det formatet vi forventet, dette fører ofte til uønskede resultater. Hvilket format tror dere x, y og z har? Vi kan sjekke med `class`. 
+```{r}
+class(x)
+class(y)
+class(z)
+class(list(1:5))
+```
+Som dere ser, er x integer og y numerisk, mens z er character. Den siste vektoren jeg lager i koden over er helt lik x og y, men er en liste. Dette betyr ikke at det jeg sa i sted om  vektorer av typene *list* og *atomic.vector*  er galt. Dette  betyr at at alle verdiene i x er lest inn som en *integer*, alle verdiene i y er lest inn som *numeric*, alle verdiene i z er lest inn som *character*, mens den siste vektoren er lest inn som en liste. Dette kan være veldig forvirende, men som regel er dette lett å løse, med funksjoner som `as.character()`, `as.numeric()` og `as.factor()` (for de fleste praktiske formål trenger vi ikke skille mellom *integer* og *numeric*). Med `unlist()` kan vi gjøre *list* om til *atomic.vector*. 
+```{r}
+class(as.character(x))
+class(as.list(y))
+class(as.numeric(z))
+as.numeric(z)
+class(unlist(list(1:5)))
+```
+En ting man bør passe seg for, er imidlertid å bruke `as.numeric()` på en faktor som inneholder tall, da skjer følgende:
+```{r}
+as.numeric(as.factor(c(2,3,4)))
+as.numeric(as.character(as.factor(c(2,3,4)))) # Gå veien via character
+```
+
+Det er mer å si om forskjellige typer vektorer og objekter enn jeg kommer inn på her, dette burde imidlertid være nok til å hjelpe dere med å komme i gang med å løse problemer som skyldes at et objekt er av en annen type enn du forventet. Dersom koden din oppfører seg merkelig er det alltid en god idé og sjekke hva slags type objekt du har nærmere. Funksjoner som `class()`, `str()`, `is.list()`, `is.atomic()` og `dim()` er nyttig til dette. Les også advarsler i konsoll som handler om objektene dine.  
+
+
+### Indeksering
+Indeksering lar oss spesifisere et eller flere elementer i et objekt. For vektorer, bruker vi `[]` til å indeksere oss frem til verdier fra et objekt som vi er interessert i. 
+```{r}
+y[4]               # Tallet i '[]', her 4, refererer til 4. element i objektet, ikke tallet 4.
+z[3:4]             # Vi kan bruke : til å velge flere elementer
+y[c(1,2,3,4)]      # Vi kan også bruke c() til å velge flere elementer
+```
+Indekseringen av z og y over returnerte nye vektorer. Vi kan dermed bruke indeksering til å opprette nye vektorer. Ved hjelp av `c()` kan vi lage en ny versjon av y, der vi endrer på rekkefølgen i vektoren:
+```{r}
+x==y # Vi kan bruke == til å sammenligne verdiene i to vektorer som er like lange
+y <- y[c(1,2,4,3,5)]
+x==y # Vi ser at y nå er endret, slik at alle verdiene i x og y er like
+```
+
+
+
+## Kort om  funksjoner <a name="funksjoner"></a>
+En annen grunnleggende byggestein i R er funksjoner. En funksjon tar i mot verdi(er), gjerne lagret i form av et R-objekt, utfører operasjoner basert på input, og produserer nye verdier. En typisk R-funksjon har følgende *syntaks*:
+```{r, eval=F}
+aFunction(x = "R-objekt", arg = "alternativ for funksjonens oppførsel")
+## Merk: dette er ikke en faktisk funksjon i R. Funksjoner kan også ha andre syntakser.
+```
+Vi har allerede brukt noen enkle R funksjoner, `c()` og `log()` er eksempler.
+Dersom vi vil lære mer om en funksjon, kan vi spørre R om hjelp med `?`. Kjør `?c` og `?log`  
+
+Dersom vi er på jakt etter en funksjon til et spesielt formål, kan vi bruke `??` (eller google).
+Si at vi har lyst til å lage en sekvens av tall, som med `:`, men bare inkludere partall. La oss se om vi kan finne en funksjon til å gjøre dette med følgende kode: `??sequence`
+
+Vi ser at `seq` kan gjøre jobben:
+```{r}
+seq(from = 2, to = 20, by =2)
+seq(from = 20, to = 2, by = -2)
+```
+Dersom en funksjon produserer output av en type som fungerer som input i en annen funksjon, kan vi plassere funksjoner inne i andre funksjoner:
+```{r}
+c(seq(20 ,2 , -2), rep(1, 2), seq(2, 20, 2))
+```
+Som dere ser trenger vi ikke skrive argumentene, kjør `?rep` for å finne ut hva funksjonen i midten gjør. Fortsett å bruke `?` til å lære om nye funksjoner som introduseres resten av seminaret. Øv på å lese syntaks fra hjelpefilene, sammen med googling vil evnen til å lese syntaks sette dere i stand til å finne løsninger på alle slags problemer, med litt trening går dette stort sett ganske raskt. 
+
+Vi skal lære mer om funksjoner neste gang.
+
+## Datasett <a name="datasett"></a>
+I R finnes det mange forskjellige typer objekter. I dette seminaret fokuserer vi heretter på datasett, som utgjør klassen "data.frame". Siden det stort sett er datasett som brukes til statistisk analyse, er det denne objekt-klassen vi skal jobbe mest med i seminarene. 
+
+Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vårt eget datasett av en samling vektorer på følgende måte:
+```{r}
+(test_data <- data.frame(x = c(rep(1,5), rep(0,5)), y = seq(2, 20 ,2), z = rnorm(10), w = "tekst", q = c(1,2)))
+```
+Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
+
+I stedet for å starte med å lære dere alt som kan føre til at dere får andre resultater enn dere ønsker, vil jeg imidlertid heller lære dere å sjekke om koden deres fungerer, samt å finne frem til årsak og løsning.   
+
+
+Kjør følgende kode for å laste inn deres første 'ordentlige' datasett i R:
+```{r}
+my_data <- mtcars
+```
+Merk at mtcars er et eksempeldatasett som er lagret i R, derfor lastes det ikke inn på samme måte som andre datasett. Her er noen nyttige funksjoner for å lære mer om datasett:
+```{r}
+class(my_data)    # Er dette faktisk en data.frame, eller et annet type objekt?
+colnames(my_data) # denne funksjonen forteller deg kolonnenavn i datasettet.
+head(my_data, 5)  # denne funksjonen viser deg de første observasjonene i datasettet.
+tail(my_data, 5)  # denne funksjonen viser deg de siste observasjonene i datasettet.
+str(my_data)      # denne funksjonen beskriver strukturen til et objekt.
+```
+Dere kan også åpne datasettet ved å trykke på `View` i toppmenyen, skriv evt. `View(my_data)`, men ikke lagre denne kommandoen i scriptet ditt som en hovedregel.
+
+### Indeksering i datasett
+Prinsippene for indeksering av datasett, og objekter i R generelt er like som for vektorer. I datasett har vi imidlertid en dimensjon mer enn i en vektor, så for å velge en spesifikk verdi fra et datasett, må vi indeksere i to trinn. I datasett bruker vi `$` for å velge en variabel/vektor. 
+```{r}
+my_data$mpg
+```
+Dersom vi ønsker å opprette en ny variabel i datasettet vårt, må vi indeksere på samme måte:
+```{r}
+my_data$carnames <- rownames(mtcars) # bare for demonstrasjon
+str(my_data)
+```
+Legg merke til at det står `chr` etter den nye variabelen, mens det står `num` etter de andre, `str` forteller oss også hva slags type variabler vi har i datasettet vårt.
+
+Hvordan tror dere at vi kan velge den 15 verdien til variabelen `mpg`? Outputen dere skal få finner dere under.
+```{r, echo=FALSE}
+mtcars$mpg[15]
+```
+
+Vi kan også velge variabler med klammeparentes, `[]`. Husk på at datasett har to dimensjoner, den første dimensjonen er definert som `rows` mens den andre er definert som `columns`. For å velge et element fra columns, den andre dimensjonen, skriver vi `[ , x]`, der x referer til et eller flere element.
+For å velge et element fra rows, den første dimensjonen, skriver vi `[x, ]`, der x referer til et eller flere element
+```{r}
+dim(my_data) # my_data har 32 rows (observasjoner) og 11 columns (variabler).
+my_data[, 1]
+my_data[1,]
+my_data[, 1][15]
+head(my_data[,c(1,3,8)]) # kode for å få raskt inntrykk av variabler vi er interessert i
+```
+Denne typen indeksering er nyttig dersom vi raskt vil velge mange variabler/observasjoner, men den gjør koden vår mindre forståelig. Derfor bruker vi `$` til å velge variabler/navngitte elementer i et objekt.
+
+Dersom dere vil vite hvordan dere skal indeksere et R-objekt, kan dere bruke `str`
+```{r}
+(a <- list(a1 = list(1, 2), a2 = c(3, 4)))
+str(a)
+```
+`str` gir dere en oppskrift på hvordan dere kan gå frem for å velge ulike elementer av R-objekt, se på `$` i koden over, og følgende indeksering:
+```{r}
+a$a1[1]
+a[[1]][2]
+```
+Nå som vi har sett hvordan datasettet vårt er bygd opp, og lært hvordan vi kan velge variabler fra datasettet kan vi begynne med statistisk analyse. 
+
+## Deskriptiv statistikk og visualisering <a name="deskriptiv"></a>
+Vi starter med deskriptiv statistikk for å lære mer om datatsettet vårt.
+`summary` er en svært nyttig funksjon som fungerer på mange forskjellige typer objekter:
+```{r}
+summary(my_data$mpg)
+summary(my_data)
+```
+Som dere ser får vi ulike former for deskriptiv statistikk, som minimumsverdi, median og gjennomsnitt. Når vi kjører summary på hele datasettet, får vi denne statistikken for alle variablene på en gang. Dersom vi bare vil ha gjennomsnitt eller median, kan vi kjøre:
+```{r}
+mean(my_data$mpg)
+median(my_data$mpg)
+```
+
+
+Dersom vi har en variabel med et begrenset antall verdier, er `table()` svært nyttig:
+```{r}
+table(my_data$cyl)
+```
+Den øverste linjen viser verdiene til *cyl*, under ser vi fordelingen av biler på de ulike verdiene. Vi kan også bruke `table()` til å få et inntrykk av sammenhengen mellom to variabler:
+```{r}
+table(my_data$cyl, my_data$gear)
+```
+
+Dersom vi heller vil ha en grafisk fremstilling av tabellen kan vi bruke `barplot`:
+```{r, eval=F}
+barplot(table(my_data$cyl, my_data$gear))
+```
+
+```{r echo = FALSE, fig.align='default'}
+knitr::include_graphics("../pics/sem1_plot1.png")
+```
+
+Dersom vi ser på sammenhengen mellom variabler som har svært mange verdier er `table()` ikke like nyttig. I stedet kan Vi f.eks. bruke `cor()` for å få korrelasjoen:
+```{r}
+## korrelasjon mellom miles per galon og vekt:
+cor(my_data$mpg, my_data$wt)
+```
+Vi kan også bruke `cor` til å lage en korrelasjonsmatrise for et sett av variabler (numeric) fra datasettet vårt:
+```{r}
+cor(mtcars[,c(1:3,6,9)])
+```
+
+
+Dersom vi vil ha et mer detaljert bilde av sammenhengen mellom to kontinuerlige variabler kan vi lage et enkelt scatterplot med `plot()`:
+```{r,eval=F}
+plot(my_data$mpg, my_data$wt)
+```
+
+```{r echo = FALSE, fig.align='default'}
+knitr::include_graphics("../pics/sem1_plot2.png")
+```
+
+Fra plottet ser det ut som om sammenhengen mellom mpg og vekt er noenlunde lineær, som innebærer at korrelasjonskoeffisienten er et greit mål på sammenhengen mellom variablene.
+
+For å visualisere fordelingen til en variabel (både kontinuerlig og kategorisk) kan vi bruke `hist`, som lager et histogram, forsøk selv med *cyl*
+```{r, eval=F}
+hist(my_data$mpg, breaks=10)
+```
+
+```{r echo = FALSE, fig.align='default'}
+knitr::include_graphics("../pics/sem1_plot3.png")
+```
+
+Nå som vi har lært litt om sammenhenger i datasettet, kan vi komme opp med en hypotese, og se om den holder i en lineær regresjonsanalyse. Jeg foreslår følgende hypotese: 
+
+> Økt fart fører til økt bensinforbruk.
+
+## Lineær regresjon (OLS) <a name="ols"></a>
+Vi kan nå kjøre en regresjonsanalyse for å teste hypotesen, til dette bruker vi `lm()`, som har følgende syntaks:
+```{r, eval = F}
+lm(avhengig.variabel ~ uavhengig.variabel1 + uavh.var2, data=mitt_datasett)
+# på mac får du ~ med alt + k + space
+```
+
+La oss teste hypotesen, med variablene *mpg* (miles per gallon) og *qsec* (1/4 mile time)
+```{r}
+m1 <- lm(mpg ~ qsec, data=my_data)
+summary(m1)
+```
+
+Det ser ut som om det er en viss støtte for hypotesen, * betyr signifikans på 0.05 nivå, men hva skjer dersom vi legger inn noen kontrollvariabler?
+```{r}
+summary(m2 <- lm(mpg ~ qsec + cyl + wt + gear, data=my_data))
+```
+Her ser dere at sammenhengen forsvinner. Kan dere komme opp med en forklaring på dette?
+
+
+## Takk for i dag!
+
+```{r echo = FALSE, fig.align='default'}
+knitr::include_graphics("../pics/puppy_eyes.jpg")
+```
+
+**Deg når du forstår at du faktisk bestemte deg for å lære deg R i stedet for SPSS?**  
+
+
+R kan være frustrerende å lære, særlig i starten. Jeg vil at dere skal unngå å føle dere som på bildet over. Jeg oppfordrer dere til samarbeid, hjelp hverandre. Spør en venn, internett eller meg dersom du sitter fast! Jeg oppfordrer dere også til å jobbe gjennom, og forsøke å forstå kode fra seminarene dersom du ikke helt fikk med deg noe. Dersom jeg får spørsmål om ting fra seminaret, kommer jeg til å laste opp spørsmål og svar med deres samtykke, det er sikkert andre som lurer på det samme som deg.
+
