@@ -36,7 +36,7 @@ Plan for i dag:
 
 ### Kommentering
 Som dere kanskje har lagt merke til, kan vi bruke `#` til å kommentere kode i R.
-Bruk kommentarer flittig, det hjelper fremtids-deg og andre å lese å forstå koden din. 
+Bruk kommentarer flittig, det hjelper fremtids-deg og andre å lese og forstå koden din. 
 
 I R-studio kan vi også lage seksjoner av kode, som man kan folde sammen. For å prøve dette, skriv `#### tekst ####` (flere `#` går også). På venstre side av tekstlinjen vil dere se en pil, skriv en setning kode under pilen og trykk på den.
 Sammen med meningsfulle overskrifter, et innebygget søkesystem og godt kommentert kode, hjelper dette folde-systemet deg til å finne rask frem i R-scriptet ditt.
@@ -45,10 +45,10 @@ Jeg anbefaler at dere starter R script med en overskrift, samt en kort beskrivel
 
 ### Renske R.
 Dersom vi skal kjøre et nytt script, er det ofte ønskelig å fjerne objekter/arbeid fra andre script vi jobber med. Dette kan vi gjøre med `rm()`. Jeg pleier å benytte `rm(list=ls())`, som fjerner alle objekter vi har lagret i R.
-R-scriptet deres bør fungere etter denne kommandoen, dere bør ikke skrive i flere script, slik at scriptene må kjøres i en spesiell rekkefølge for å fungere (unntaket er dersom dere kjører andre R-script dere trenger med kode).
+R-scriptet deres bør fungere etter denne kommandoen, dere bør ikke skrive i flere script, på en slik måte at scriptene må kjøres i en spesiell rekkefølge for å fungere (unntaket er dersom dere kjører andre R-script med kode).
 
 ### Working directory
-Working directory er den mappen R forventer å hente å lagre filer i. Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. Jeg anbefaler derfor at dere lager en ny mappe for hvert nye prosjekt med R, og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) her. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være våres working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er en demonstrasjon av `setwd()`, som fungerer litt ulikt på windows og mac/linux:
+Working directory er den mappen R forventer å hente og lagre filer i. Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. Jeg anbefaler derfor at dere lager en ny mappe for hvert nye prosjekt med R, og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) her. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være våres working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er en demonstrasjon av `setwd()`, som fungerer litt ulikt på windows og mac/linux:
 ```{r, eval=F}
 setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra") # For windows
 setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
@@ -56,7 +56,7 @@ setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
 
 **Oppgave:** Lag en mappe som heter *R-seminar*, og lag en mappe som heter *seminar 2* i denne mappen. Sett working directory til mappen *seminar 2*. Opprett et dokument fra notepad som heter test i mappen seminar 2.
 
-Når vi har bestemt working directory, kan vi navigere til andre mapper med utgangspunkt i denne mappen. Vi kan for eksempel sjekke hvilke filer som finnes i mappen som er workind directory, og i mappen på nivået under med:
+Når vi har bestemt working directory, kan vi navigere til andre mapper med utgangspunkt i denne mappen. Vi kan for eksempel sjekke hvilke filer som finnes i mappen som er working directory, og i mappen på nivået under med:
 ```{r, eval=F}
 list.files()      # Filer i mappen vi er i
 list.files("../") # Filer i mappen under
@@ -132,10 +132,10 @@ Denne organiseringen hjelper deg og andre med å finne frem i scriptet ditt, sam
 
 ## Importere data <a name="datasett"></a>
 
-Dersom dere skal gjøre statistisk analyse, er som regel den første seksjonen import og forberedelse av data. En styrke ved R, er at det er mulig å importere alskens mulige filer, både fra en mappe på pcen din og fra en url fra internett. Jeg går gjennom import av filer fra excel, stata, spss, R, men vit at det finnes mange andre muligheter.
+Dersom dere skal gjøre statistisk analyse, er som regel den første seksjonen import og forberedelse av data. En styrke ved R, er at det er mulig å importere alskens mulige filer, både fra en mappe på pcen din og fra en url fra internett. Jeg går gjennom import av filer fra excel, stata, spss, R, men vit at det finnes mange andre muligheter. Vi skal bruke ekte statsvitenskapelige konfliktdatasett, fra Uppsala Conflict Data Program.
 
 ### Import fra fil lagret på pc:
-**Oppgave** Last ned "UCDP Battle-Related Deaths Dataset" i `.csv`fra <http://ucdp.uu.se/downloads/> til ditt working directory, og kjør `list.files()` for å sjekke om du har lyktes. Kjør deretter `?read.csv()`. Kan noen forklare syntaksen?
+**Oppgave** Last ned "UCDP Battle-Related Deaths Dataset" i `.csv`fra <http://ucdp.uu.se/downloads/> til ditt working directory, og kjør `list.files()` for å sjekke om du har lyktes. Kjør deretter `?read.csv()`. Kan noen forklare syntaksen? Eventuelt finner dere datasettet på [github](https://github.com/martigso/stv4020aR/tree/master/Gruppe%201/data)
 
 La oss laste inn datasettet vi lagret i working directory som et objekt i R:
 ```{r, eval=F}
