@@ -57,7 +57,7 @@ Plan for i dag (så mye vi rekker):
 1. [Åpne Rstudio](#Rstudio)
 2. [R som kalkulator](#kalkulator)
 3. [Objekter, vektorer og indeksering](#objekter)
-4. [Kort om funksjoner og pakker](#funksjoner)
+4. [Kort om funksjoner](#funksjoner)
 5. [Datasett](#datasett)
 6. [Deskriptiv statistikk og visualisering](#deskriptiv)
 7. [Lineær regresjonsanalyse (OLS)](#ols)
@@ -529,16 +529,16 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 
 ```
 ##    x  y          z     w q
-## 1  1  2 -2.0055457 tekst 1
-## 2  1  4  0.4079542 tekst 2
-## 3  1  6 -0.9547722 tekst 1
-## 4  1  8 -0.8067421 tekst 2
-## 5  1 10  0.7354837 tekst 1
-## 6  0 12 -1.0560398 tekst 2
-## 7  0 14 -0.6332924 tekst 1
-## 8  0 16 -0.6119554 tekst 2
-## 9  0 18 -0.1280464 tekst 1
-## 10 0 20  1.0084484 tekst 2
+## 1  1  2  0.7825846 tekst 1
+## 2  1  4 -0.2662535 tekst 2
+## 3  1  6  0.5820621 tekst 1
+## 4  1  8 -2.5941273 tekst 2
+## 5  1 10 -1.0660071 tekst 1
+## 6  0 12  0.3344202 tekst 2
+## 7  0 14 -0.7872976 tekst 1
+## 8  0 16  1.3327171 tekst 2
+## 9  0 18 -1.5182053 tekst 1
+## 10 0 20 -0.4976962 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 
