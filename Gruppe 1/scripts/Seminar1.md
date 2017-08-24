@@ -226,6 +226,11 @@ Objekter er grunnleggende byggesteiner i R. Vi kan lagre ulike typer verdier, so
 x <- 3  # lager objektet x
 y <- 6  # lager objektet y
 z <- x + y  # man kan lage objekter fra andre objekter
+
+# Vi kan også gi andre navn til objekter:
+gull <- 3
+bronse <- 6
+medaljer <- gull + bronse
 ```
 Når vi lager objekter, returnerer ikke R en verdi i Console slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
 
@@ -522,16 +527,16 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 
 ```
 ##    x  y           z     w q
-## 1  1  2 -0.76973742 tekst 1
-## 2  1  4  0.58337775 tekst 2
-## 3  1  6 -0.81623555 tekst 1
-## 4  1  8 -0.76783117 tekst 2
-## 5  1 10  1.86004586 tekst 1
-## 6  0 12 -0.56941930 tekst 2
-## 7  0 14 -1.19430057 tekst 1
-## 8  0 16 -1.08030378 tekst 2
-## 9  0 18  0.06598191 tekst 1
-## 10 0 20 -1.46649690 tekst 2
+## 1  1  2  0.35080790 tekst 1
+## 2  1  4  0.79076142 tekst 2
+## 3  1  6  0.29056330 tekst 1
+## 4  1  8  0.06379065 tekst 2
+## 5  1 10  0.16730247 tekst 1
+## 6  0 12  0.46178262 tekst 2
+## 7  0 14  0.03524516 tekst 1
+## 8  0 16  0.07680485 tekst 2
+## 9  0 18 -0.67852891 tekst 1
+## 10 0 20 -0.62380980 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 

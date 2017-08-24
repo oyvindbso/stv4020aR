@@ -127,6 +127,11 @@ Objekter er grunnleggende byggesteiner i R. Vi kan lagre ulike typer verdier, so
 x <- 3     # lager objektet x
 y <- 6     # lager objektet y
 z <- x + y # man kan lage objekter fra andre objekter
+
+# Vi kan også gi andre navn til objekter:
+gull   <- 3
+bronse <- 6
+medaljer <- gull + bronse
 ```
 Når vi lager objekter, returnerer ikke R en verdi i Console slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
 ```{r}
