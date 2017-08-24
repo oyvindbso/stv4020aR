@@ -65,7 +65,9 @@ Plan for i dag (så mye vi rekker):
 ## Åpne Rstudio <a name="Rstudio"></a>
 Rstudio er en IDE (integrated development environment) til R. Rstudio gjør R mer brukervennlig, og har en del tilleggsfunksjonalitet som er nyttig. Derfor bruker vi Rstudio. Rstudio består av 3 vinduer første gang dere åpner det. Til venstre ser dere console. Her vises kode som vi kjører. Oppe til høyre er environment, hvor objekter vi har opprettet vises. Nede til høyre vises filer i mappen vi jobber fra. Fra menyen over vinduet nede til høyre, ser vi at "plot", "packages" og "Help" også vises i dette vinduet. Mer om dette i løpet av dagens seminar.
 
-![](Rstudio.png)
+
+![](../pics/Rstudio.png)<!-- -->
+
 
 Det vitkigste vinduet må vi imidlertid opprette selv. Klikk på arket med en grønn sirkel med et plusstegn like under `File` øverst til venstre, og velg `R Script`. Vi har nå opprettet et R-script. Vi skriver all kode i R-script, fordi r-script lar oss skrive, redigere, kommentere og lagre kode. I tillegg hjelper R-studio oss med å rette og organisere kode som skrives i R-script. R-script hjelper oss med å gjøre arbeidet vårt **reproduserbart**. For å kjøre koden på en linje i et r-script, naviger til linjen og trykk `ctrl + enter` (`Cmd` i stedet for `Ctrl` for dem som bruker mac). forsøk med 2+2.
 
@@ -526,17 +528,17 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 ```
 
 ```
-##    x  y           z     w q
-## 1  1  2  0.35080790 tekst 1
-## 2  1  4  0.79076142 tekst 2
-## 3  1  6  0.29056330 tekst 1
-## 4  1  8  0.06379065 tekst 2
-## 5  1 10  0.16730247 tekst 1
-## 6  0 12  0.46178262 tekst 2
-## 7  0 14  0.03524516 tekst 1
-## 8  0 16  0.07680485 tekst 2
-## 9  0 18 -0.67852891 tekst 1
-## 10 0 20 -0.62380980 tekst 2
+##    x  y          z     w q
+## 1  1  2 -1.0105472 tekst 1
+## 2  1  4  0.6129642 tekst 2
+## 3  1  6  0.0487391 tekst 1
+## 4  1  8 -0.9930886 tekst 2
+## 5  1 10  0.6751641 tekst 1
+## 6  0 12 -1.1908381 tekst 2
+## 7  0 14 -0.7717401 tekst 1
+## 8  0 16  0.4839949 tekst 2
+## 9  0 18  0.7846268 tekst 1
+## 10 0 20  1.2741519 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 
