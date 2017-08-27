@@ -1,66 +1,3 @@
-#' ---
-#' title: "Seminar 1"
-#' author: "Martin Søyland"
-#' output:
-#'   pdf_document: default
-#'   html_document: html_notebook
-#' urlcolor: cyan
-#' header-includes:
-#'     - \usepackage{setspace}\doublespacing
-#' ---
-#' 
-## ----setup, include=FALSE------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
-
-
-#' 
-#' # Seminaropplegg
-#' 
-#' ## Seminarrekka
-#' 
-#' | Dato              | Tid             | Aktivitet                         | Sted                |
-#' |-------------------|-----------------|-----------------------------------|---------------------|
-#' | ma. 28. aug.      | 10:15–12:00     | Seminar i databehandling R 2      | ES PC-stue 351      |
-#' | ma. 11. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | **to. 14. sep.**  | **08:15–10:00**	| **Seminar i databehandling R 2**  | **ES PC-stue 351**  |
-#' | ma. 18. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | ma. 25. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | ma. 2. okt.       | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | **ma. 9. okt.**   | **10:15–12:00** | **Obligatorisk prøve**            | **ES PC-stue 351**	|
-#' 
-#' ## Linker
-#' - [Last ned R](http://cran.uib.no/)
-#' - [Last ned Rstudio](https://www.rstudio.com/products/rstudio/download/#download)
-#' - [R cheat sheet](https://s3.amazonaws.com/quandl-static-content/Documents/Quandl+-+R+Cheat+Sheet.pdf)
-#' - [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
-#' - [Mappestruktureringsforslag](https://nicercode.github.io/blog/2013-04-05-projects/)
-#' - [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
-#' - [Guide til ggplot2](http://docs.ggplot2.org/current/)
-#' - [Data fra Fivethirtyeight](https://github.com/fivethirtyeight/data)
-#' - [Facebookgruppe for R](https://www.facebook.com/groups/427792970608618/)
-#' 
-#' 
-#' # Grunnleggende (repetisjon fra STV1020)
-#' For de som starter helt fra scratch med R vil jeg anbefale å gå gjennom [materiellet fra STV1020](https://github.com/martigso/stv1020R).
-#' 
-#' I dette dokumentet skal vi gå gjennom det mest grunnleggende med R. Det første man må gjøre er å installere [R](http://cran.uib.no/) og [Rstudio](https://www.rstudio.com/products/rstudio/download/#download) (den siste er valgfri, men sterkt anbefalt). Du skal da få opp et vidu som ser ut som dette:
-#' 
-## ----echo = FALSE--------------------------------------------------------
-knitr::include_graphics("../pics/RStudio.png")
-
-#' 
-#' 
-#' 
-#' ## Script og konsoll
-#' 
-#' På bildet over viser tre vindu:
-#' 
-#' 1. Til venstre viser console. Dette er motoren til R; det er her vi får ut kodene vi skal kjøre.
-#' 2. Oppe til høyre har vi Environment. Her kommer *objektene* vi lagrer
-#' 3. Nede til høyre er filene i mappen vi jobber fra. Her er det også tabs for plot (figurer), pakker og hjelp
-#' 
-#' Men vi mangler ett vindu; vinduet der vi skriver inn koden har ikke kommet opp enda. For å få dette opp trykker vi på arket helt overst til venstre (under "File") og så på "R Script" fra rullegardinmenyen (eventuelt kan man bruke hurtigtasten Ctrl/Cmd + Shift + N). Vinduet som da dukker opp er det vi skal tilbringe mest tid i; det er her vi skriver den **reproduserbare** koden som R skal gjøre om til outputen vi vil ha. For å sende en linje med kode fra **script** til **console** kan vi bruke knappen *run* øverst til høyre i script-vinduet, eller bare trykke Ctrl / Cmd + Enter når markøren står på linjen vi vil sende. 
-#' 
 #' ## R som kalkulator
 #' 
 #' R (og de fleste andre programmeringsspråk) er enkelt sagt veldig avanserte kalkulatorer:
@@ -140,7 +77,7 @@ list.files()
 list.files("../")
 
 # En mappe under, og i mappen scripts
-list.files("../scripts")
+list.files("../Gruppe 1/scripts/")
 
 
 #' 
@@ -164,20 +101,20 @@ passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv")
 #' 
 #' La oss se på noen helt basic funksjoner vi kan bruke på datasettet:
 ## ----dataset_basic, eval=FALSE-------------------------------------------
-## class(passengers)
-## head(passengers)
-## tail(passengers)
-## colnames(passengers)
+class(passengers)
+head(passengers)
+tail(passengers)
+colnames(passengers)
 
 #' 
 ## ----View, eval = FALSE--------------------------------------------------
-## View(passengers) # Denne gir et vindu med data i.
+View(passengers) # Denne gir et vindu med data i, men man kan også trykke i "Environment"
 
 #' 
 #' Allerede nå er det kommet mange **funksjoner** vi bruker. Funksjoner er en slags "sort-boks" vi sender informasjon til, for så å få ut det funksjonen er definert til å gi oss, gitt data vi putter inn. Funksjonen *head()* for eksempel er definert til å vise de første enhetene i en vektor, dataset, matrise eller tabell. Det er veldig nyttig å se på hjelpefilene til funksjonene man bruker:
 #' 
 ## ----Hjelp, eval = FALSE, tidy = FALSE-----------------------------------
-## ?head
+?head
 ## 
 
 #' 
@@ -190,11 +127,7 @@ head(n = 1, x = passengers)
 #' 
 #' Koden under vil gi en feilmelding fordi objektet *passengers* ikke er et enkelt heltall:
 ## ----Head_eks2, eval=FALSE-----------------------------------------------
-## head(1, passengers)
-
-#' 
-## ----echo = FALSE, fig.align='center'------------------------------------
-knitr::include_graphics("../pics/head_man.png")
+head(1, passengers)
 
 #' 
 #' ## Jobbe med variabler i dataset
@@ -242,9 +175,10 @@ mean(passengers$Age, na.rm = TRUE)
 #' Ofte er vi heller ikke fornøyd med hvordan data er strukturert. Her er en av hovedfordelene med R; vi kan gjøre så og si hva som helst for å få dataene i det formatet vi ønsker. La oss si at vi, for eksempel, har en hypotese om at eldre personer hadde mindre sannsynlighet for å overleve enn yngre personer. Som dere husker fra forelesning :) kan det være lurt å sentrere variabler som alder fordi vi sjelden har et naturlig nullpunkt, som igjen gjør at konstantleddet i en evt regresjon ikke gir substansiell mening. La oss derfor sentrere alder:
 #' 
 ## ----omkoding------------------------------------------------------------
+median(passengers$Age, na.rm = TRUE)
 passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
 
-table(passengers$age_cent[1:10], passengers$Age[1:10])
+table(passengers$age_cent, passengers$Age)
 
 #' 
 #' Over har jeg laget en ny variabel i datasettet *passengers* som heter *age_sent*. Den skal være sentrert til median: vi trekker fra medianen til aldervariabelen fra alle verdier på aldervariabelen. Legg også merke til at jeg validerer at det ble riktig med `table()`.
@@ -277,10 +211,32 @@ pass_reg <- lm(Survived ~ age_cent, data = passengers)
 summary(pass_reg)
 
 #' 
-#' Kan dere tenke dere noen variabler som vi burde inkludere i denne regresjonen?
 #' 
-## ----ikketenkpådenne, eval=FALSE-----------------------------------------
-## knitr::purl("./docs/seminar1.Rmd", output = "./scripts/1seminar.R", documentation = 2)
-## 
+## ----regplot-------------------------------------------------------------
+
+# install.packages("ggplot")
+library(ggplot2)
+theme_set(theme_bw())
+ggplot(passengers, aes(x = Age, y = Survived)) +
+  geom_smooth(method = "lm")
 
 #' 
+#' Kan dere tenke dere noen variabler som vi burde inkludere i denne regresjonen?
+#' 
+#' 
+## ----regplot2------------------------------------------------------------
+ggplot(passengers, aes(x = Age, y = Survived, color = Sex)) +
+  geom_smooth(method = "lm") 
+
+# Andre problemer, gitt denne ukens forelesningstematema?
+ggplot(passengers, aes(x = Age, y = Survived, color = Sex)) +
+  geom_smooth(method = "lm") + 
+  geom_point()
+
+#' 
+#' 
+#' Bonus for \LaTeX elskere:
+## ----stargazer,results='asis'--------------------------------------------
+# install.packages("stargazer")
+library(stargazer)
+stargazer(pass_reg, star.cutoffs = c(.05, .01, .001), ci = TRUE)
