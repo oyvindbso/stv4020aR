@@ -222,7 +222,7 @@ Google "logical operators r" for å få en mer komplett oversikt, kan dere finne
 
 
 ## Objekter og vektorer <a name="objekter"></a>   
-Objekter er grunnleggende byggesteiner i R. Vi kan lagre ulike typer verdier, som regresjonskoeffisienter, tekst og tall i objekter. Vi lager objekter ved hjelp av "<-" :
+Objekter er grunnleggende byggesteiner i R. Vi kan lagre ulike typer informasjon, som regresjonskoeffisienter, tekst og tall i objekter. Vi kan også lage objekter som representerer en enkelt verdi. Vi lager objekter ved hjelp av "<-" :
 
 ```r
 x <- 3  # lager objektet x
@@ -234,7 +234,7 @@ gull <- 3
 bronse <- 6
 medaljer <- gull + bronse
 ```
-Når vi lager objekter, returnerer ikke R en verdi i Console slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid får vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
+Når vi lager objekter, returnerer ikke R en verdi i Console slik vi får når vi bruker R som en kalkulator. Vi kan imidlertid få vite verdien til et objekt ved å skrive navnet til objektet og trykke `ctrl + enter`.
 
 ```r
 z
@@ -246,12 +246,12 @@ z
 
 Vi kan også gi navn til objekter med ´=´. Jeg oppfordrer dere imidlertid instendig til å alltid bruke `<-` for å gi navn til objekter, **alle** følger denne konvensjonen.   
 
-Dersom dere ser i øverste vindu til høyre (global environment), ser dere fire linjer under values: R, x, y og z. Når vi oppretter et nytt objekt vises det her.
+Dersom dere ser i øverste vindu til høyre (global environment), ser dere seks linjer under values: gull, bronse, medaljer, x, y og z. Når vi oppretter et nytt objekt vises det her.
 
 
 
 ### Vektorer:
-Det er mulig å opprette mange forskjellige objekttyper i R. Et naturlig steg videre fra å opprette objekter som representerer et enkelt tall, er å opprette en vektor. I R kan en vektor defineres som en ordnet liste av verdier, dvs. at verdiene kommer i en bestemt rekkefølge. Det finnes flere måter å lage vektorer på:
+Det er mulig å opprette mange forskjellige objekttyper i R. Over laget vi objekter som representerte en enkelt tallverdi. Vi kan også lage objekter som inneholder flere verdier. Den enkleste objekttypen med flere verdier, er vektorer. I R kan en vektor defineres som en ordnet liste av verdier, dvs. at man lagrer verdier i en bestemt rekkefølge. Det finnes flere måter å lage vektorer på:
 
 
 ```r
@@ -265,7 +265,7 @@ Det er mulig å opprette mange forskjellige objekttyper i R. Et naturlig steg vi
 ```
 
 ```r
-(y <- c(1, 2, 4, 3, 5))  # med c() kan vi kombinere ulike tall i den rekkefølgen vi vil.
+(y <- c(1, 2, 4, gull, 5))  # med c() kan vi kombinere ulike tall i den rekkefølgen vi vil. Vi kan også hente ut tall fra objekter som 'gull'
 ```
 
 ```
@@ -528,17 +528,17 @@ Dere kan tenke på datasett som et sett av samordnede vektorer. Vi kan lage vår
 ```
 
 ```
-##    x  y          z     w q
-## 1  1  2  0.7825846 tekst 1
-## 2  1  4 -0.2662535 tekst 2
-## 3  1  6  0.5820621 tekst 1
-## 4  1  8 -2.5941273 tekst 2
-## 5  1 10 -1.0660071 tekst 1
-## 6  0 12  0.3344202 tekst 2
-## 7  0 14 -0.7872976 tekst 1
-## 8  0 16  1.3327171 tekst 2
-## 9  0 18 -1.5182053 tekst 1
-## 10 0 20 -0.4976962 tekst 2
+##    x  y           z     w q
+## 1  1  2 -0.02306647 tekst 1
+## 2  1  4 -1.58181522 tekst 2
+## 3  1  6 -0.19105583 tekst 1
+## 4  1  8  1.22501160 tekst 2
+## 5  1 10 -2.55006871 tekst 1
+## 6  0 12  1.78039406 tekst 2
+## 7  0 14  0.86677029 tekst 1
+## 8  0 16  0.54475001 tekst 2
+## 9  0 18  0.62016316 tekst 1
+## 10 0 20 -2.24669755 tekst 2
 ```
 Legg merke til at de tre første vektorene har en lengde på 10, mens de to siste har en lengde på henholdsvis 1 og 2. R fyller inn verdier basert på strukturen til disse variablene slik at de kan slåes sammen med de lengre variablene. Som regel fungerer R slik at du må spesifisere nøyaktig det du vil ha for å få output, men noen ganger tolker R den gale koden din i beste mening, og gir deg output du egentlig ikke ønsker. Hva skjer dersom vi forsøker å inkludere variabelen `s = c(1,2,3)`?
 
