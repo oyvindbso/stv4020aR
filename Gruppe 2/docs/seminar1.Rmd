@@ -2,8 +2,8 @@
 title: "Seminar 1"
 author: "Martin Søyland"
 output:
-  html_document: html_notebook
   pdf_document: default
+  html_document: html_notebook
 header-includes: \usepackage{setspace}\onehalfspacing
 urlcolor: cyan
 ---
@@ -26,6 +26,17 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = T
 | ma. 25. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
 | ma. 2. okt.       | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
 | **ma. 9. okt.**   | **10:15–12:00** | **Obligatorisk prøve**            | **ES PC-stue 351**	|
+
+
+[Semestersidene](www.uio.no/studier/emner/sv/statsvitenskap/STV4020A/index.html).
+
+### Egen datamaskin
+I selve seminarene har dere valget mellom å bruke maskinene som står i seminarrommet via deres UiO-bruker (R er forhåndsinstallert på alle maskinene) eller dere kan bruke egen bærbar PC/Mac. Hvis dere bruker egen maskin forventer jeg at dere har installert både R og RStudio før det første seminaret. 
+
+### Slack
+Jeg har satt opp et Slack-team (slack.com) som dere kan bruke gjennom seminarrekka. Hensikten med dette er å tilrettelegge for en platform der dere kan sette frem problemer dere støter på med R (eller med oppgaver til teori-seminarene og spørsmål angående forelesningene) med hverandre, samarbeide om å løse disse, og at spørsmål bare jeg kan svare på blir åpne for alle. Slack er også et verktøy som blir brukt mer og mer i både arbeidsliv og forskning, så det kan være god verdi i å få kjennskap til hvordan det fungerer.
+
+Dere får en link på UiO-mailen med 
 
 ## Linker
 - [Last ned R](http://cran.uib.no/)
@@ -241,6 +252,7 @@ mean(passengers$Age, na.rm = TRUE)
 Ofte er vi heller ikke fornøyd med hvordan data er strukturert. Her er en av hovedfordelene med R; vi kan gjøre så og si hva som helst for å få dataene i det formatet vi ønsker. La oss si at vi, for eksempel, har en hypotese om at eldre personer hadde mindre sannsynlighet for å overleve enn yngre personer. Som dere husker fra forelesning :) kan det være lurt å sentrere variabler som alder fordi vi sjelden har et naturlig nullpunkt, som igjen gjør at konstantleddet i en evt regresjon ikke gir substansiell mening. La oss derfor sentrere alder:
 
 ```{r omkoding}
+median(passengers$Age, na.rm = TRUE)
 passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
 
 table(passengers$age_cent[1:10], passengers$Age[1:10])
@@ -276,9 +288,31 @@ pass_reg <- lm(Survived ~ age_cent, data = passengers)
 summary(pass_reg)
 ```
 
+\newpage
+
+```{r regplot}
+
+# install.packages("ggplot")
+library(ggplot2)
+theme_set(theme_bw())
+ggplot(passengers, aes(x = Age, y = Survived)) +
+  geom_smooth(method = "lm")
+```
+
 Kan dere tenke dere noen variabler som vi burde inkludere i denne regresjonen?
 
-Bonus:
+\newpage
+
+```{r regplot2}
+
+ggplot(passengers, aes(x = Age, y = Survived, color = Sex)) +
+  geom_smooth(method = "lm") + 
+  geom_point()
+```
+
+\newpage
+
+Bonus for \LaTeX elskere:
 ```{r stargazer,results='asis'}
 # install.packages("stargazer")
 library(stargazer)
