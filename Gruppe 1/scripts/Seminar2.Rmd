@@ -26,11 +26,12 @@ Plan for i dag:
 2. [Importere data](#datasett)
 3. [Forberede data 1: Omkoding](#data1) 
 4. [Forberede data 2: Merge, subset, aggregate](#data2)
-5. [Mer om funksjoner](#funksjoner)
+5. [Mer om funksjoner*](#funksjoner)
 6. [OLS med samspill, andregradsledd og diagnostikk](#ols)
 7. [Fine plot med ggplot2](#ggplot2)
-8. [Eksportere tabeller fra R](#tabeller)
+8. [Eksportere tabeller fra R*](#tabeller)
 
+Avsnitt merket med `*` i overskriften er mer avanserte og vil ikke bli prioritert dersom det blir dårlig tid i dagens seminar. De kan imidlertid være svært nyttig ved en senere anledning.
 
 ## Oppsett R-script <a name="Rscript"></a>
 
@@ -58,7 +59,7 @@ Dersom vi skal kjøre et nytt script, er det ofte ønskelig å fjerne objekter/a
 R-scriptet deres bør fungere etter denne kommandoen, dere bør ikke skrive i flere script, på en slik måte at scriptene må kjøres i en spesiell rekkefølge for å fungere (unntaket er dersom dere kjører andre R-script med kode).
 
 ### Working directory
-Working directory er den mappen R forventer å hente og lagre filer i. Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. Jeg anbefaler derfor at dere lager en ny mappe for hvert nye prosjekt med R, og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) her. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være våres working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er en demonstrasjon av `setwd()`, som fungerer litt ulikt på windows og mac/linux:
+Working directory er den mappen R forventer å hente og lagre filer i. Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. Jeg anbefaler derfor at dere lager en ny mappe for hvert nye prosjekt med R, og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) her. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være vår working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er en demonstrasjon av `setwd()`, som fungerer litt ulikt på windows og mac/linux:
 ```{r, eval=F}
 setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra") # For windows
 setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
@@ -71,7 +72,9 @@ Når vi har bestemt working directory, kan vi navigere til andre mapper med utga
 list.files()      # Filer i mappen vi er i
 list.files("../") # Filer i mappen under
 ```
-Jeg har gjemt output fra koden, men dere bør få "test.txt" og "seminar 2" som output. 
+Jeg har gjemt output fra koden, men dere bør få "test.txt" og "seminar 2" som output.
+
+
 
 ### Pakker 
 R er *open-source* software, som gjør det mulig for brukere å lage sine egne tilleggspakker til R. Det finnes over **10 000** slike pakker, mange av dem inneholder mange funksjoner som løser spesifikke oppgaver mer effektivt enn grunninstallasjonen av R. Vi installerer nye pakker med `install.packages("pakkenavn")`. For å bruke installerte pakker, må vi laste inn pakkene med `library(pakkenavn)`. Dersom dere skal dele kode, sett `#` foran `install.packages()`, slik at koden ikke kjøres, det er kjedelig å sette i gang et script som installerer 10 pakker man allerede har på nytt. Inkluder imidlertid `library`. Et godt tips er å skrive hvilken versjon av en pakke du bruker i en kommentar etter `library()`, da pakker noen ganger endres slik at koden din ikke fungerer. Det er mulig å laste inn historiske versjoner av pakker, dermed bidrar dette også til å sikre reproduserbarhet. Her er et eksempel på installasjon og innlasting av pakker: 
@@ -238,7 +241,7 @@ En lettvint måte å kikke etter slike metoder er å vise den grunnleggende data
 
 
 
-### Min første `for()`-loop
+### Min første `for()`-loop*
 En annen funksjon som kan være nyttig til omkoding er en `for()`-loop.
 En slik loop starter på første (eller siste) observasjon i et datasett, og går deretter forlengs (eller) baklengs gjennom datasettet, observasjon for observasjon. Siden en `for`-loop går gjennom observasjonene i en bestemt rekkefølge, er det svært viktig å sørge for at observasjonene er i den rekkefølgen vi ønsker før vi setter i gang loopen. Derfor bruker jeg alltid `arrange()` fra dplyr til å ordne datasettet slik jeg vil som den siste linjen med kode før en slik loop. Under er et eksempel på en enkel loop som lager en ny variabel ved å telle antall år en konflikt har vart.
 
@@ -261,6 +264,9 @@ Forklaring: den første linjen av koden bestemmer hvor loopen skal starte (andre
 ## Forberede data 2:  Merge, subset og aggregate <a name="data2"></a>
 
 ### Subset:
+
+> Når vi subsetter velger vi ut noen av observasjonene i datasettet vårt, og lager et datasett bestående av disse observasjonene.
+
 Det er som regel mange forskjellige måter å løse oppgaver i R. Under ser dere 3 ulike linjer med kode, som alle velger observasjoner fra et datasett, og lager et nytt datasett som bare inneholder disse observasjonene. Vi bruker `table(test==test2, test==test3)` for å sjekke at vi får samme resultat.
 ```{r}
 test <- subset(bat_death, bat_death$conflict.year>1)
@@ -276,6 +282,9 @@ table(test==test2, test==test3)
 
 
 ### Merge:
+
+> Når vi merger legges det flere variabler til datasettet vårt.
+
 Noen ganger er vi interessert i å kombinere informasjon fra ulike datasett. Dette kan gjøres med `merge()`, eller med `right_join()` (og beslektede funksjoner) fra dplyr. La oss laste inn et annet datasett fra uppsala for å prøve:
 
 ```{r}
@@ -298,7 +307,10 @@ Vi ser at det i noen tilfeller er flere konflikter som pågår samme sted/om sam
 
 
 ### Aggregate:
-Noen ganger ønsker vi å lage ett nytt datasett ved å aggregere data fra et datasett vi allerede har. Et eksempel på en slik situasjon kan være en studie der vi ser på territorielle konflikter, og ønsker å inkludere data om ikke-statlig vold i disse områdene (i.e. eksempelet over). Vi kan for eksempel aggregere data med utgangspunkt i en variabel for området der volden foregikk, og år. Dette kan gjøres som følger:
+
+> Når vi aggregerer grupperer vi data med utgangspunkt i en eller flere variabler, og oppsummerer informasjon om hver gruppe. Dette fører til færre observasjoner
+
+Noen ganger ønsker vi å lage ett nytt datasett ved å aggregere data fra et datasett vi allerede har. Et eksempel på en slik situasjon kan være en studie der vi ser på territorielle konflikter, og ønsker å inkludere data om ikke-statlig vold i disse områdene (se eksempelet over). Vi kan for eksempel aggregere data med utgangspunkt i en variabel for området der volden foregikk, og år. Dette kan gjøres som følger:
 ```{r}
 nonstate <- nonstate %>%
   group_by(gwnoloc, year) %>%                
@@ -314,7 +326,7 @@ Vi bruker først `group_by` til å bestemme hvilke variabler vi skal gruppere da
 
 Forberede data oppsummert: Sjekk først strukturen til data og variabler. Tenk deretter nøye gjennom hva slags data du trenger, og hvilken struktur du trenger data i. Finn til slutt en fremgangsmåte for å lage det datasettet du trenger, men ikke skriv over variabler/datasett mens du forsøker å finne en løsning.
 
-## Mer om funksjoner <a name="funksjoner"></a>
+## Mer om funksjoner* <a name="funksjoner"></a>
 
 I forrige seminar snakket vi om at funksjoner er grunnleggende byggeklosser i R sammen med objekter. Dere har nå lært at det finnes et hav av ferdiglagde funksjoner i R og i tilleggspakker til R, og vi har sett nærmere på noen nyttige funksjoner for omkoding av data. Siden R er et programmeringsspråk, lar det oss imidlertid også skrive våre egne funksjoner. Dette er som regel mye lettere enn man skulle tro. Syntaksen for å skrive en egen funksjon er:
 ```{r, eval=F}
@@ -362,8 +374,9 @@ beste_statitistikkprogram("R")
 ```
 
 ## OLS med samspill, andregradsledd og diagnostikk <a name="ols"></a>
-I forrige seminar kjørte vi lineær regresjonsanalyse, og så på output. Her følger en rask gjennomgang av hvordan du legger inn samspill og andregradsledd, samt den emkleste formen for diagnostikk (mer om diagnostikk senere). Jeg har fjernet 3 observasjoner fra datasettet bat_death og opprettet det nye datasettet model_data for bedre illustrasjon. Dette viser jeg imidlertid ikke til dere, siden det ikke er lov å fjerne observasjoner på denne måten uten videre i en statistisk analyse.
+I forrige seminar kjørte vi lineær regresjonsanalyse, og så på output. Her følger en rask gjennomgang av hvordan du legger inn samspill og andregradsledd, samt den emkleste formen for diagnostikk (mer om diagnostikk senere). 
 ```{r, include=FALSE}
+# Her fikser jeg litt på data for å gjøre det mer velegnet til illustrasjon. Man bør tenke seg om før man gjør slike endringer i en hjemmeoppgave.
 model_data <- bat_death %>%
   filter(Region!="1, 2, 3, 5" & Region!="1, 3, 5" & Incompatibility!=3)
 ```
@@ -419,7 +432,7 @@ ggsave("testplot.png", width = 8, height = 5) # lagrer ditt siste ggplot i det f
 ```
 Mulighetene er endeløse, jeg har bare vist dere noen få muligheter her. Ved hjelp av [cheatsheet til ggplot2](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) og [annen dokumentasjon](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/) som dere kan google dere frem til, burde dere finne metoder for å lage akkurat det plottet dere ønsker.
 
-## Eksportere tabeller fra R <a name="tabeller"></a>
+## Eksportere tabeller fra R* <a name="tabeller"></a>
 R kan lage tabellene dine for deg, om du skriver i word eller i [Latex](https://www.latex-project.org/about/). Det finnes flere pakker som kan brukes til å lage og eksportere fine tabeller fra R til begge program. 
 
 ### Eksportere til Latex
@@ -442,7 +455,7 @@ screenreg(list(m1,m2,m3,m4))
 ```
 
 
-## Dagens moralisering
+## Dagens moral
 Dersom dere følger det jeg har lært dere om organisering i dag, kan dere redusere antallet situasjoner av denne typen
 
 ```{r echo = FALSE}
