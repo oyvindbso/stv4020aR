@@ -1,7 +1,13 @@
 #### Regresjonsoppgaver til seminar 2 ####
-load("https://github.com/martigso/stv4020aR/raw/master/Gruppe%201/data/Seminar2.RData")
 
 #### Forberedelser ####
+
+##  Sett working directory, last ned data fra github, og lagre i wd.
+
+setwd("")
+
+load("Seminar2.RData")
+
 ## Laster inn pakker
 library(stargazer)
 library(ggplot2)
