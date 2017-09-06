@@ -25,12 +25,12 @@ Dette scriptet gir en kort innføring i hvordan du kan plotte regresjonslinjer, 
 2. Lag et nytt datasett, med en variabel for hver uavhengig variabel i regresjonsmodellen. Variablene i datasettet du lager må ha samme navn som de uavhengige variablene i regresjonsmodellen. La verdiene til de uavhengige variablene du vil plotte effekten vil variere, hold verdiene til de andre uavhengige variablene konstant.
 3. Bruk `predict()` og argumentet `newdata =` til å lage enda et nytt datasett. Denne funksjonen lar deg beregne forventede verdier på **avhengig variabel** samt standardfeil med utgangspunkt i modellen fra trinn 1, gitt verdiene på de **uavhengige variablene** i datasettet fra trinn 2. 
 4. Lag et nytt datasett ved å kombinere datasettene fra trinn 2 og 3 med `cbind()`.
-5. Kalkuler kofidensintervaller med din foretrukne formel for standardfeil ved hjelp av standardfeilene du beregnet i trinn 3[^1], og legg til datasettet ditt fra trinn 4.[^2] 
+5. Kalkuler kofidensintervaller med din foretrukne formel for standardfeil ved hjelp av standardfeilene du beregnet i trinn 3<a href="#footnote-1">[1]</a>, og legg til datasettet ditt fra trinn 4.<a href="#footnote-2">[2]</a>. 
 6. Plot effekten til uavhengig variabel ved hjelp av datasettet fra trinn 5.
 
-[^1]: Du kan bruke **sandwich** pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. [Spørsmål og svar i denne linken viser hvordan du kan gå frem](https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors)
+<p id="footnote-1">[1] Du kan bruke **sandwich** pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. [Spørsmål og svar i denne linken viser hvordan du kan gå frem](https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
 
-[^2]: Ved bootstrap må du kalkulere standardfeil i trinn 3, [samtidig som du bruker `predict`](http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html)
+<p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, [samtidig som du bruker `predict`](http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html) </p>
 
 
 ### Lineær regresjon med en uavhengig variabel <a name="ols1"></a>
