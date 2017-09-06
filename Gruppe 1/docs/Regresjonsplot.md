@@ -28,7 +28,7 @@ Dette scriptet gir en kort innføring i hvordan du kan plotte regresjonslinjer, 
 5. Kalkuler kofidensintervaller med din foretrukne formel for standardfeil ved hjelp av standardfeilene du beregnet i trinn 3<a href="#footnote-1">[1]</a>, og legg til datasettet ditt fra trinn 4.<a href="#footnote-2">[2]</a>. 
 6. Plot effekten til uavhengig variabel ved hjelp av datasettet fra trinn 5.
 
-<p id="footnote-1">[1] Du kan bruke **sandwich** pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. Spørsmål og svar i denne linken viser hvordan du kan gå frem: (https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
+<p id="footnote-1">[1] Du kan bruke __sandwich__ pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. Spørsmål og svar i denne linken viser hvordan du kan gå frem: (https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
 
 <p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, samtidig som du bruker `predict`: (http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html) </p>
 
@@ -250,7 +250,7 @@ p
 
 Plottet viser tydelig at regresjonslinjen for `wt` får ulik helning for ulike verdier av `wt` (men vi må fortsatt gjøre hypotesetesting for å vite om samspillet er statistisk signifikant).
 
-Ved hjelp av funksjonen `facet_wrap()` kan vi faktisk også visualisere to samspillseffekter samtidig. I modell 4 under, utvider jeg modell3 ved å legge inn samspill mellom `wt` og `cyl` (som dummyvariabler) også. Med `facet_wrap()` får vi et plot for hver verdi av en variabel, her `cyl`. Tallene over hvert plot viser variabelverdien i  hvert plot, her antall sylindre. Jeg viser først scatterplot med `facet_wrap()`, før jeg legger på regresjonslinjer og konfidensintervall.
+Ved hjelp av funksjonen `facet_wrap()` kan vi faktisk også visualisere to samspillseffekter samtidig. I modell 4 under, utvider jeg modell 3 ved å legge inn samspill mellom `wt` og `cyl` (som dummyvariabler) også. Med `facet_wrap()` får vi et plot for hver verdi av en variabel, her `cyl`. Tallene over hvert plot viser variabelverdien i  hvert plot, her antall sylindre. Jeg viser først scatterplot med `facet_wrap()`, før jeg legger på regresjonslinjer og konfidensintervall.
 
 
 ```r
@@ -303,7 +303,7 @@ I dette tilfellet er datasettet så lite at det ikke har mye for seg å modeller
 
 
 ### Bonus: visualisering av mange variabler i scatterplot
-Jeg synes også noen ganger det er nyttig å visualisere enda flere variabler i et scatterplot. Med utgangspunkt i scatterplottene over, kan vi legge inn følgende alternativer i (aes) for å visualisere `hp`, `qsec` og `am` også:
+Jeg synes også noen ganger det er nyttig å visualisere enda flere variabler i et scatterplot. Med utgangspunkt i scatterplottene over, kan vi legge inn følgende alternativer i `aes()` for å visualisere `hp`, `qsec` og `am` også:
 
 ```r
 p <- ggplot(mtcars, aes(x = wt, y = mpg, col=hp, size=qsec,  shape=as.factor(am))) +
@@ -321,5 +321,4 @@ p
 ![](../pics/regplot10.png)<!-- -->
 
 Her er alle variablene i regresjonen visualisert. I dette tilfellet synes jeg ikke visualiseringen fungerer spesielt godt, men vi ser at am = 1 ser ut til å være korrelert med lavt antall sylindre, høy verdi på `hp` og høy verdi på `qsec`. Det generelle poenget er imidlertid at man kan visualisere mange variabler samtidig med ggplot. Man kan også legge inn histogram eller andre typer plot, i tillegg til eller i stedet for scatterplot. Slike visualiseringer kan gjøre det lettere å forstå hva regresjonskoeffisientene sier, og hvordan uavhengig variabel er relatert til kontrollvariabler. Jeg anbefaler derfor visualisering som et virkemiddel for å forstå hvordan en modell fungerer.
-
 
