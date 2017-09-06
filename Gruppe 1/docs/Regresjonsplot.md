@@ -28,9 +28,9 @@ Dette scriptet gir en kort innføring i hvordan du kan plotte regresjonslinjer, 
 5. Kalkuler kofidensintervaller med din foretrukne formel for standardfeil ved hjelp av standardfeilene du beregnet i trinn 3<a href="#footnote-1">[1]</a>, og legg til datasettet ditt fra trinn 4.<a href="#footnote-2">[2]</a>. 
 6. Plot effekten til uavhengig variabel ved hjelp av datasettet fra trinn 5.
 
-<p id="footnote-1">[1] Du kan bruke **sandwich** pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. [Spørsmål og svar i denne linken viser hvordan du kan gå frem](https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
+<p id="footnote-1">[1] Du kan bruke **sandwich** pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. Spørsmål og svar i denne linken viser hvordan du kan gå frem: (https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
 
-<p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, [samtidig som du bruker `predict`](http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html) </p>
+<p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, samtidig som du bruker `predict`: (http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html) </p>
 
 
 ### Lineær regresjon med en uavhengig variabel <a name="ols1"></a>
@@ -63,7 +63,7 @@ p
 
 ![](Regresjonsplot_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-![](../pics/regplot1.png)<!-- -->
+
 
 
 
@@ -74,9 +74,9 @@ p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high)) + geom_
     aes(y = fit))
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-![](../pics/regplot2.png)<!-- -->
+
 
 
 
@@ -88,9 +88,9 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point() + ggtitle("Cars")
 p + geom_smooth(method = "lm")
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-![](../pics/regplot3.png)<!-- -->
+
 
 Dersom vi prøver å legge inn flere variabler i plottet vårt får vi imidlertid bedre kontroll ved å bruke den generelle tilnærmingen.
 
@@ -137,9 +137,9 @@ p
 ```
 
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
-![](../pics/regplot4.png)<!-- -->
+
 
 Vi kan nå begynne å legge inn forskjellige utvidelser av plottet over.
 Som dere kanskje husker fra forelesning, kan man visualisere effekten av dummyvariabler som ulike skjæringspunkt med y-aksen. Plottet under er likt plottet over, bortsett fra at jeg nå også visualiserer effekten av dummy-variabelen am, som var holdt konstant til verdien 1 i sted. For å gjøre dette, lager jeg et datasett til plotting med alle plotte-verdier for wt 2 ganger, en gang for `am = 0`, og en gang for `am = 1`.
@@ -180,9 +180,9 @@ p
 ```
 
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
-![](../pics/regplot5.png)<!-- -->
+
 
 Muligheten til å kontrollere verdiene til kontrollvariabler, lar oss sjekke effekten for ulike grupper i datasettet. I plottet under er basert på samme modell som forrige plot, men jeg har satt alle kontrollvariablene til sin minimumsverdi. Dette kan være nyttig, siden vi kanskje har teoretisk motivasjon for å være spesielt interessert i effekten for en gruppe med en bestemt kombinasjon verdier på kontrollvariablene. Jeg plotter forøvrig også effekten av am i dette plottet. Koden er dermed det samme som over, bortsett fra at trinn 2 nå ser slik ut:
 
@@ -204,9 +204,9 @@ data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
 
 Ved å bytte ut denne delen av koden får vi følgende plot:
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
-![](../pics/regplot6.png)<!-- -->
+
 
 ### Introduksjon <a name="samspill"></a>
 Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen vi må gjøre for å plotte samspill i forrige seksjon, ved å plotte `am`. Trikset er å lage et datasett i trinn 2, med alle kombinasjoner av verdier vi trenger for plotting. La oss nå lage en ny modell som inkluderer samspill mellom `am` og `wt`. Som dere kanskje husker fra forelesning, vil slikt samspill kunne føre til ulik helning på regresjonslinjen for `wt` for de to ulike verdiene av am. Under ser dere kode for hvordan jeg plotter denne modellen, her har jeg ikke fjernet pynt.
@@ -245,9 +245,8 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_rangeframe() + ggtitle("Cars") 
 p
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
-![](../pics/regplot7.png)<!-- -->
 
 Plottet viser tydelig at regresjonslinjen for `wt` får ulik helning for ulike verdier av `wt` (men vi må fortsatt gjøre hypotesetesting for å vite om samspillet er statistisk signifikant).
 
@@ -287,10 +286,9 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) + ggtitle("Cars") + theme_tufte() + yl
 p
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 
-![](../pics/regplot8.png)<!-- -->
 
 
 ```r
@@ -299,9 +297,9 @@ p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high, fill = a
     geom_line(data = plot_data, aes(y = fit, colour = am))
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
-![](../pics/regplot9.png)<!-- -->
+
 
 I dette tilfellet er datasettet så lite at det ikke har mye for seg å modellere to samspill (konfidensintervallene er enorme, noe som betyr at det er enorm usikkerhet. Årsaken er lite data), men i andre tilfeller kan slik visualisering av data være nyttig. Legg forøvrig merke til at det ser ut som om det er en tydelig sammenheng mellom `wt` og `cyl` (se på plassering av verdier på x-aksen i de tre plottene). Ytterligere utvidelser er også mulig, man kunne for eksempel visualisert to samspill ved hjelp av tredimensjonale plot. 
 
@@ -320,10 +318,10 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg, col=hp, size=qsec,  shape=as.factor(am)
 p
 ```
 
-![](Regresjonsplot_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
+![](Regresjonsplot_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 
-![](../pics/regplot10.png)<!-- -->
+
 
 Her er alle variablene i regresjonen visualisert. I dette tilfellet synes jeg ikke visualiseringen fungerer spesielt godt, men vi ser at am = 1 ser ut til å være korrelert med lavt antall sylindre, høy verdi på `hp` og høy verdi på `qsec`. Det generelle poenget er imidlertid at man kan visualisere mange variabler samtidig med ggplot. Man kan også legge inn histogram eller andre typer plot, i tillegg til eller i stedet for scatterplot. Slike visualiseringer kan gjøre det lettere å forstå hva regresjonskoeffisientene sier, og hvordan uavhengig variabel er relatert til kontrollvariabler. Jeg anbefaler derfor visualisering som et virkemiddel for å forstå hvordan en modell fungerer.
 
