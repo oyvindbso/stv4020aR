@@ -72,7 +72,7 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
 p
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, include=F}
 ##Pyntet versjon
 m1 <- lm(mpg ~ wt, data=mtcars)
 
@@ -103,7 +103,9 @@ p
 ggsave("regplot1.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot1.png")
+```
 
 
 ```{r,eval=F}
@@ -112,7 +114,7 @@ p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high)) +
     geom_line(data=plot_data, aes(y=fit))
 ```
 
-```{r, echo=F, warning=FALSE}
+```{r, include=F, warning=FALSE}
 ## Pyntet versjon
 p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high), alpha=.15) +
     geom_line(data=plot_data, aes(y=fit), col=wes_palette(n=1, name="Zissou"))
@@ -121,7 +123,9 @@ p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high), alpha=.15) +
 ggsave("regplot2.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot2.png")
+```
 
 
 
@@ -134,7 +138,7 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
 p +  geom_smooth(method="lm")
 ```
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 # Pyntet versjon
 p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
@@ -151,7 +155,9 @@ p + geom_rangeframe() +
 ggsave("regplot3.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot3.png")
+```
 
 Dersom vi prøver å legge inn flere variabler i plottet vårt får vi imidlertid bedre kontroll ved å bruke den generelle tilnærmingen.
 
@@ -197,7 +203,7 @@ p
 ```
 
 
-```{r, echo=FALSE, warning=F}
+```{r, include=FALSE, warning=F}
 ## Omkoder am og cyl til faktor
 mtcars$am <-  as.factor(mtcars$am)
 mtcars$cyl <- as.factor(mtcars$cyl)
@@ -241,7 +247,9 @@ p
 ggsave("regplot4.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot4.png")
+```
 
 Vi kan nå begynne å legge inn forskjellige utvidelser av plottet over.
 Som dere kanskje husker fra forelesning, kan man visualisere effekten av dummyvariabler som ulike skjæringspunkt med y-aksen. Plottet under er likt plottet over, bortsett fra at jeg nå også visualiserer effekten av dummy-variabelen am, som var holdt konstant til verdien 1 i sted. For å gjøre dette, lager jeg et datasett til plotting med alle plotte-verdier for wt 2 ganger, en gang for `am = 0`, og en gang for `am = 1`.
@@ -281,7 +289,7 @@ p
 ```
 
 
-```{r, echo=FALSE, warning=F}
+```{r, include=FALSE, warning=F}
 ## Pyntet versjon
 ## Omkoder am og cyl til faktor
 mtcars$am <-  as.factor(mtcars$am)
@@ -326,7 +334,9 @@ p
 ggsave("regplot5.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot5.png")
+```
 
 Muligheten til å kontrollere verdiene til kontrollvariabler, lar oss sjekke effekten for ulike grupper i datasettet. I plottet under er basert på samme modell som forrige plot, men jeg har satt alle kontrollvariablene til sin minimumsverdi. Dette kan være nyttig, siden vi kanskje har teoretisk motivasjon for å være spesielt interessert i effekten for en gruppe med en bestemt kombinasjon verdier på kontrollvariablene. Jeg plotter forøvrig også effekten av am i dette plottet. Koden er dermed det samme som over, bortsett fra at trinn 2 nå ser slik ut:
 ```{r, eval=F}
@@ -343,7 +353,7 @@ data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
 
 Ved å bytte ut denne delen av koden får vi følgende plot:
 
-```{r, echo=FALSE, warning=F}
+```{r, include=FALSE, warning=F}
 ## Omkoder am og cyl til faktor
 mtcars$am <-  as.factor(mtcars$am)
 mtcars$cyl <- as.factor(mtcars$cyl)
@@ -387,13 +397,52 @@ p
 ggsave("regplot6.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot6.png")
+```
 
 ### Introduksjon <a name="samspill"></a>
 Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen vi må gjøre for å plotte samspill i forrige seksjon, ved å plotte `am`. Trikset er å lage et datasett i trinn 2, med alle kombinasjoner av verdier vi trenger for plotting. La oss nå lage en ny modell som inkluderer samspill mellom `am` og `wt`. Som dere kanskje husker fra forelesning, vil slikt samspill kunne føre til ulik helning på regresjonslinjen for `wt` for de to ulike verdiene av am. Under ser dere kode for hvordan jeg plotter denne modellen, her har jeg ikke fjernet pynt.
 
 
-```{r, warning=F}
+```{r, eval=F, warning=F}
+## Trinn 1: kjører regresjon med samspill mellom am og wt.
+m3 <- lm(mpg ~ wt*as.factor(am) + as.factor(cyl) + qsec + hp, data=mtcars)
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am til 1.
+data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+                                                 max(mtcars$wt), .1),2),
+                                  qsec = median(mtcars$qsec),
+                                  hp   = mean(mtcars$hp),
+                                  cyl  = as.factor(6),
+                                  am   = as.factor(c(rep(1, 40), rep(0, 40))))
+
+
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
+predicted_data <- predict(m3, newdata = data_for_prediction, 
+                                        se=TRUE)
+
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
+plot_data <- cbind(predicted_data, data_for_prediction)
+
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+plot_data$low  <- plot_data$fit - 1.96*plot_data$se
+plot_data$high <- plot_data$fit + 1.96*plot_data$se
+
+## Trinn 6: Plot
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_rangeframe() +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  scale_x_continuous(breaks = extended_range_breaks()(mtcars$wt)) +
+  scale_y_continuous(breaks = extended_range_breaks()(mtcars$mpg)) +
+  ylab("Miles per Gallon") +
+  xlab("Weight") + 
+  geom_point() +
+  geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high, fill=am), alpha=.2) +
+  geom_line(data=plot_data, aes(y=fit, colour=am))
+p
+```
+```{r, include=F, warning=F}
 ## Trinn 1: kjører regresjon med samspill mellom am og wt.
 m3 <- lm(mpg ~ wt*as.factor(am) + as.factor(cyl) + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am til 1.
@@ -434,12 +483,15 @@ p
 ggsave("regplot7.png")
 dev.off()
 ```
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot7.png")
+```
 
 Plottet viser tydelig at regresjonslinjen for `wt` får ulik helning for ulike verdier av `wt` (men vi må fortsatt gjøre hypotesetesting for å vite om samspillet er statistisk signifikant).
 
 Ved hjelp av funksjonen `facet_wrap()` kan vi faktisk også visualisere to samspillseffekter samtidig. I modell 4 under, utvider jeg modell3 ved å legge inn samspill mellom `wt` og `cyl` (som dummyvariabler) også. Med `facet_wrap()` får vi et plot for hver verdi av en variabel, her `cyl`. Tallene over hvert plot viser variabelverdien i  hvert plot, her antall sylindre. Jeg viser først scatterplot med `facet_wrap()`, før jeg legger på regresjonslinjer og konfidensintervall.
 
-```{r, warning=F}
+```{r, eval=F, warning=F}
 ## Trinn 1: kjører regresjon med samspill mellom am og wt.
 m4 <- lm(mpg ~ wt*as.factor(am) + wt*as.factor(cyl) + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg lar verdiene til am og cyl variere.
@@ -475,13 +527,57 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   facet_wrap(~as.factor(cyl))
 p 
 ```
+```{r, include=F, warning=F}
+## Trinn 1: kjører regresjon med samspill mellom am og wt.
+m4 <- lm(mpg ~ wt*as.factor(am) + wt*as.factor(cyl) + qsec + hp, data=mtcars)
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg lar verdiene til am og cyl variere.
 
+data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+                                                 max(mtcars$wt), .1),6),
+                                  qsec = median(mtcars$qsec),
+                                  hp   = mean(mtcars$hp),
+                                  cyl  = as.factor(rep(c(rep(4, 40), rep(6, 40), rep(8, 40)), 2)),
+                                  am   = as.factor(rep(c(rep(1, 40), rep(0, 40)), 3)))
+
+
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
+predicted_data <- predict(m4, newdata = data_for_prediction, 
+                          se=TRUE)
+
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
+plot_data <- cbind(predicted_data, data_for_prediction)
+
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+
+plot_data$low  <- plot_data$fit - 1.96*plot_data$se
+plot_data$high <- plot_data$fit + 1.96*plot_data$se
+
+## Trinn 6: Viser først scatterplot, legger deretter på linjer.
+
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  ylab("Miles per Gallon") +
+  xlab("Weight") + 
+  geom_point() +
+  facet_wrap(~as.factor(cyl))
+p 
+```
 ```{r, include=F}
 ggsave("regplot8.png")
 dev.off()
 ```
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot8.png")
+```
 
-```{r, warning=F}
+```{r, eval = F ,warning=F}
+## Plotter med regresjonslinje og konfidensintervall
+p +
+  geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high, fill=am), alpha=.2) +
+  geom_line(data=plot_data, aes(y=fit, colour=am))
+```
+```{r, include=F, warning=F}
 ## Plotter med regresjonslinje og konfidensintervall
 p +
   geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high, fill=am), alpha=.2) +
@@ -491,14 +587,26 @@ p +
 ggsave("regplot9.png")
 dev.off()
 ```
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot9.png")
+```
 
 I dette tilfellet er datasettet så lite at det ikke har mye for seg å modellere to samspill (konfidensintervallene er enorme, noe som betyr at det er enorm usikkerhet. Årsaken er lite data), men i andre tilfeller kan slik visualisering av data være nyttig. Legg forøvrig merke til at det ser ut som om det er en tydelig sammenheng mellom `wt` og `cyl` (se på plassering av verdier på x-aksen i de tre plottene). Ytterligere utvidelser er også mulig, man kunne for eksempel visualisert to samspill ved hjelp av tredimensjonale plot. 
 
 
 ### Bonus: visualisering av mange variabler i scatterplot
 Jeg synes også noen ganger det er nyttig å visualisere enda flere variabler i et scatterplot. Med utgangspunkt i scatterplottene over, kan vi legge inn følgende alternativer i (aes) for å visualisere `hp`, `qsec` og `am` også:
-```{r, tidy=F}
+```{r, tidy=F, eval=F}
+p <- ggplot(mtcars, aes(x = wt, y = mpg, col=hp, size=qsec,  shape=as.factor(am))) +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  ylab("Miles per Gallon") +
+  xlab("Weight") + 
+  geom_point() +
+  facet_wrap(~as.factor(cyl))
+p
+```
+```{r, tidy=F, include=F}
 p <- ggplot(mtcars, aes(x = wt, y = mpg, col=hp, size=qsec,  shape=as.factor(am))) +
   ggtitle("Cars")  + 
   theme_tufte() + 
@@ -513,7 +621,9 @@ ggsave("regplot10.png")
 dev.off()
 ```
 
-
+```{r echo = FALSE}
+knitr::include_graphics("../pics/regplot10.png")
+```
 
 Her er alle variablene i regresjonen visualisert. I dette tilfellet synes jeg ikke visualiseringen fungerer spesielt godt, men vi ser at am = 1 ser ut til å være korrelert med lavt antall sylindre, høy verdi på `hp` og høy verdi på `qsec`. Det generelle poenget er imidlertid at man kan visualisere mange variabler samtidig med ggplot. Man kan også legge inn histogram eller andre typer plot, i tillegg til eller i stedet for scatterplot. Slike visualiseringer kan gjøre det lettere å forstå hva regresjonskoeffisientene sier, og hvordan uavhengig variabel er relatert til kontrollvariabler. Jeg anbefaler derfor visualisering som et virkemiddel for å forstå hvordan en modell fungerer.
 
