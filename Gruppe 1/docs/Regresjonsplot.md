@@ -10,7 +10,7 @@ Erlend Langørgen
 2. [Den generelle tilnærmingen, trinn for trinn](#Trinn)
 3. [Lineær regresjon med en uavhengig variabel](#ols1)
 4. [Multippel lineær regresjon](#ols2)
-5. [Multippel lineær regresjon med samspill](#samspill)
+5. [Multippel lineær regresjon med include](#samspill)
 
 
 ### Introduksjon <a name="Introduksjon"></a>
@@ -28,9 +28,9 @@ Dette scriptet gir en kort innføring i hvordan du kan plotte regresjonslinjer, 
 5. Kalkuler kofidensintervaller med din foretrukne formel for standardfeil ved hjelp av standardfeilene du beregnet i trinn 3<a href="#footnote-1">[1]</a>, og legg til datasettet ditt fra trinn 4.<a href="#footnote-2">[2]</a>. 
 6. Plot effekten til uavhengig variabel ved hjelp av datasettet fra trinn 5.
 
-<p id="footnote-1">[1] Du kan bruke __sandwich__ pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut `plot_data$se` med dine nye standardfeil i utregning av konfidensintervall i trinn 5. Spørsmål og svar i denne linken viser hvordan du kan gå frem: (https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors) </p>
+<p id="footnote-1">[1] Du kan bruke sandwich pakken til å regne ut robuste standardfeil. Regn først ut robuste standardfeil, bytt deretter ut plot_data$se med dine nye standardfeil i utregning av konfidensintervall i trinn 5. Spørsmål og svar i denne linken viser hvordan du kan gå frem: https://stackoverflow.com/questions/13259357/using-ggplot2-to-plot-predicted-values-with-robust-standard-errors </p>
 
-<p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, samtidig som du bruker `predict`: (http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html) </p>
+<p id="footnote-2">[2] Ved bootstrap må du kalkulere standardfeil i trinn 3, samtidig som du bruker predict(): http://rstudio-pubs-static.s3.amazonaws.com/24365_2803ab8299934e888a60e7b16113f619.html </p>
 
 
 ### Lineær regresjon med en uavhengig variabel <a name="ols1"></a>
@@ -208,7 +208,7 @@ Ved å bytte ut denne delen av koden får vi følgende plot:
 
 ![](../pics/regplot6.png)<!-- -->
 
-### Introduksjon <a name="samspill"></a>
+### Multippel lineær regresjon med samspill <a name="samspill"></a>
 Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen vi må gjøre for å plotte samspill i forrige seksjon, ved å plotte `am`. Trikset er å lage et datasett i trinn 2, med alle kombinasjoner av verdier vi trenger for plotting. La oss nå lage en ny modell som inkluderer samspill mellom `am` og `wt`. Som dere kanskje husker fra forelesning, vil slikt samspill kunne føre til ulik helning på regresjonslinjen for `wt` for de to ulike verdiene av am. Under ser dere kode for hvordan jeg plotter denne modellen, her har jeg ikke fjernet pynt.
 
 
