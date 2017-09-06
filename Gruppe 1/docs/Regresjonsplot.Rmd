@@ -156,7 +156,7 @@ ggsave("regplot3.png")
 dev.off()
 ```
 ```{r echo = FALSE}
-knitr::include_graphics("../pics/regplot13.png")
+knitr::include_graphics("../pics/regplot3.png")
 ```
 
 Dersom vi prøver å legge inn flere variabler i plottet vårt får vi imidlertid bedre kontroll ved å bruke den generelle tilnærmingen.
@@ -532,6 +532,7 @@ p
 ggsave("regplot10.png")
 dev.off()
 ```
+
 ```{r echo = FALSE}
 knitr::include_graphics("../pics/regplot10.png")
 ```
