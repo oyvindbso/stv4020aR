@@ -2,7 +2,7 @@
 #' 
 #' R (og de fleste andre programmeringsspråk) er enkelt sagt veldig avanserte kalkulatorer:
 ## ----Plussminus----------------------------------------------------------
-1 + 2 # Dette er linjen med kode jeg sender til console. 
+1 + 2  # Dette er linjen med kode jeg sender til console. 
 # Linjen over er det console gir meg som svar
 
 3 * 4
@@ -46,10 +46,10 @@ Tiern * Tiern
 
 Tiern[4] 
 
-ABC <- c("A", "B", "C")
+ABC <- c("A", "B", "C") # SKRIV DETTE I DOKUMENTET 
 
 ABC[2]
-ABC[c(3,1,2)]
+ABC[c(3, 1, 2)]
 
 
 #' 
@@ -66,7 +66,7 @@ getwd() # get working directory
 ## setwd("~/R/der/du/vil/jobbe/fra")
 ## 
 ## # Windows
-## setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")
+setwd("~/Dropbox/PhD/Undervisning/Seminarleder/STV4020/høst_2017/Gruppe 2/")
 
 #' 
 #' Etter dette kan du sjekke hvilke filer og mapper som ligger i mappen du jobber fra -- da jobber vi med relative paths:
@@ -121,7 +121,7 @@ View(passengers) # Denne gir et vindu med data i, men man kan også trykke i "En
 #' Da får vi opp bildet nedenfor i vinduet nede til høyre. Her har vi først en kort beskrivelse av hva funksjonen gjør, så hvordan den brukes. Disse lærer man seg å lese etter hvert som man jobber med hjelpefilene. Den viktigste seksjonen i starten er **Arguments**; her listes argumentene man kan gi til funksjonen og beskrivelse av hva disse skal være. Så funksjonen `head()` tar argumentene *x* og *n*, hvor den første er et objekt (f.eks et dataset) og den andre er et enkelt heltall/integer (f.eks 4) som gir antall elementer man skal vise med funksjonen. Legg merke til at *n* har 6 som default -- disse verdiene står i seksjonen **Usage**. Derfor fikk vi 6 linjer når vi skrev `head(passengers)` over, uten å spesifiser *n*. Det er også viktig å spesifisere argumentene riktig; hvis vi gjør det i rekkefølgen **Usage** viser, slipper vi å skrive `n = 4` for eksempel:
 #' 
 ## ----Head_eks------------------------------------------------------------
-head(passengers, 1)
+head(passengers, 8)
 head(n = 1, x = passengers)
 
 #' 
@@ -156,7 +156,7 @@ barplot(klassetabell)
 
 #' 
 ## ----barplot2, eval=FALSE------------------------------------------------
-## barplot(table(passengers$Pclass)) #Vi trenger ikke gå innom objektet
+barplot(table(passengers$Pclass)) #Vi trenger ikke gå innom objektet
 ## 
 
 #' 
@@ -165,7 +165,6 @@ barplot(klassetabell)
 ## ----missing-------------------------------------------------------------
 mean(passengers$Age)
 
-table(is.na(passengers$Age))
 
 mean(passengers$Age, na.rm = TRUE)
 
