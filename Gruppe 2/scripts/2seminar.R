@@ -9,8 +9,11 @@
 #' Jeg laster bare direkte inn fra linken. Legg merke til argumentet `stringsAsFactors = FALSE`. Dette står som default til `TRUE`. Argumentet konverterer alle variabler (kolonner) til klassen `factor()`, som er tilnærmet det samme som ordinalt målenivå -- det vil vi ikke! Hvorfor vil vi ikke? Fordi vi vil ha lavest målenivå og heller sette det opp om vi finner ut at det gir mening, gitt data og det vi skal gjøre.
 #' 
 ## ----Titanic-------------------------------------------------------------
+
 passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv", stringsAsFactors = FALSE)
+
 class(passengers$Name)
+class(passengers$Age)
 
 #' 
 #' ## Jobbe med variabler i dataset
@@ -28,6 +31,7 @@ summary(passengers$Age)
 mean(passengers$Survived)
 
 table(passengers$Pclass)
+table(passengers$Age)
 
 hist(passengers$Age)
 
@@ -49,19 +53,24 @@ mean(passengers$Age, na.rm = TRUE)
 #' 
 ## ----omkoding------------------------------------------------------------
 median(passengers$Age, na.rm = TRUE)
-passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
 
+passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
+summary(passengers$age_cent)
 #' 
 #' Dette er en veldig god anledning til å se litt på **pakker**. R har nemlig et helt insane stort *open source* bibliotek med brukerlagede pakker alle har lov å bruke. Vi installerer en pakke med funksjonen `install.packages()` (husk å ha pakkenavnet i hermetegn her). Det er faktisk ikke nok å bare installer pakken, vi må også pakke den opp. Det gjør vi med `library()`. Pakken vil da være lastet *inn* til du avslutter R-sessionen du har åpen. Såååå, "ggplot2" er en pakke for å lage grafikk, som vi kommer til å bruke mye (R har også en innebygd grafikk-fuksjon: `plot()`).
 #' 
 #' Nedenfor sjekker jeg om omkodingen vi gjorde er riktig. Syns dere det ser sånn ut?
 #' 
 ## ----sjekkeomkoding------------------------------------------------------
-#install.packages(ggplot2)
-library(ggplot2)
-ggplot(passengers, aes(x = Age, y = age_cent)) +
-  geom_point()
+# install.packages("ggplot2")
 
+library("ggplot2")
+
+ggplot(passengers, aes(x = Age, y = age_cent))
+
+ggplot(passengers, aes(x = Age, y = age_cent)) + geom_point()
+
+ggplot(passengers, aes(x = Sex, y = age_cent)) + geom_boxplot()
 
 #' 
 #' Vi kan også gjøre grafikken mye finere, men denne figuren vil ikke bli brukt i et evt paper. Så det er greit at den er litt quick and dirty. Kommer tilbake til det senere.
@@ -81,6 +90,7 @@ cor.test(passengers$age_cent, passengers$Survived, use = "complete.obs")
 #' Også her må vi håndtere missingverdier (ref første linje over). Men med korrelasjon er det, som dere vet, forskjellige måter å håndere missing på: pairwise og listwise exclusion. Dette er ikke viktig med korrelasjon mellom bare to variabler, men med flere variabler er det viktig:
 #' 
 ## ----korrelasjon_missing, results='hold'---------------------------------
+
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "complete.obs")
 
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "pairwise.complete.obs")
@@ -102,8 +112,10 @@ summary(pass_reg)
 
 # install.packages("ggplot")
 library(ggplot2)
-theme_set(theme_bw())
-ggplot(passengers, aes(x = Age, y = Survived)) +
+
+theme_set(theme_classic())
+
+ggplot(passengers, aes(x = age_cent, y = Survived)) +
   geom_smooth(method = "lm")
 
 #' 
@@ -121,7 +133,11 @@ summary(pass_reg2)
 #' 
 #' Og noen personer er viktiger enn andre...:
 ## ----ols3----------------------------------------------------------------
-pass_reg3 <- lm(Survived ~ age_cent + Sex + factor(Pclass), data = passengers)
+table(passengers$Pclass)
+
+passengers$Pclass <- factor(passengers$Pclass, levels = c(3, 1, 2))
+
+pass_reg3 <- lm(Survived ~ age_cent + Sex + Pclass, data = passengers)
 summary(pass_reg3)
 
 #' 
@@ -133,14 +149,13 @@ summary(pass_reg3)
 
 passengers$age_cent_andregrad <- passengers$age_cent^2
 
-andregrads_reg <- lm(Survived ~ age_cent + age_cent_andregrad + Sex + factor(Pclass),
+andregrads_reg <- lm(Survived ~ age_cent + age_cent_andregrad + Sex + Pclass,
                      data = passengers)
-
+summary(andregrads_reg)
 # andregrads_reg <- lm(Survived ~ poly(age_cent, 2, raw = TRUE) + Sex + factor(Pclass),
 #                      data = passengers[which(is.na(passengers$age_cent) == FALSE), ])
 
 summary(andregrads_reg)
-# plot(andregrads_reg)
 
 
 #' 
@@ -148,11 +163,20 @@ summary(andregrads_reg)
 #' Logistisk regresjon er veldig likt i oppbygning. Det er i familien **general linearized models** (`glm()`). Det viktige her er argumentet `family = "binomial"`, som spesifiserer at vi snakker om en binær avhengig variabel -- kan også skrive `binomial(link = "logit")`. 
 ## ----logit, tidy=FALSE---------------------------------------------------
 
-pass_logit <- glm(Survived ~ age_cent + Sex + factor(Pclass),
-                  data = passengers, family = "binomial")
+pass_logit <- glm(Survived ~ age_cent + Sex + Pclass,
+                  data = passengers, family = binomial(link = "logit"))
 
 summary(pass_logit)
 
+# Odds
+exp(0.160800)
+
+# Sannsynlighet
+exp(0.160800) / (1 + exp(0.160800))
+
+exp(0.160800 + 1.270826) / (1 + exp(0.160800 + 1.270826))
+
+exp(0.160800 + 2.580625 + (-0.036985 * -28)) / (1 + exp(0.160800 + 2.580625 + (-0.036985 * -28)))
 
 #' 
 #' ## Neste gang:

@@ -2,7 +2,9 @@
 #' 
 #' R (og de fleste andre programmeringsspråk) er enkelt sagt veldig avanserte kalkulatorer:
 ## ----Plussminus----------------------------------------------------------
+
 1 + 2  # Dette er linjen med kode jeg sender til console. 
+
 # Linjen over er det console gir meg som svar
 
 3 * 4
@@ -33,6 +35,8 @@
 
 100.5:0.5
 
+(100.5:0.5)[23]
+
 #' 
 #' Den siste linjen viser indeksnummerene til flere av verdiene i rekken tall vi spør om: tall nummer 12 i rekken tall er 89.5. Hvor mange verdier er det totalt i denne rekken?
 #' 
@@ -44,12 +48,12 @@ Tiern
 
 Tiern * Tiern
 
-Tiern[4] 
+Tiern[c(1, 10, 3)] 
 
-ABC <- c("A", "B", "C") # SKRIV DETTE I DOKUMENTET 
+tekst <- c("A", "B", "C") # SKRIV DETTE I DOKUMENTET 
 
-ABC[2]
-ABC[c(3, 1, 2)]
+tekst[2]
+tekst[c(3, 1, 2)]
 
 
 #' 
@@ -65,13 +69,13 @@ getwd() # get working directory
 ## # Mac/Linux:
 ## setwd("~/R/der/du/vil/jobbe/fra")
 ## 
-## # Windows
 setwd("~/Dropbox/PhD/Undervisning/Seminarleder/STV4020/høst_2017/Gruppe 2/")
+
 
 #' 
 #' Etter dette kan du sjekke hvilke filer og mapper som ligger i mappen du jobber fra -- da jobber vi med relative paths:
 ## ----ls------------------------------------------------------------------
-list.files()
+list.files("./docs")
 
 # En mappe under:
 list.files("../")
@@ -89,7 +93,7 @@ list.files("../Gruppe 1/scripts/")
 ## ----Titanic2, eval=FALSE------------------------------------------------
 ## setwd("~/Der/du/vil/jobbe/fra")
 ## 
-## passengers <- read.csv("titanic.csv")
+passengers <- read.csv("./data/titanic.csv")
 ## 
 
 #' 
@@ -167,7 +171,7 @@ mean(passengers$Age)
 
 
 mean(passengers$Age, na.rm = TRUE)
-
+?mean
 #' 
 #' ## Litt omkoding
 #' 
