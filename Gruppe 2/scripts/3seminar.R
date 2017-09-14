@@ -65,12 +65,21 @@ head(aid, 3)
 #' Noen ganger vil vi fjerne enheter fra datasettene våre. Det kan være vi kun vil se på trender innad i et land, sammenligne spesifikke grupper, fjerne enheter som skaper systematisk missing, og så videre. Under viser jeg to måter dette kan gjøres på -- det finnes mange flere.
 #' 
 ## ----subsetEks, tidy=FALSE-----------------------------------------------
-# aid$country == "ARG"
-# which(aid$country == "ARG")
-# aid[which(aid$country == "ARG"), ]
+aid$country == "ARG"
+which(aid$country == "ARG")
+aid[which(aid$country == "ARG"), ]
+
+
 argentina <- aid[which(aid$country == "ARG"), ]
+rm(argentina)
+
 argentina <- subset(aid, country == "ARG")
 
+
+
+
+
+#######
 nomiss_policy <- aid[which(is.na(aid$policy) == FALSE), ]
 nomiss_policy <- subset(aid, is.na(policy) == FALSE)
 
@@ -94,6 +103,11 @@ model5 <- lm(gdp_growth ~ gdp_pr_capita + ethnic_frac * assasinations +
                sub_saharan_africa + fast_growing_east_asia + policy * aid,
              data = aid)
 summary(model5)
+
+
+
+
+
 
 
 #' 
@@ -142,8 +156,11 @@ ggplot(aid, aes(x = gdp_pr_capita, y = gdp_pr_capita_log)) + geom_point()
 ## ----whichOmkoding, tidy=TRUE--------------------------------------------
 aid$regions <- NA
 aid$regions[which(aid$sub_saharan_africa == 0 & aid$fast_growing_east_asia == 0)] <- "Other"
-aid$regions[which(aid$sub_saharan_africa == 1 & aid$fast_growing_east_asia == 0)] <- "Sub-Saharan Africa"
-aid$regions[which(aid$sub_saharan_africa == 0 & aid$fast_growing_east_asia == 1)] <- "East Asia"
+aid$regions[which(aid$sub_saharan_africa == 1)] <- "Sub-Saharan Africa"
+aid$regions[which(aid$fast_growing_east_asia == 1)] <- "East Asia"
+
+table(aid$regions, aid$sub_saharan_africa)
+table(aid$regions, aid$fast_growing_east_asia)
 
 #' 
 #' I den neste funksjonen bruker vi **nesting** med `ifelse()` for å gjøre akkurat det samme. Dette viser at de to variablene er helt identiske. Vi sjekker at det blir riktig, og setter kategorien "Other" til referansekategori med funksjonen `factor()`.
@@ -156,8 +173,9 @@ aid$regions2 <- ifelse(aid$sub_saharan_africa == 1, "Sub-Saharan Africa",
                        ifelse(aid$fast_growing_east_asia == 1, "East Asia", "Other"))
 
 table(aid$regions, aid$regions2)
-
+#######
 aid$regions <- factor(aid$regions, levels = c("Other", "Sub-Saharan Africa", "East Asia"))
+table(aid$regions)
 
 #' 
 #' 1. ~~Gdp pr capita skal log-transformeres~~
@@ -171,7 +189,7 @@ aid$regions <- factor(aid$regions, levels = c("Other", "Sub-Saharan Africa", "Ea
 #' Nå er vi faktisk klar til å kjøre regresjonen! Legg merke til at vi har satt inn `factor(period)` direkte i regresjonen
 ## ----fixedOLS, tidy=FALSE------------------------------------------------
 
-model5 <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac * assasinations + 
+model5 <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac * assasinations +
                institutional_quality + m2_gdp_lagged + regions + policy * aid +
                factor(period),
              data = aid, na.action = "na.exclude")
@@ -180,6 +198,7 @@ results
 
 # "Heteroskedasticity-consistent standard errors"
 library(sandwich)
+
 results$coefficients[, "Std. Error"] <- sqrt(diag(vcovHC(model5, type = "HC")))
 results$cov.unscaled <- vcovHC(model5, type = "HC")
 round(results$coefficients[, c("Estimate", "Std. Error")], digits = 2)
@@ -221,8 +240,8 @@ snitt_data <- data.frame(gdp_pr_capita_log = mean(aid$gdp_pr_capita_log, na.rm =
                          institutional_quality = mean(aid$institutional_quality, na.rm = TRUE),
                          m2_gdp_lagged = mean(aid$m2_gdp_lagged, na.rm = TRUE),
                          regions = "Other",
-                         policy = c(rep(-1, 9), rep(0, 9), rep(1, 9)),
-                         aid = rep(0:8, 3),
+                         policy = c(rep(-4, 9), rep(4, 9)),
+                         aid = rep(0:8, 2),
                          period = median(aid$period, na.rm = TRUE))
 
 predict(model5, newdata = snitt_data, se = TRUE)
