@@ -17,9 +17,9 @@ Dere vil se disse forutsetningene formulert på litt forskjellige måter i ulike
 
 1. Ingen utelatt variabelskjevhet
 2. Lineær sammenheng mellom variablene
-3. Ingen autokorrelasjon/Uavhengige restledd
-4. Normalfordelte restledd
-5. Homoskedastiske restledd
+3. Ingen autokorrelasjon/Uavhengige observasjoner
+4. Normalfordelte residualer
+5. Homoskedastiske residualer
 6. Ingen perfekt multikollinearitet
 
 
@@ -32,8 +32,6 @@ Hva innebærer denne antagelsen?
 * Dersom vi vil tolke en uavhengig variabel, kan vi tenke på de resterende variablene som kontrollvariabler, som er korrelert med uavhengig variabel og påvirker avhengig variabel.
 
 **Merk:** korrelasjon er lineær sammenheng mellom to variabler, ikke et årsaksforhold. Så lenge to variabler påvirker den avhengige variabelen, og de er korrelert (selv om de ikke påvirker hverandre på noe vis), får vi utelatt variabelskjevhet dersom vi ikke kontrollerer for den andre variabelen. 
-
-Er det noen som kan tenke seg forskningsdesign som kan sørge for at denne antagelsen holder (tenk tilbake til forelesningene til Knutsen)? For dem som vil lære mer om metoder for å håndtere utelatt variabelskjevhet, anbefaler jeg *Counterfactuals and Causal Inference* av Morgan og Winship (2015).
 
 Denne antagelsen kan vi ikke teste. Det finnes imidlertid metoder for å estimere effekten av utelatte variabler med ulike egenskaper. Denne formen for robusthetstesting kalles *sensivity analysis*
 
