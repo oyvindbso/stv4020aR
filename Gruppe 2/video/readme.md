@@ -1,7 +1,7 @@
 ## STV4020A høst 2017
 - [Seminar 1](https://youtu.be/EQbbz9V8h7o)
 - [Seminar 2](https://youtu.be/x1YJZ9pz9_0)
-- [Seminar 3](TBD)
+- [Seminar 3](https://youtu.be/4U-xrjw0bG0)
 - [Seminar 4](TBD)
 - [Seminar 5](TBD)
 
