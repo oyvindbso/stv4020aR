@@ -8,7 +8,10 @@
 #' Denne gangen skal vi laste inn et datasett lagret i en R-fil. Dette er litt anerledes enn funksjonene vi har gjort tidligere (altså read.\*()-familien). Det finnes to typer filer som R-data kan lagres i: *.rda* og *.RData*. Disse er, såvidt jeg vet, helt identiske i format; de har bare forskjellig filtypenavn. Vi skal bruke European Social Survey, men bare med enhetene fra Norge (kommer tilbake med flere land når vi skal ta flernivåanalyse).
 #' 
 ## ----lasterda------------------------------------------------------------
+rm(list = ls())
+
 load("./data/ess_norge.rda")
+
 head(ess_nor, 3)
 
 #' 
@@ -40,20 +43,23 @@ head(ess_nor, 3)
 #' La oss først kikke litt på vår avhengige variabel. Dette kan man gjøre med både tabeller og figurer, men jeg liker best figurer.
 #' 
 ## ----deskAV--------------------------------------------------------------
+
 table(ess_nor$party_vote_short, useNA = "always")
 
 library(ggplot2)
+
 ggplot(ess_nor, aes(x = party_vote_short, fill = party_vote_short)) +
   geom_bar()
 
-ggplot(ess_nor[which(is.na(ess_nor$party_vote_short) == FALSE), ],
-       aes(x = party_vote_short, fill = party_vote_short)) +
+party_noNA <- ess_nor[which(is.na(ess_nor$party_vote_short) == FALSE), ]
+
+ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) +
   geom_bar() +
   scale_fill_manual(values = c("darkred", "darkblue", "blue", "yellow4", "seashell4",
                                "forestgreen", "red1", "darkgreen", "red2", "green")) +
   labs(x = "Partistemmer", y = "Frekvens", fill = "Parti") +
-  scale_y_continuous(breaks = seq(0, 260, 50)) +
-  theme_minimal() +
+  scale_y_continuous(breaks = seq(0, 300, 50)) +
+  theme_minimal() + 
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         legend.position = "none")
@@ -74,6 +80,7 @@ attributes(ess_nor$trust_politicians)
 attr(ess_nor$trust_politicians, "labels")
 
 
+
 #' 
 #' Da vet vi at 0 er ingen tillit og 10 er fulstendig tillit til politikere på denne variabelen. Kan den brukes som en forholdstallsvariabel? Eller burde vi holde oss til ordinalnivå?
 #' 
@@ -86,12 +93,15 @@ attr(ess_nor$trust_politicians, "labels")
 # install.packages("nnet")
 library(nnet)
 
-party_reg <- multinom(party_vote_short ~ trust_politicians, data = ess_nor,
+party_reg <- multinom(party_vote_short ~ trust_politicians, 
+                      data = ess_nor,
                       na.action = "na.exclude", Hess = TRUE)
 summary(party_reg)
+exp(coef(party_reg))
 
 # Regner litt på Arbeiderpartiet vs. Fremskrittspartiet
 exp(0.7870249) / (1 + exp(0.7870249))
+
 exp(0.7870249 + (-0.34755333 * 10)) / (1 + exp(0.7870249 + (-0.34755333 * 10)))
 
 # En enkel måte å sjekke om effekten er signifikant på 5% nivå
@@ -119,7 +129,10 @@ larger_parties <- ess_nor[which(ess_nor$party_vote_short != "RØDT" &
                                   ess_nor$party_vote_short != "KYST" & 
                                   ess_nor$party_vote_short != "MDG" & 
                                   is.na(ess_nor$party_vote_short) == FALSE), ]
+
 table(larger_parties$party_vote_short, useNA = "always")
+
+
 
 #' 
 #' ## Fikse kontrollvariabler
@@ -132,23 +145,30 @@ table(larger_parties$party_vote_short, useNA = "always")
 #' Når vi subsetter blir labels på variablene fjernet av en eller annen grunn...så vi må kopiere dem over til det nye datasettet med pakken **labelled** og funksjonen **copy_labels** først. Deretter kan vi sjekke hvilke verdier vi ikke vil ha med videre fra de forskjellige variablene.
 #' 
 ## ----incomeCode----------------------------------------------------------
+table(larger_parties$income_feel)
+attributes(larger_parties$income_feel)
+
+attributes(ess_nor$income_feel)
+
+######
 library(labelled)
 
 larger_parties$income_feel <- copy_labels(ess_nor$income_feel, 
                                           larger_parties$income_feel)
 attr(larger_parties$income_feel, "labels")
+######
 
-larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, 
-                                      larger_parties$income_feel)
+larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, larger_parties$income_feel)
 
 table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
 
+#####
 larger_parties$income_decile <- copy_labels(ess_nor$income_decile,
                                             larger_parties$income_decile)
 attr(larger_parties$income_decile, "labels")
-
-larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, 
-                                        larger_parties$income_decile)
+#####
+attributes(ess_nor$income_decile)
+larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, larger_parties$income_decile)
 
 table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "always")
 
@@ -160,6 +180,8 @@ table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "alwa
 table(larger_parties$gender) # Ca like mange, så referansekategori er ikke viktig
 
 larger_parties$age <- 2014 - larger_parties$year_born
+summary(larger_parties$age)
+
 larger_parties$age <- larger_parties$age - median(larger_parties$age) # ingen har NA
 summary(larger_parties$age)
 
@@ -189,7 +211,18 @@ test_set2 <- data.frame(trust_politicians = 0:10,
 
 
 predict(party_reg2, newdata = test_set2)
-predict(party_reg2, newdata = test_set2, type = "probs")
+plot_data <- cbind(test_set2, predict(party_reg2, newdata = test_set2, type = "probs"))
+
+library(ggplot2)
+
+ggplot(plot_data, aes(x = trust_politicians, y = A, group = 1)) + geom_point() + geom_line()
+
+
+ggplot(plot_data, aes(x = trust_politicians)) + 
+  geom_point(aes(y = A)) +
+  geom_point(aes(y = FRP)) +
+  geom_line(aes(y = A, group = 1)) +
+  geom_line(aes(y = FRP, group = 1))
 
 #' 
 #' ## Rangert logistisk (for spesielt interesserte)
