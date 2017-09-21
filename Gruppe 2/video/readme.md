@@ -2,7 +2,7 @@
 - [Seminar 1](https://youtu.be/EQbbz9V8h7o)
 - [Seminar 2](https://youtu.be/x1YJZ9pz9_0)
 - [Seminar 3](https://youtu.be/4U-xrjw0bG0)
-- [Seminar 4](TBD)
+- [Seminar 4](https://youtu.be/6zNc86_KCMc)
 - [Seminar 5](TBD)
 
 ## STV1020 våren 2017
