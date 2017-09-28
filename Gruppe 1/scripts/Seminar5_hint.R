@@ -1,6 +1,6 @@
-##########################################
-#### Seminar 5: Hint til  oppgaver første time #### 
-##########################################
+########################################
+#### Seminar 5: Hint til  oppgaver  #### 
+########################################
 
 ## I en del tilfeller er mange fremgangsmåter mulig,
 ## Så lenge du får jobben gjort kan du velge metode fritt.
@@ -127,3 +127,11 @@ f <- 1/(1 + exp(-()))
 
 ## effekt
 f-m
+
+
+### Dersom du har tid: vurder om effekten av income_decile er substansiell, ved å
+### beregne predikerte sannsynligheter.
+table(cordata$income_decile)
+newdata <- data.frame(income_decile=1:10,
+                      )
+predict()
