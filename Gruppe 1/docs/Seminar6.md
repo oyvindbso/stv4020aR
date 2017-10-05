@@ -30,20 +30,40 @@ library(lme4)
 
 Under finner dere syntaksen for flernivå med samme notasjon som på forelesning, oversatt til `lmer`. Jeg bruker `group_var` for å betegne variabelen som forteller hvilken gruppe observasjoner tilhører (den hierarkiske strukturen). `x` refererer til variabler på nivå 1, mens `z` referer til variabler på nivå 2 (skiller mellom z og x for å gjøre det lettere og oversette til **R**).
 
-**Lineær Regresjon:** ![](https://latex.codecogs.com/gif.latex?Y_%7Bi%7D%20%3D%20%5Cbeta_0%20&plus;%20%5Cbeta_1%20X_%7B1i%7D%20&plus;%20%5Cbeta_2%20X_%7B2i%7D%20&plus;%20e_i)
+**Lineær Regresjon:**
+
+![](https://latex.codecogs.com/gif.latex?Y_%7Bi%7D%20%3D%20%5Cbeta_0%20&plus;%20%5Cbeta_1%20X_%7B1i%7D%20&plus;%20%5Cbeta_2%20X_%7B2i%7D%20&plus;%20e_i)
+
 `lmer(y ~ (1|group_var), data = data)`
-**Flernivå med kun random intercept:**  $$Y_i = \beta_{0} + u_{0j} + e_{ij}$$
+
+**Flernivå med kun random intercept:**
+
+$$Y_i = \beta_{0} + u_{0j} + e_{ij}$$
+
 `lmer(y ~ 1 + (1|group_var))`
 
-**Flernivå med uavh. var på mikronivå, fixed effects, random intercept:**  $$Y_i = \beta_{0} + \beta_{1}X_{1ij} +  u_{0j} + e_{ij}$$
+**Flernivå med uavh. var på mikronivå, fixed effects, random intercept:** 
+
+![](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7DX_%7B1ij%7D%20&plus;%20u_%7B0j%7D%20&plus;%20e_%7Bij%7D)
+
 `lmer(y ~ (1|group_var) + x1, data = data)`
-**Flernivå med uavh. var på mikronivå, random slopes:**  $$Y_i = \beta_{0} + \beta_{1}X_{1ij} + u_{1j}X_{1ij} + u_{0j} +  e_{ij}$$
+
+**Flernivå med uavh. var på mikronivå, random slopes:** 
+
+![](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7DX_%7B1ij%7D%20&plus;%20u_%7B1j%7DX_%7B1ij%7D%20&plus;%20u_%7B0j%7D%20&plus;%20e_%7Bij%7D)
+
 `lmer(y ~ x1 + (x1|group_var), data=data)`
 
-**Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå:**  $$Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j} Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}$$
+**Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå:** 
+
+![](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7DX_%7B1ij%7D%20&plus;%20%5Cbeta_%7B2j%7D%20Z_%7B2j%7D%20&plus;%20&plus;%20u_%7B1j%7DX_%7B1ij%7D%20&plus;%20u_%7B0j%7D%20&plus;%20e_%7Bij%7D)
+
 `lmer(y ~ x1 + (x1|group_var) + z2, data=data)`
 
-**Flernivå med uavh. var på mikronivå med random effects, kryssnivåsamspill, og uavhengig variabel på makronivå:**  $$Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j}Z_{2j} + \beta_{3}X_{1ij}Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}$$
+**Flernivå med uavh. var på mikronivå med random effects, kryssnivåsamspill, og uavhengig variabel på makronivå:** 
+
+![](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7DX_%7B1ij%7D%20&plus;%20%5Cbeta_%7B2j%7DZ_%7B2j%7D%20&plus;%20%5Cbeta_%7B3%7DX_%7B1ij%7DZ_%7B2j%7D%20&plus;%20&plus;%20u_%7B1j%7DX_%7B1ij%7D%20&plus;%20u_%7B0j%7D%20&plus;%20e_%7Bij%7D)
+
 `lmer(y ~ x1*z2  + x1 + (x1|group_var) + z2, data=data)`
 
 Som dere kanskje husker, kan vi bruke modellen med kun random intercept til å beregne intra-class correlation. For å gjøre dette deler vi varians på nivå 2 på summen av varians på nivå en og nivå 2: $$var(u_j)/(var(u_j) + var(e_{ij}))$$
