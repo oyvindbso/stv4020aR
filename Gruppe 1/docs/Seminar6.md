@@ -30,7 +30,7 @@ library(lme4)
 
 Under finner dere syntaksen for flernivå med samme notasjon som på forelesning, oversatt til `lmer`. Jeg bruker `group_var` for å betegne variabelen som forteller hvilken gruppe observasjoner tilhører (den hierarkiske strukturen). `x` refererer til variabler på nivå 1, mens `z` referer til variabler på nivå 2 (skiller mellom z og x for å gjøre det lettere og oversette til **R**).
 
-**Lineær Regresjon:** $$Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + e_i$$
+**Lineær Regresjon:** ![](https://latex.codecogs.com/gif.latex?Y_%7Bi%7D%20%3D%20%5Cbeta_0%20&plus;%20%5Cbeta_1%20X_%7B1i%7D%20&plus;%20%5Cbeta_2%20X_%7B2i%7D%20&plus;%20e_i)
 `lmer(y ~ (1|group_var), data = data)`
 **Flernivå med kun random intercept:**  $$Y_i = \beta_{0} + u_{0j} + e_{ij}$$
 `lmer(y ~ 1 + (1|group_var))`
