@@ -1,13 +1,6 @@
----
-title: "Seminar 6"
-output:
-  html_document:
-    keep_md: TRUE
----
+# Seminar 6
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## Seminar 6
 Plan:
@@ -27,14 +20,13 @@ Den statistiske motivasjonen bak flernivåanalyse er å ta hensyn til avhengighe
 
 *I R:* Som de andre regresjonsformene vi har sett på, ligner syntaksen for flernivåanalyse på syntaksen for ols. Den største forskjellen ligger i spesifisering av nivå for variabler. Vi skal bruke `lme4` pakken til å kjøre flernivå, installer den og last den inn med koden under.
 
-```{r, eval=FALSE}
+
+```r
 install.packages("lme4")
 library(lme4)
 ```
 
-```{r, include=FALSE}
-library(lme4)
-```
+
 
 Under finner dere syntaksen for flernivå med samme notasjon som på forelesning, oversatt til `lmer`. Jeg bruker `group_var` for å betegne variabelen som forteller hvilken gruppe observasjoner tilhører (den hierarkiske strukturen). `x` refererer til variabler på nivå 1, mens `z` referer til variabler på nivå 2 (skiller mellom z og x for å gjøre det lettere og oversette til **R**).
 
