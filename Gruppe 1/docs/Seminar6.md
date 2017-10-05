@@ -38,7 +38,7 @@ Under finner dere syntaksen for flernivå med samme notasjon som på forelesning
 
 **Flernivå med kun random intercept:**
 
-$$Y_i = \beta_{0} + u_{0j} + e_{ij}$$
+![](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20u_%7B0j%7D%20&plus;%20e_%7Bij%7D)
 
 `lmer(y ~ 1 + (1|group_var))`
 
