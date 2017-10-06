@@ -62,21 +62,17 @@ table(larger_parties$party_vote_short, useNA = "always")
 ## ----incomeCode----------------------------------------------------------
 library(labelled)
 
-larger_parties$income_feel <- copy_labels(ess_nor$income_feel, 
-                                          larger_parties$income_feel)
+larger_parties$income_feel <- copy_labels(ess_nor$income_feel, larger_parties$income_feel)
 attr(larger_parties$income_feel, "labels")
 
-larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, 
-                                      larger_parties$income_feel)
+larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, larger_parties$income_feel)
 
 table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
 
-larger_parties$income_decile <- copy_labels(ess_nor$income_decile,
-                                            larger_parties$income_decile)
+larger_parties$income_decile <- copy_labels(ess_nor$income_decile, larger_parties$income_decile)
 attr(larger_parties$income_decile, "labels")
 
-larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, 
-                                        larger_parties$income_decile)
+larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, larger_parties$income_decile)
 
 table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "always")
 
@@ -122,13 +118,14 @@ test_set2 <- data.frame(trust_politicians = 0:10,
                         income_feel2 = median(larger_parties$income_feel2, na.rm = TRUE),
                         age_sen = 0,
                         gender = "female")
-
+test_set2
 #' 
 #' Når vi har opprettet dette objektet kan vi binde sammen kolonnene av test settet vår og predikerte verdier på test settet. Mer spesifikt bruker vi regresjonsobjektet vårt (alle beta og Xer) og regner ut ligningen gitt at data ser ut som test settet vårt (*newdata*-argumentet sier altså at vi skal løse ligningen for vårt hypotetiske datasett). Legg også merke til argumentet *type*, som med multinomisk regresjon enten kan gi partiet med høyest sannsynlighet for hver rad (dette er *default*), eller sannsynlighet for hver rad å havne i hvert parti.
 #' 
 ## ----predikerteSannsynligheter-------------------------------------------
+
 test_set2 <- cbind(test_set2, predict(party_reg2, newdata = test_set2, type = "probs"))
-head(test_set2)
+test_set2
 
 #' 
 #' Vi gjør også et siste lille triks før vi plotter ut effekten av *trust_politicians*. `ggplot()` (og veldig mange andre funksjoner i R) liker nemlig best data i **long** heller enn **wide format**. Pakken **reshape2** kan hjelpe oss med denne konverteringen, og er generelt en pakke som brukes veldig mye.
@@ -195,6 +192,7 @@ summary(fe)
 #' 
 ## ----flernivå------------------------------------------------------------
 library(lme4)
+
 trust_polit <- lmer(trust_politicians ~ age + gender + income_feel + income_decile + (1|country),
                     data = ess)
 summary(trust_polit)
@@ -217,10 +215,7 @@ summary(trust_polit)
 # lmer(AV ~ UV_nivå1 * UV_nivå2 + (1 + UV_nivå1 | Gruppe_nivå2), data = data) 
       # = random intercept, cross-level interaction
 
-library(lme4)
-
-trust_polit2 <- lmer(trust_politicians ~ age + gender + income_feel + income_decile + 
-                       (income_feel|country),
+trust_polit2 <- lmer(trust_politicians ~ age + gender + income_feel + income_decile + (income_feel|country),
                     data = ess) # random intercept, random slope
 summary(trust_polit2)
 
@@ -232,7 +227,8 @@ summary(trust_polit2)
 coef(trust_polit2)
 ranef(trust_polit2)
 
-lattice::dotplot(ranef(trust_polit2, condVar = TRUE))
+library(lattice)
+dotplot(ranef(trust_polit2, condVar = TRUE))
 
 
 #' 

@@ -1,16 +1,3 @@
-#' ---
-#' title: "Seminar 5"
-#' author: "Martin Søyland"
-#' output:
-#'   pdf_document: default
-#'   html_document: html_notebook
-#' header-includes: \usepackage{setspace}\onehalfspacing
-#' urlcolor: cyan
-#' ---
-#' 
-## ----setup, include=FALSE------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 80), tidy = FALSE)
-knitr::opts_knit$set(root.dir = "../")
 
 #' 
 #' ## Laste inn data
@@ -32,6 +19,8 @@ load("./data/ess.rda")
 korrel <- cor(ess[, c("trust_parl", "trust_legalsys", "trust_police", 
                       "trust_politicians", "trust_polparties", "trust_eurparl",
                       "trust_unitednations")], use = "complete.obs")
+korrel
+
 library(psych)
 
 cor.plot(korrel, numbers = TRUE)
@@ -67,8 +56,9 @@ trust_factor <- factanal(~., 3, ess[, c("trust_parl", "trust_legalsys", "trust_p
                         "trust_politicians", "trust_polparties", 
                         "trust_eurparl", "trust_unitednations")])
 
+loadings(trust_factor)
 
-print(loadings(trust_factor), cutoff = .5)
+print(loadings(trust_factor), cutoff = 0.5)
 
 
 #' Her er alle ladninger lavere enn 0.5 sjult. Vi ser at den teoretiske antagelsen vår ser ganske rimelig ut. Magi!
@@ -86,6 +76,8 @@ promax(loadings(trust_factor))
 ## ----lageIndekser--------------------------------------------------------
 
 ess$political_trust <- (ess$trust_parl + ess$trust_politicians + ess$trust_polparties) / 3
+summary(ess$political_trust)
+
 ess$legal_trust <- (ess$trust_legalsys + ess$trust_police) / 2
 ess$international_trust <- (ess$trust_unitednations + ess$trust_eurparl) / 2
 
@@ -97,7 +89,7 @@ library(ggplot2)
 
 plot_data <- ess[which(is.na(ess$gender) == FALSE), ]
 
-ggplot(plot_data, aes(x = gender, y = as.numeric(political_trust))) + 
+ggplot(plot_data, aes(x = gender, y = political_trust)) + 
   geom_boxplot() +
   facet_wrap(~country) +
   theme_minimal()
@@ -126,18 +118,23 @@ summary(trust_polit0)
 
 trust_polit1 <- lmer(political_trust ~ income_feel + (1|country),
                     data = reg_data)
+summary(trust_polit1)
 
 trust_polit2 <- lmer(political_trust ~ income_feel + income_decile + (1|country),
                     data = reg_data)
 
+summary(trust_polit2)
+
 trust_polit3 <- lmer(political_trust ~ income_feel + income_decile + age + gender + 
                        (1|country),
                     data = reg_data)
+summary(trust_polit3)
 
 trust_polit4 <- lmer(political_trust ~ income_feel + income_decile + age + gender + 
                        (gender|country),
                     data = reg_data)
 
+summary(trust_polit4)
 # To mål på model-fit, som straffer at vi legger inn flere variabler
 # AIC(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4)
 # BIC(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4)
@@ -156,7 +153,8 @@ stargazer(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4, 
 #' Vi kan så hente ut random effekter og konstantledd for alle land med funksjonen `coef()`/`ranef()`, plotte konstantleddene med `dotplot()` fra pakken lattice, etc. 
 #' 
 ## ----trekkeUtLmerTing----------------------------------------------------
-lattice::dotplot(ranef(trust_polit4, condVar = TRUE))
+library(lattice)
+dotplot(ranef(trust_polit4, condVar = TRUE))
 
 #' 
 ## ----ikketenkpådenne, eval=FALSE, echo=FALSE-----------------------------
