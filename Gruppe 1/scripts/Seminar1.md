@@ -141,6 +141,19 @@ Under viser jeg koden for å installere `moments`. Skriv koden for å installere
 library(moments)
 ```
 
+### Noen omkodingsfunksjoner:
+
+Omkoding er ofte nødnvedig i dataanalyse. Dere skal få et godt råd: ikke gjør en omkoding som overskriver variabler som allerede finnes, opprett alltid nye variabler, ellers kan det bli veldig kjedelig å gjøre feil.
+
+Den funksjonen jeg bruker mest til omkoding, er `ifelse()`. Syntaksen til denne funksjonen kan forklares som følger:
+
+
+```r
+data$nyvar <- ifelse(test = my_data$my.variabel == "some logical condition", yes = "what to return if 'some condition' is TRUE", 
+    no = "what to return if 'some condition' is FALSE")
+```
+
+Andre nyttige funksjoner til omkoding er matematiske transformasjoner som `log()`, `exp()` og `sqrt()`, og funksjoner for å "lagge" og "leade" variabler som `lag()` og `lead()` fra pakken `dplyr`. Det finnes et stort antall funksjoner som kan brukes til omkoding.
 
 
 ## Importere ulike datatyper i R <a name="importere"></a>
