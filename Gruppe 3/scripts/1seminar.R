@@ -2,8 +2,8 @@
 #' title: "Seminar 1"
 #' author: "Martin Søyland"
 #' output:
-#'   pdf_document: default
 #'   html_document: html_notebook
+#'   pdf_document: default
 #' header-includes: \usepackage{setspace}\onehalfspacing
 #' urlcolor: cyan
 #' editor_options: 
@@ -21,13 +21,14 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = T
 #' 
 #' | Dato              | Tid             | Aktivitet                         | Sted                |
 #' |-------------------|-----------------|-----------------------------------|---------------------|
-#' | ~~fr. 24. aug.~~  | ~~10:15–12:00~~ | ~~Seminar i databehandling R 2~~  | ~~ES PC-stue 351~~  |
-#' | ti. 11. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | fr. 14. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | HE PC-rom 235       |
-#' | ti. 18. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | ma. 24. sep.      | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | ti. 2. okt.       | 10:15–12:00	    | Seminar i databehandling R 2      | ES PC-stue 351	    |
-#' | ti. 9. okt.       | 10:15–12:00     | Obligatorisk kvalifiseringsprøve  | ES PC-stue 351	    |
+#' | ~~fr. 24. aug.~~  | ~~10:15–12:00~~ | ~~Seminar i databehandling R 3~~  | ~~ES PC-stue 351~~  |
+#' | ma. 10. sep.      | 12:15–14:00	    | Seminar i databehandling R 3      | HE PC-rom 235 	    |
+#' | to. 13. sep.      | 10:15–12:00	    | Seminar i databehandling R 3      | ES PC-stue 351      |
+#' | ma. 17. sep.      | 12:15–14:00	    | Seminar i databehandling R 3      | HE PC-rom 235	      |
+#' | ma. 24. sep.      | 12:15–14:00	    | Seminar i databehandling R 3      | HE PC-rom 235	      |
+#' | on. 26. okt.      | 10:15–12:00	    | Seminar i databehandling R 3      | ES PC-stue 351	    |
+#' | ma. 1. okt.       | 12:15–14:00     | Seminar i databehandling R 3      | HE PC-rom 235	      |
+#' | ma. 8. okt.       | 12:15–14:00     | Obligatorisk kvalifiseringsprøve  | HE PC-rom 235	      |
 #' | ti. 23. okt.      | 14:15–16:00     | Utsatt kvalifiseringsprøve        | ES PC-stue 351	    |
 #' 
 #' 
