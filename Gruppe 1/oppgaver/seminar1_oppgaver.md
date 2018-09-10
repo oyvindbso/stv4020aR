@@ -97,7 +97,7 @@ Se på scatterplot, der du:
 
 **Oppgave 2:** Bruk `log()`
 
-**Oppgave 3:** Bruk `aid[which(),]`, eller `fillter()` fra `dplyr` pakken.
+**Oppgave 3:** Bruk `aid[which(),]`, eller `filter()` fra `dplyr` pakken.
 
 **Oppgave 4:** Bruk to linjer med `ifelse`:
 På linje 1 (fyll ut): `ifelse(logisk test 1, "Sub-Saharan Africa", "Other")`
