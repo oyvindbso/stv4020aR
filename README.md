@@ -12,3 +12,5 @@ Repo for R-undervisning i STV4020A
 - [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
 - [Guide til ggplot2](http://docs.ggplot2.org/current/)
 - [Data fra Fivethirtyeight](https://github.com/fivethirtyeight/data)
+- [LaTex (Windows)](https://www.latex-tutorial.com/installation/)
+- [LaTex (Mac)](https://www.tug.org/mactex/)
