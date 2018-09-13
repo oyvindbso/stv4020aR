@@ -1,0 +1,171 @@
+---
+title: "Introduksjon seminar 2"
+author: "Erlend Langørgen"
+date: "13 september 2018"
+output:
+  html_document:
+    keep_md: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Om seminaret i morgen
+
+I neste seminar, skal vi i hovedsak bruke 1. time på å jobbe med oppgaver i databehandling med R. I andre time skal vi se på regresjonsdiagnostikk. Vi kommer til å fortsette å jobbe med utgangspukt i artikkelen til Burnside og Dollar (2000). I denne introduksjonen, viser jeg noen flere konsepter for databehandling i R, som kan være særlig nyttig til hjemmeoppgaven:
+
+1. Kombinere datasett
+2. Gruppere/aggregere data
+3. Mer om funksjoner
+
+
+### Kombinere datasett - merge funksjonen
+
+> Når vi merger legges det flere variabler til datasettet vårt.
+
+Noen ganger er vi interessert i å kombinere informasjon fra ulike datasett. Dette kan gjøres med `merge()`, eller med `right_join()` (og beslektede funksjoner) fra dplyr. Datasettet `bd_full.Rdata`, laget jeg ved å kombinere datasettet fra [New Data, New Doubts: Revisiting  "Aid, Policies and Growth"](https://dataverse.harvard.edu/dataverse/harvard?q=easterly+2003) (Easterly 2003) med datasettet til Burnside og Dollar (2000). Her er annotert kode for å gjøre sammenslåingen med `merge()`:
+
+```{r}
+# Plan: vi vet at observasjonene i datasettene er land-år. Vi vil beholde denne strukturen i data, og vil derfor 
+# bruke variabler for land og år til å kombinere observasjoner fra datasettene
+
+# pakke for å lese .dta
+library(haven)
+
+# laster inn de to datasettene
+easterly <- read_stata("https://github.com/martigso/stv4020aR/raw/master/Gruppe%201/data/NDND.dta")
+bd <- read.csv("https://raw.githubusercontent.com/martigso/stv1020R/master/data/aidgrowth.csv")
+
+# sjekker hvilke variabelnavn det er i datasettene.
+names(easterly)
+names(bd)
+
+# sjekker at verdiene til variablene er like - her er det også lurt å se på kodebok
+table(bd$period)
+table(easterly$period)
+
+table(easterly$country)
+table(bd$country)
+
+full <- merge(easterly, bd, 
+              by.x = c("country", "period"), 
+              by.y = c("country", "period"), 
+              all.x = T)
+# Forklaring: merge(data1, data2, 
+#                   by.x = "merge.variabler fra data1",
+#                   by.y = "merge.variabler fra data2",
+#                   all.x = T) siste linje forteller at vi vil beholde alle observasjoner fra datasett 1.
+str(full)
+
+# Rask test av om merge fungerte ved å sammenligne missing - bør gjøres grundigere med lignende tabeller/deskriptiv statistikk.
+table(is.na(bd$gdp_growth)) # is.na er en funksjon som tester for missing (NA), returnerer TRUE hvis noe er NA
+table(is.na(full$gdp_growth))
+summary(bd$aid)
+summary(full$aid) # 1360 - 331 = 1029 NA, lik fordeling i de to datasettene, ser bra ut.
+```
+
+
+**Oppgave:** Last inn datasettene du finner bak disse urlene:
+
+1. "https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/ucdp-brd-conf-171.csv"
+2. "https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/ucdp-nonstate-171.csv"
+
+Sjekke deretter hvordan er datasettene strukturert.
+
+Slå til slutt sammen datasettene. Merge-variabler for det første datasettet er `"GWNoLoc"` og `"Year"`. Merge-variabler for det andre datasettet er `"gwnoloc"` og `"year"`. Behold alle observasjoner fra det første datasettet. Avslutt med deskriptiv statistikk/tabell for å sjekke at `merge()` fungerte.
+
+
+### Gruppere/aggregere data:
+
+> Når vi aggregerer grupperer vi data med utgangspunkt i en eller flere variabler, og oppsummerer informasjon om hver gruppe. Når vi oppretter et aggregert datasett, reduserer vi antall observasjoner gjennom gruppering.
+
+Noen ganger ønsker vi å lage ett nytt datasett ved å aggregere data fra et datasett vi allerede har. Dette kan være fordi vi ønsker å gjennomføre en analyse på høyere aggregeringsnivå, men det kan også være for å undersøke systematiske forskjeller i ulike grupper i data med deskriptiv statistikk/plot. Under viser jeg hvordan man aggregerer data til region-perioder i datasettet `full` med utgangspunkt i `group_by()` og `summarise()` fra pakken `dplyr`:
+
+```{r}
+library(dplyr)
+
+# Oppretter region-variabel (se også oppgaver etter seminar 1, her bruker jeg andre variabler):
+full$regions <- ifelse(full$elreasia==1, "East Asia", "Other")
+full$regions <- ifelse(full$elrcentam==1, "Central America", full$regions)
+full$regions <- ifelse(full$elrssa==1, "Sub Saharan Africa", full$regions)
+table(full$regions)
+# oppretter aggregert versjon av datasettet full
+agg_full <- full %>% # %>% brukes til å binde funksjoner sammen, som + i ggplot. Forteller først navn på data
+  group_by(regions, period) %>% # group_by() angir variabler som brukes til å aggregere på
+ # i summarise bestemmer man hvilken variabler som skal aggregeres, og hvordan de skal aggregeres
+ # Syntaks:  ny_var_navn = funksjon_som_produserer_et_tall_for_gruppe(var_navn)   
+  summarise(med_growth = median(gdp_growth, na.rm = T),
+            var_growth = var(gdp_growth, na.rm = T),    
+            mean_aid = mean(aid, na.rm = T),             
+            var_aid = var(aid, na.rm = T),
+            med_policy = median(policy, na.rm = T))
+str(agg_full)
+agg_full
+```
+
+
+**Oppgave:** Aggreger full på variabelen country. Opprett aggregerte variabler for minimums og maksimumsverdier på variablene `gdp_growth`, `aid` og `policy` for landene. 
+
+
+### Mer om funksjoner:
+
+I forrige seminar snakket vi om at funksjoner er grunnleggende byggeklosser i R sammen med objekter. Dere har nå lært at det finnes et hav av ferdiglagde funksjoner i R og i tilleggspakker til R, og vi har sett nærmere på noen nyttige funksjoner for omkoding av data. Siden R er et programmeringsspråk, lar det oss imidlertid også skrive våre egne funksjoner. Dette er som regel mye lettere enn man skulle tro. Syntaksen for å skrive en egen funksjon er:
+```{r, eval=F}
+a_function <- function(arg1, arg2) {
+  #operasjoner her
+}
+```
+arg1 og arg2 kan være hva som helst. Når jeg koder skriver jeg funksjoner ofte, særlig når jeg jobber med å forberede data. Dersom jeg skal utføre en repetetiv oppgave, går det som regel raskere å skrive en funksjon til oppgaven enn å copy-paste. Dessuten er sjansen for å gjøre feil mye mindre enn når man copy-paster, for da må man gjerne bytte ut en haug med navn. Her er et eksempel på en typisk situasjon der det er nyttig å skrive en funksjon:
+
+Vi har importert et datasett i spss format der missing på alle variabler er kodet som -999, - 998 og -997. En fremgangsmåte er å skrive:
+```{r}
+data <- data.frame(v1 = c(1:90, rep(-999,10)), v2 =c(-998,2), v3=c(200, 2)) # lager kunstig SPSS datasett
+tail(data)
+data$v1 <- ifelse(data$v1==-999, NA, data$v1)
+data$v1 <- ifelse(data$v1==-998, NA, data$v1)
+data$v1 <- ifelse(data$v1==-997, NA, data$v1)
+tail(data)
+```
+Deretter kan man copy-paste ørten gannger, og bytte ut var1 med en annen variabel hver gang. Her er det imidlertid lett å glemme å bytte ut var1, noe som kan føre til feil. Alternativt kan vi skrive en funksjon:
+```{r}
+fix_na <- function(x) {
+x <- ifelse(x==-999, NA, x)
+x <- ifelse(x==-998, NA, x)
+x <- ifelse(x==-997, NA, x)
+x
+}
+```
+
+Her utnytter vi at vi skal gjennom føre en repetitiv oppgave, der variabelnavn er det eneste som endres. I stedet for å måtte skrive hvert variabelnavn 9 ganger, må vi nå bare skrive det en gang. Dersom man ser slike mønstre i repetetive oppgaver kan man som regel lett skrive en funksjon.
+
+I dette tilfellet kan vi faktisk gjøre enda bedre. Et annet mønster er at vi vil gjøre denne operasjonen på alle variablene i datasettet, vi gjennomfører på sett og vis en repetetiv oppgave når vi skriver alle variabelnavnene i datasettet. Funksjonen `apply()` passer perfekt til å gjøre jobben enda enklere (funksjonen `for()` kan gjøre en lignende jobb), da den lar oss kjøre funksjoner enten på alle rader (bytt 2 med 1 under) eller alle kolonner:
+```{r}
+data <-  apply(data, 2 , fix_na)
+tail(data)
+```
+Vi ser at koden fungerer. Selv om det kan virke litt skummelt og vanskelig, oppfordrer jeg dere til å lære dere å skrive funksjoner så raskt som mulig, da dette kan gjøre arbeidet deres i R utrolig effektivt. Bare kreativiteten setter grenser for hva dere kan bruker funksjoner til, under har jeg skrevet en funksjon som forteller dere hva som er det beste statistikkprogrammet (om noen lurer, er dette en spøk, og en ganske dårlig funksjon):
+```{r}
+beste_statitistikkprogram <- function(input){
+  svar <-c("R", "er", "best", "og", "mye", "bedre", "enn", "SPSS")
+  ifelse(duplicated(rbind(input, svar[1]))[2]==T, 
+        "#### Obviously! ####", 
+        "######### Game over. ( Try to type 'R' next time) #######")
+}
+
+beste_statitistikkprogram("SPSS")
+beste_statitistikkprogram("stata")
+beste_statitistikkprogram("R")
+```
+
+
+**Oppgave:** Forsøk å skriv en funksjon som sentrerer en variabel rundt variabelens medianverdi (dette er en vanskelig oppgave, men se på funksjonen `center()` som jeg skrev mot slutten av [Introduksjonen](https://github.com/martigso/stv4020aR/blob/master/Gruppe%201/scripts/Introduksjon.md) for hint). 
+
+
+
+
+
+
+
+
+
