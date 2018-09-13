@@ -37,9 +37,11 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = T
 #' Jeg laster bare direkte inn fra linken. Legg merke til argumentet `stringsAsFactors = FALSE`. Dette står som default til `TRUE`. Argumentet konverterer alle variabler (kolonner) til klassen `factor()`, som er tilnærmet det samme som ordinalt målenivå -- det vil vi ikke! Hvorfor vil vi ikke? Fordi vi vil ha lavest målenivå og heller sette det opp om vi finner ut at det gir mening, gitt data og det vi skal gjøre.
 #' 
 ## ----Titanic-------------------------------------------------------------
-# passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv", stringsAsFactors = FALSE)
+passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv",
+                       stringsAsFactors = FALSE)
 
-passengers <- read.csv("../data/titanic.csv", stringsAsFactors = FALSE)
+# passengers <- read.csv("./data/titanic.csv", stringsAsFactors = FALSE)
+
 class(passengers$Name)
 
 #' 
@@ -57,8 +59,11 @@ passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
 #' Nedenfor sjekker jeg om omkodingen vi gjorde er riktig. Syns dere det ser sånn ut?
 #' 
 ## ----sjekkeomkoding------------------------------------------------------
-#install.packages(ggplot2)
+rm(list = ls())
 library(ggplot2)
+
+#install.packages("ggplot2")
+
 ggplot(passengers, aes(x = Age, y = age_cent)) +
   geom_point()
 
@@ -72,6 +77,9 @@ ggplot(passengers, aes(x = Age, y = age_cent)) +
 #' Som dere husker fra forrige gang, må vi håndtere missingverdier. Men med korrelasjon er det, som dere vet, forskjellige måter å håndere missing på: pairwise og listwise exclusion. Dette er ikke viktig med korrelasjon mellom bare to variabler, men med flere variabler er det viktig:
 #' 
 ## ----korrelasjon_missing, results='hold'---------------------------------
+# data[rader, kolonner]
+passengers[ , c("age_cent", "Survived", "Fare")]
+
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "complete.obs")
 
 cor(passengers[, c("age_cent", "Survived", "Fare")], use = "pairwise.complete.obs")
@@ -91,6 +99,7 @@ summary(pass_reg)
 #' 
 #' "Women and children":
 ## ----ols2----------------------------------------------------------------
+# pass_reg2 <- lm(passengers$Survived ~ passengers$age_cent + passengers$Sex)
 pass_reg2 <- lm(Survived ~ age_cent + Sex, data = passengers)
 summary(pass_reg2)
 
@@ -100,6 +109,11 @@ summary(pass_reg2)
 ## ----ols3----------------------------------------------------------------
 pass_reg3 <- lm(Survived ~ age_cent + Sex + factor(Pclass), data = passengers)
 summary(pass_reg3)
+
+plot(pass_reg3)
+hist(resid(pass_reg3))
+
+0.972139 + (-0.005460 * 40) + (-0.479456 * 1) + (-0.406618 * 1)
 
 #' 
 #' 
@@ -129,7 +143,7 @@ summary(andregrads_reg)
 pass_logit <- glm(Survived ~ age_cent + Sex + factor(Pclass),
                   data = passengers, family = "binomial",
                   na.action = "na.exclude")
-
+resid(pass_logit)
 summary(pass_logit)
 
 
@@ -146,12 +160,17 @@ exp(2.741425) / (1 + exp(2.741425))
 exp(2.741425 + (-0.036985 * 1)) / (1 + exp(2.741425 + (-0.036985 * 1)))
 
 # Alder (10 enhets økning)
-exp(2.741425 + (-0.036985 * 10)) / (1 + exp(2.741425 + (-0.036985 * 10)))
+exp(2.741425 + (-0.036985 * -10)) / (1 + exp(2.741425 + (-0.036985 * -10)))
 
 # Mann, 38 år, 3 klasse
 exp(2.741425 + (-0.036985 * 10) + (-2.522781 * 1) + (-2.580625 * 1)) / 
   (1 + exp(2.741425 + (-0.036985 * 10) + (-2.522781 * 1) + (-2.580625 * 1)))
 
+
+exp(2.741425 + (-0.036985 * 10) + (-2.522781 * 1)) / 
+  (1 + exp(2.741425 + (-0.036985 * 10) + (-2.522781 * 1)))
+
+# table(passengers$Pclass)
 
 #' 
 #' Dette kan også gjøres automatisk. Her med in sample prediksjon:
@@ -162,6 +181,7 @@ predict(pass_logit)
 
 # Sannsynlighet
 predict(pass_logit, type = "response")
+passengers[891, c("Survived", "age_cent", "Sex", "Pclass")]
 
 # Sannsynlighet, med standardfeil
 predict(pass_logit, type = "response", se = TRUE)
@@ -177,9 +197,17 @@ passengers$pred <- predict(pass_logit, type = "response")
 
 ggplot(passengers, aes(x = pred, color = factor(Survived), fill = factor(Survived))) +
   geom_density(alpha = .25) +
-  theme_bw()
+  theme_bw() +
+  scale_colour_manual(values = c("blue", "darkred")) +
+  scale_fill_manual(values = c("blue", "darkred")) +
+  labs(x = "Predikert sannsynlighet", y = "Tetthet", color = "Overlevde", fill = "Overlevde") +
+  theme(legend.position = "top",
+        panel.grid = element_blank())
 
 
+ggplot(passengers, aes(x = Age, y = Fare)) +
+  geom_point() +
+  geom_smooth(method = "lm")
 #' 
 #' 
 #' 
