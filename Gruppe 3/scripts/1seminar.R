@@ -75,13 +75,21 @@ knitr::include_graphics("../pics/RStudio.png")
 #' Legg merke til at det kommer opp [1] før outputen vi forventer. Dette er R sin måte å vise til en verdis **indeks** i en rekke med tall. Alle linjene over har kun 1 verdi som svar. Men det er veldig sjelden vi opererer med bare 1 verdi om gangen; vi bruker da heller **vektorer** av verdier:
 #' 
 ## ----Vektorer------------------------------------------------------------
+# rm(list = ls())
+# x <- "a"
 1:10
 
 2 * 1:10
 
 1:10 / 1:10
 
+1:10 %o% 1:10
+
 100.5:0.5
+
+seq(0, 1, 0.25)
+
+#?seq
 
 #' 
 #' Den siste linjen viser indeksnummerene til flere av verdiene i rekken tall vi spør om: tall nummer 12 i rekken tall er 89.5. Hvor mange verdier er det totalt i denne rekken?
@@ -95,17 +103,26 @@ Tiern
 
 Tiern * Tiern
 
-Tiern[4] 
+Tiern %o% Tiern
+
+Tiern[4]
 
 ABC <- c("A", "B", "C")
 
+c(321, 1:10, 43831, 3218, 04)
+c(Tiern, Tiern)
+
 ABC[2]
-ABC[c(3,1,2)]
+
+abc2 <- ABC[c(3,1,2)]
+
+ABC == "A"
 
 which(ABC == "A")
 
 ABC[which(ABC == "A")]
 
+ABC[1]
 
 #' 
 #' ## Working directory og paths
@@ -132,7 +149,7 @@ list.files()
 list.files("../")
 
 # En mappe under, og i mappen scripts
-list.files("../scripts")
+list.files("./scripts")
 
 
 #' 
@@ -153,13 +170,26 @@ list.files("../scripts")
 
 passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv")
 
+# passengers <- read.csv("./data/titanic.csv")
+
 #' 
 #' La oss se på noen helt basic funksjoner vi kan bruke på datasettet:
 ## ----dataset_basic, eval=TRUE--------------------------------------------
 class(passengers)
+class(passengers$Name)
+class(passengers$Age)
+
+
 head(passengers)
+
 tail(passengers)
 colnames(passengers)
+
+head(passengers, n = 2)
+tail(passengers, n = 2)
+
+head(letters)
+
 
 #' 
 ## ----View, eval = FALSE--------------------------------------------------
@@ -196,11 +226,14 @@ knitr::include_graphics("../pics/head_man.png")
 ## ----data_desc-----------------------------------------------------------
 
 summary(passengers)
+
 summary(passengers$Age)
 
 mean(passengers$Survived)
 
 table(passengers$Pclass)
+
+table(passengers$Survived, passengers$Sex)
 
 hist(passengers$Age)
 
@@ -211,11 +244,13 @@ hist(passengers$Age)
 #' 
 ## ----barplot-------------------------------------------------------------
 klassetabell <- table(passengers$Pclass)
+klassetabell
+
 barplot(klassetabell)
 
 #' 
 ## ----barplot2, eval=FALSE------------------------------------------------
-## barplot(table(passengers$Pclass)) #Vi trenger ikke gå innom objektet
+barplot(table(passengers$Pclass)) #Vi trenger ikke gå innom objektet
 ## 
 
 #' 
@@ -224,9 +259,11 @@ barplot(klassetabell)
 ## ----missing-------------------------------------------------------------
 mean(passengers$Age)
 
-table(is.na(passengers$Age))
-
 mean(passengers$Age, na.rm = TRUE)
+
+is.na(passengers$Age)
+
+table(is.na(passengers$Age))
 
 #' 
 #' ## Litt omkoding
@@ -235,9 +272,11 @@ mean(passengers$Age, na.rm = TRUE)
 #' 
 ## ----omkoding------------------------------------------------------------
 median(passengers$Age, na.rm = TRUE)
+
 passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
 
 table(passengers$age_cent[1:10], passengers$Age[1:10])
+table(passengers$age_cent, passengers$Age)
 
 #' 
 #' Over har jeg laget en ny variabel i datasettet *passengers* som heter *age_sent*. Den skal være sentrert til median: vi trekker fra medianen til aldervariabelen fra alle verdier på aldervariabelen. Legg også merke til at jeg validerer at det ble riktig med `table()`.
@@ -266,6 +305,8 @@ cor(passengers[, c("age_cent", "Survived", "Fare")], use = "pairwise.complete.ob
 #' 
 #' 
 ## ----ols-----------------------------------------------------------------
+lm(passengers$Survived ~ passengers$age_cent)
+
 pass_reg <- lm(Survived ~ age_cent, data = passengers)
 summary(pass_reg)
 
@@ -274,9 +315,11 @@ summary(pass_reg)
 #' 
 ## ----regplot-------------------------------------------------------------
 
-# install.packages("ggplot")
+#install.packages("ggplot2")
 library(ggplot2)
+
 theme_set(theme_bw())
+
 ggplot(passengers, aes(x = Age, y = Survived)) +
   geom_smooth(method = "lm")
 
@@ -288,8 +331,8 @@ ggplot(passengers, aes(x = Age, y = Survived)) +
 ## ----regplot2------------------------------------------------------------
 
 ggplot(passengers, aes(x = Age, y = Survived, color = Sex)) +
-  geom_smooth(method = "lm") + 
-  geom_point()
+  geom_smooth(method = "lm") #+ 
+  # geom_point()
 
 #' 
 #' \newpage
