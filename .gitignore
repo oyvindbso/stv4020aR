@@ -10,14 +10,12 @@
 ## Docs
 # Gruppe 2
 Gruppe\ 2/docs/*.Rmd
-Gruppe\ 2/docs/seminar3*
 Gruppe\ 2/docs/seminar4*
 Gruppe\ 2/docs/seminar5*
 Gruppe\ 2/docs/seminar6*
 
 # Gruppe 3
 Gruppe\ 3/docs/*.Rmd
-Gruppe\ 3/docs/seminar3*
 Gruppe\ 3/docs/seminar4*
 Gruppe\ 3/docs/seminar5*
 Gruppe\ 3/docs/seminar6*
@@ -56,14 +54,12 @@ Gruppe\ 3/prove/*
 ## Scripts
 # Gruppe 2
 Gruppe\ 2/scripts/ekstra/*
-Gruppe\ 2/scripts/3seminar.R
 Gruppe\ 2/scripts/4seminar.R
 Gruppe\ 2/scripts/5seminar.R
 Gruppe\ 2/scripts/6seminar.R
 
 # Gruppe 3
 Gruppe\ 3/scripts/ekstra/*
-Gruppe\ 3/scripts/3seminar.R
 Gruppe\ 3/scripts/4seminar.R
 Gruppe\ 3/scripts/5seminar.R
 Gruppe\ 3/scripts/6seminar.R
