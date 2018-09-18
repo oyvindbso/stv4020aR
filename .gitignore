@@ -10,41 +10,32 @@
 ## Docs
 # Gruppe 2
 Gruppe\ 2/docs/*.Rmd
-Gruppe\ 2/docs/seminar3*
 Gruppe\ 2/docs/seminar4*
 Gruppe\ 2/docs/seminar5*
 Gruppe\ 2/docs/seminar6*
 
 # Gruppe 3
 Gruppe\ 3/docs/*.Rmd
-Gruppe\ 3/docs/seminar3*
 Gruppe\ 3/docs/seminar4*
 Gruppe\ 3/docs/seminar5*
 Gruppe\ 3/docs/seminar6*
 
 ## Data
 # Gruppe 2
-Gruppe\ 2/data/aidgrowth.csv
-Gruppe\ 2/data/aidgrowth/aiddata.zip
 Gruppe\ 2/data/ess.rda
 Gruppe\ 2/data/ess_norge.rda
-Gruppe\ 2/data/aidgrowth/*
+
 
 # Gruppe 3
-Gruppe\ 3/data/aidgrowth.csv
-Gruppe\ 3/data/aidgrowth/aiddata.zip
 Gruppe\ 3/data/ess.rda
 Gruppe\ 3/data/ess_norge.rda
-Gruppe\ 3/data/aidgrowth/*
 
 ## Ekstraoppgaver
 # Gruppe 2
 Gruppe\ 2/ekstraoppgaver/*.Rmd
-Gruppe\ 2/ekstraoppgaver/ekstraoppgaver3*
 
 # Gruppe 3
 Gruppe\ 3/ekstraoppgaver/*.Rmd
-Gruppe\ 3/ekstraoppgaver/ekstraoppgaver3*
 
 # Prøve
 # Gruppe 2
@@ -56,14 +47,12 @@ Gruppe\ 3/prove/*
 ## Scripts
 # Gruppe 2
 Gruppe\ 2/scripts/ekstra/*
-Gruppe\ 2/scripts/3seminar.R
 Gruppe\ 2/scripts/4seminar.R
 Gruppe\ 2/scripts/5seminar.R
 Gruppe\ 2/scripts/6seminar.R
 
 # Gruppe 3
 Gruppe\ 3/scripts/ekstra/*
-Gruppe\ 3/scripts/3seminar.R
 Gruppe\ 3/scripts/4seminar.R
 Gruppe\ 3/scripts/5seminar.R
 Gruppe\ 3/scripts/6seminar.R
