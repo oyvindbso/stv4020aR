@@ -11,11 +11,12 @@ Erlend Langørgen
 3. [Lineær regresjon med en uavhengig variabel](#ols1)
 4. [Multippel lineær regresjon](#ols2)
 5. [Multippel lineær regresjon med include](#samspill)
+6. [Logistisk regresjon](#logistisk)
 
 
 ### Introduksjon <a name="Introduksjon"></a>
 
-Dette scriptet gir en kort innføring i hvordan du kan plotte regresjonslinjer, ved hjelp av `ggplot()` og `predict()`. De grunnleggende ideene for metoden, inkludert `predict()` kan overføres til andre former for regresjonsanalyse, og `plot()`. Jeg demonstrerer hvordan du kan plotte enkel ols, multivariat ols og multivariat ols med samspill. Dere kan lese om hvordan metoden kan overføres til logistisk regresjonsanalyse [på nett](https://stackoverflow.com/questions/26694931/how-to-plot-logit-and-probit-in-ggplot2), med litt googling burde dere finne tilsvarende metoder for andre regresjonsmodeller også. Jeg bruker pakkene **ggplot2**, **ggthemes** og **wesanderson** (de to siste til pynting av plot). For å holde koden så enkel som mulig, gjemmer jeg all kode som brukes for å pynte plottene du ser. Plottene du får ved å copy-paste koden du ser vil gi plot med samme innhold, men litt annet utseende enn plottene du ser. Dersom du vil se nærmere på hvordan jeg pynter plottene, gå inn på .Rmd filen og klikk på raw. 
+Dette dokumentet gir en innføring i hvordan du kan plotte regresjonslinjer, ved hjelp av `ggplot()` og `predict()`. De grunnleggende ideene for metoden, inkludert `predict()` kan overføres til alle former for regresjonsanalyse, og kan også brukes sammen med `plot()` om du liker den funksjonen bedre enn `ggplot()`. Jeg demonstrerer hvordan du kan plotte enkel ols, multivariat ols, multivariat ols med samspill og logistisk regresjon. Med litt googling burde dere finne tilsvarende metoder for andre regresjonsmodeller også. Jeg bruker pakkene **ggplot2**, **ggthemes** og **wesanderson** (de to siste til pynting av plot). For å holde koden så enkel som mulig, gjemmer jeg all kode som brukes for å pynte plottene du ser. Plottene du får ved å copy-paste koden du ser vil gi plot med samme innhold, men litt annet utseende enn plottene du ser. Dersom du vil se nærmere på hvordan jeg pynter plottene, gå inn på .Rmd filen og klikk på raw. 
 
 
 
@@ -63,7 +64,7 @@ p
 
 
 
-![](../pics/regplot1.png)<!-- -->
+<img src="../pics/regplot1.png" width="2100" />
 
 
 
@@ -76,7 +77,7 @@ p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high)) + geom_
 
 
 
-![](../pics/regplot2.png)<!-- -->
+<img src="../pics/regplot2.png" width="2100" />
 
 
 
@@ -90,7 +91,7 @@ p + geom_smooth(method = "lm")
 
 
 
-![](../pics/regplot3.png)<!-- -->
+<img src="../pics/regplot3.png" width="2100" />
 
 Dersom vi prøver å legge inn flere variabler i plottet vårt får vi imidlertid bedre kontroll ved å bruke den generelle tilnærmingen.
 
@@ -108,7 +109,7 @@ mtcars$am <-  as.factor(mtcars$am)
 mtcars$cyl <- as.factor(mtcars$cyl)
 ## Trinn 1: Kjører regresjonsmodell
 m2 <- lm(mpg ~ wt + am + cyl + qsec + hp, data=mtcars)
-## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am til 1.
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Koden seq(min(mtcars$wt),        max(mtcars$wt), .1) lager en kontinuerlig sekvens av verdier fra minimums- til maksimums-verdien til wt. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am til 1.
 data_for_prediction <- data.frame(wt   = seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),
                                   qsec = median(mtcars$qsec),
@@ -139,7 +140,7 @@ p
 
 
 
-![](../pics/regplot4.png)<!-- -->
+<img src="../pics/regplot4.png" width="2100" />
 
 Vi kan nå begynne å legge inn forskjellige utvidelser av plottet over.
 Som dere kanskje husker fra forelesning, kan man visualisere effekten av dummyvariabler som ulike skjæringspunkt med y-aksen. Plottet under er likt plottet over, bortsett fra at jeg nå også visualiserer effekten av dummy-variabelen am, som var holdt konstant til verdien 1 i sted. For å gjøre dette, lager jeg et datasett til plotting med alle plotte-verdier for wt 2 ganger, en gang for `am = 0`, og en gang for `am = 1`.
@@ -182,7 +183,7 @@ p
 
 
 
-![](../pics/regplot5.png)<!-- -->
+<img src="../pics/regplot5.png" width="2100" />
 
 Muligheten til å kontrollere verdiene til kontrollvariabler, lar oss sjekke effekten for ulike grupper i datasettet. I plottet under er basert på samme modell som forrige plot, men jeg har satt alle kontrollvariablene til sin minimumsverdi. Dette kan være nyttig, siden vi kanskje har teoretisk motivasjon for å være spesielt interessert i effekten for en gruppe med en bestemt kombinasjon verdier på kontrollvariablene. Jeg plotter forøvrig også effekten av am i dette plottet. Koden er dermed det samme som over, bortsett fra at trinn 2 nå ser slik ut:
 
@@ -206,7 +207,7 @@ Ved å bytte ut denne delen av koden får vi følgende plot:
 
 
 
-![](../pics/regplot6.png)<!-- -->
+<img src="../pics/regplot6.png" width="2100" />
 
 ### Multippel lineær regresjon med samspill <a name="samspill"></a>
 Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen vi må gjøre for å plotte samspill i forrige seksjon, ved å plotte `am`. Trikset er å lage et datasett i trinn 2, med alle kombinasjoner av verdier vi trenger for plotting. La oss nå lage en ny modell som inkluderer samspill mellom `am` og `wt`. Som dere kanskje husker fra forelesning, vil slikt samspill kunne føre til ulik helning på regresjonslinjen for `wt` for de to ulike verdiene av am. Under ser dere kode for hvordan jeg plotter denne modellen, her har jeg ikke fjernet pynt.
@@ -218,8 +219,9 @@ Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen 
 m3 <- lm(mpg ~ wt * as.factor(am) + as.factor(cyl) + qsec + hp, data = mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og
 ## hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg
-## lager. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am
-## til 1.
+## lager. Jeg repeterer sekvensen for wt to ganger, slik at jeg kan se på effekten av
+## variabelen for både am = 0 og am = 1. Jeg velger medianverdien til qsec, gjennomsnittet
+## til hp.
 data_for_prediction <- data.frame(wt = rep(seq(min(mtcars$wt), max(mtcars$wt), 0.1), 2), qsec = median(mtcars$qsec), 
     hp = mean(mtcars$hp), cyl = as.factor(6), am = as.factor(c(rep(1, 40), rep(0, 40))))
 
@@ -246,7 +248,7 @@ p
 ```
 
 
-![](../pics/regplot7.png)<!-- -->
+<img src="../pics/regplot7.png" width="2100" />
 
 Plottet viser tydelig at regresjonslinjen for `wt` får ulik helning for ulike verdier av `wt` (men vi må fortsatt gjøre hypotesetesting for å vite om samspillet er statistisk signifikant).
 
@@ -287,7 +289,7 @@ p
 ```
 
 
-![](../pics/regplot8.png)<!-- -->
+<img src="../pics/regplot8.png" width="2100" />
 
 
 ```r
@@ -297,7 +299,7 @@ p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high, fill = a
 ```
 
 
-![](../pics/regplot9.png)<!-- -->
+<img src="../pics/regplot9.png" width="2100" />
 
 I dette tilfellet er datasettet så lite at det ikke har mye for seg å modellere to samspill (konfidensintervallene er enorme, noe som betyr at det er enorm usikkerhet. Årsaken er lite data), men i andre tilfeller kan slik visualisering av data være nyttig. Legg forøvrig merke til at det ser ut som om det er en tydelig sammenheng mellom `wt` og `cyl` (se på plassering av verdier på x-aksen i de tre plottene). Ytterligere utvidelser er også mulig, man kunne for eksempel visualisert to samspill ved hjelp av tredimensjonale plot. 
 
@@ -318,7 +320,105 @@ p
 
 
 
-![](../pics/regplot10.png)<!-- -->
+<img src="../pics/regplot10.png" width="2100" />
 
 Her er alle variablene i regresjonen visualisert. I dette tilfellet synes jeg ikke visualiseringen fungerer spesielt godt, men vi ser at am = 1 ser ut til å være korrelert med lavt antall sylindre, høy verdi på `hp` og høy verdi på `qsec`. Det generelle poenget er imidlertid at man kan visualisere mange variabler samtidig med ggplot. Man kan også legge inn histogram eller andre typer plot, i tillegg til eller i stedet for scatterplot. Slike visualiseringer kan gjøre det lettere å forstå hva regresjonskoeffisientene sier, og hvordan uavhengig variabel er relatert til kontrollvariabler. Jeg anbefaler derfor visualisering som et virkemiddel for å forstå hvordan en modell fungerer.
 
+
+### Logistisk regresjon <a name="logistisk"></a>
+
+For å kjøre logistisk regresjon, bruker vi funksjonen `glm()`, som har tilnærmet lik syntaks som `lm()`. Eneste forskjellen i syntaks bortsett fra funksjonsnavn, er at vi må spesifisere at det faktisk er en logistisk regresjon vi skal bruke i et eget argument, fordi `glm()` kan brukes til å kjøre flere regresjonstyper (f.eks. probit). Under kjører jeg en multivariat logistisk regresjon med `am` (automatgir = 1, manuelt gir = 0) som avhengig variabel.
+
+
+```r
+gm1 <- glm(am ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
+summary(gm1)
+```
+
+```
+## 
+## Call:
+## glm(formula = am ~ hp + qsec, family = binomial(link = "logit"), 
+##     data = mtcars)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6122  -0.6767  -0.2364   0.4225   2.5080  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(>|z|)   
+## (Intercept) 38.77277   14.68295   2.641  0.00827 **
+## hp          -0.04468    0.01685  -2.652  0.00799 **
+## qsec        -1.84289    0.70265  -2.623  0.00872 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 43.230  on 31  degrees of freedom
+## Residual deviance: 26.757  on 29  degrees of freedom
+## AIC: 32.757
+## 
+## Number of Fisher Scoring iterations: 6
+```
+
+Regresjonskoeffisientene blir her angitt i logits, som ikke er så lette å tolke. Vi kan konvertere til oddsratioer med `exp()`, men sannsynligheter er enda lettere å tolke. På forelesning har dere lært at vi må velge verdier på alle uavhengige variabler for å kunne regne ut sannsynlighet. Vi kan regne ut sannsynligheten for to utfall for ulike verdier av `hp` manuelt ved å sette inn i formelen:
+
+
+```r
+# setter inn koeffisienter fra modell over for minimumsverdi og maksimumsverdi til
+# horsepower (hp), setter qsec til medianverdi: maks:
+exp(38.77277 + -0.04468 * max(mtcars$hp) + -1.84289 * median(mtcars$qsec))/(1 + exp(38.77277 + 
+    -0.04468 * max(mtcars$hp) + -1.84289 * median(mtcars$qsec)))
+```
+
+```
+## [1] 0.0001458754
+```
+
+```r
+# minimum
+exp(38.77277 + -0.04468 * min(mtcars$hp) + -1.84289 * median(mtcars$qsec))/(1 + exp(38.77277 + 
+    -0.04468 * min(mtcars$hp) + -1.84289 * median(mtcars$qsec)))
+```
+
+```
+## [1] 0.9783705
+```
+
+Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette lar oss se hvordan sannsynlighet varierer over alle verdier av en uavhengig variabel. For å plotte logistisk regresjon er fremgangsmåten nesten helt lik fremgangsmåten som for ols. Det eneste vi må ta hensyn til, er å transformere prediksjonene våre til sannsynlighet, med argumentet `type = "response"` i `predict()`:
+
+
+```r
+## Trinn 1: Kjører logistisk regresjonsmodell
+gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
+## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er
+## interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg
+## velger medianverdien til qsec.
+data_for_prediction <- data.frame(hp = seq(min(mtcars$hp), max(mtcars$hp), 0.1), qsec = median(mtcars$qsec))
+
+
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og
+## standardfeil:
+predicted_data <- predict(gm1, newdata = data_for_prediction, type = "response", se = TRUE)
+
+## Trinn 4: Kombinerer data fra trinn 2 og 3:
+plot_data <- cbind(predicted_data, data_for_prediction)
+
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til
+## plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+plot_data$low <- plot_data$fit - 1.96 * plot_data$se
+plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+
+## Trinn 6: Plot
+p <- ggplot(mtcars, aes(x = hp, y = am)) + geom_rangeframe() + ggtitle("Cars") + theme_tufte() + 
+    ylab("Predicted probabilities for automatic") + xlab("Weight") + geom_point() + geom_ribbon(data = plot_data, 
+    aes(y = fit, ymin = low, ymax = high), alpha = 0.2) + geom_line(data = plot_data, aes(y = fit))
+p
+```
+
+
+
+<img src="../pics/regplot11.png" width="2100" />
+
+Dette plottet gir oss en bedre forståelse av den predikerte sannsynligheten enn utregningen over, derfor oppfordrer jeg til bruk av plot ved tolkning av effekten av kontinuerlige uavhengige variabler i logistisk regresjon. For å legge inn samspill/flere nyanser i plottet, går du frem som med lineær regresjon.
