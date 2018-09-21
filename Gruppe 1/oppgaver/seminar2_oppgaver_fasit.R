@@ -22,6 +22,7 @@ which(full$elraid==min(full$elraid, na.rm =T)) # observasjon 1122
 full[which(full$elraid==min(full$elraid, na.rm =T)),] # ferdig
 
 # metode 2 - dplyr:
+library(dplyr)
 full %>%
   filter(elraid==min(full$elraid, na.rm =T)) # ferdig
 
