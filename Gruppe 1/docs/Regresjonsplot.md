@@ -390,6 +390,7 @@ Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette l
 
 
 ```r
+rm(mtcars)
 ## Trinn 1: Kjører logistisk regresjonsmodell
 gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
 ## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er

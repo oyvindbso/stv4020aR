@@ -651,6 +651,7 @@ exp(38.77277 + -0.04468*min(mtcars$hp) + -1.84289*median(mtcars$qsec))/(1 + exp(
 Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette lar oss se hvordan sannsynlighet varierer over alle verdier av en uavhengig variabel. For å plotte logistisk regresjon er fremgangsmåten nesten helt lik fremgangsmåten som for ols. Det eneste vi må ta hensyn til, er å transformere prediksjonene våre til sannsynlighet, med argumentet `type = "response"` i `predict()`:
 
 ```{r, eval = F, warning=F}
+rm(mtcars)
 ## Trinn 1: Kjører  logistisk regresjonsmodell
 gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
 ## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec.
