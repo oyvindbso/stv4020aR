@@ -8,9 +8,16 @@
 #' Denne gangen skal vi laste inn et datasett lagret i en R-fil. Dette er litt anerledes enn funksjonene vi har gjort tidligere (altså read.\*()-familien). Det finnes to typer filer som R-data kan lagres i: *.rda* og *.RData*. Disse er, såvidt jeg vet, helt identiske i format; de har bare forskjellig filtypenavn. Vi skal bruke European Social Survey, men bare med enhetene fra Norge (kommer tilbake med flere land når vi skal ta flernivåanalyse).
 #' 
 ## ----lasterda------------------------------------------------------------
+
+# Encoding
+# defaults write org.R-project.R force.LANG en_US.UTF-8
+
 rm(list = ls())
 
-load("./data/ess_norge.rda")
+# load("./data/ess_norge.rda")
+
+load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/ess_norge.rda"))
+
 
 head(ess_nor, 3)
 
@@ -53,7 +60,9 @@ ggplot(ess_nor, aes(x = party_vote_short, fill = party_vote_short)) +
 
 party_noNA <- ess_nor[which(is.na(ess_nor$party_vote_short) == FALSE), ]
 
-ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) +
+colors()
+
+ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) + 
   geom_bar() +
   scale_fill_manual(values = c("darkred", "darkblue", "blue", "yellow4", "seashell4",
                                "forestgreen", "red1", "darkgreen", "red2", "green")) +
@@ -63,6 +72,25 @@ ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         legend.position = "none")
+
+table(party_noNA$party_vote_short)
+
+party_noNA$party_vote_short <- factor(party_noNA$party_vote_short, 
+                                      levels = c("KYST", "RØDT", "SV", "A", "SP", "MDG", 
+                                                 "KRF", "V", "H", "FRP"))
+
+
+ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) + 
+  geom_bar() +
+  scale_fill_manual(values = c("darkred", "darkblue", "blue", "yellow4", "seashell4",
+                               "forestgreen", "red1", "darkgreen", "red2", "green")) +
+  labs(x = "Partistemmer", y = "Frekvens", fill = "Parti") +
+  scale_y_continuous(breaks = seq(0, 300, 50)) +
+  theme_minimal() + 
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
 
 #' 
 #' Her har jeg lagt inn et plot som viser antall enheter i data som stemte på de forskjellige partiene og et plot der jeg fikser litt på det estetiske. **ggplot** har en milliard måter å endre på plots på, så her er det bare å leke seg til perfeksjon.
