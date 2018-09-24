@@ -17,9 +17,9 @@ library(moments)
 
 ##### Første time #####
 
-load("Seminar2.RData")
+
 #### Oppgave 1 ####
-install.packages("moments")
+#install.packages("moments")
 library(moments)
 
 mean(tillit$skala10, na.rm = T)
@@ -56,7 +56,12 @@ reg3 <- lm(tillit ~ skala10 + as.factor(utd3) + as.factor(utd3)*skala10,
            data=tillit)
 summary(reg3)
 
+# kjapt histogram:
 hist(tillit$tillit)
+
+# Med ggplot:
+ggplot(tillit, aes(x = tillit)) +  geom_histogram()
+
 #### Oppgave 4 #####
 ## HVa skjer dersom vi sentrerer skala10 og kjører samme modell?
 tillit$sosstat.ms <- scale(tillit$skala10, center=TRUE, scale=FALSE)
@@ -69,6 +74,7 @@ stargazer(reg3, reg3b, type="text")
 names(tillit)
 summary(tillit$skala10)
 ## Lager datasett som bare har observasjoner brukt i reg3 og reg3b:
+library(dplyr)
 reg3b_data <- tillit %>% 
   select(c("skala10", "utd3" , "tillit"))
 reg3b_data <- reg3b_data %>%
@@ -122,7 +128,7 @@ table(tillit$rtillit,
 
 
 #### Oppgave 3 ####
-install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
 
 cordata <- tillit %>%
@@ -156,16 +162,17 @@ data_for_prediction <- data.frame(skala10   = rep(seq(min(reg3b_data$skala10),
 
 ## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
 predicted_data <- predict(binomisk, newdata = data_for_prediction, 
-                          type = "link", se = TRUE)
+                          type = "response", se = TRUE)
 
 ## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
 ## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
 std <- qnorm(0.95 / 2 + 0.5)
-plot_data$low <- binomisk$family$linkinv(plot_data$fit - std * plot_data$se)
-plot_data$high <- binomisk$family$linkinv(plot_data$fit + std * plot_data$se)
-plot_data$fit <- binomisk$family$linkinv(plot_data$fit) 
+
+plot_data$low <- plot_data$fit - 1.96 * plot_data$se
+plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+ 
 
 ## Trinn 6: Plot
 p <- ggplot(tillit, aes(x = skala10, y = rtillit2)) +
