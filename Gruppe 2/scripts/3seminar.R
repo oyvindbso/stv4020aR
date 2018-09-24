@@ -15,8 +15,9 @@
 #' 
 #' ### R-data
 ## ----lasteRdata----------------------------------------------------------
-load("./data/aidgrowth/aidgrowth.rda")
 
+load("./data/aidgrowth/aidgrowth.rda")
+class(aid)
 head(aid, 3)
 
 rm(aid) # rm() fjerner objektet fra Environment
@@ -32,7 +33,7 @@ library(haven)
 
 aid <- read_sav("./data/aidgrowth/aidgrowth.sav")
 head(aid, 3)
-
+class(aid)
 rm(aid)
 
 #' 
@@ -51,41 +52,48 @@ head(aid, 3)
 #' Noen ganger vil vi fjerne enheter fra datasettene våre. Det kan være vi kun vil se på trender innad i et land, sammenligne spesifikke grupper, fjerne enheter som skaper systematisk missing, og så videre. Under viser jeg to måter dette kan gjøres på -- det finnes mange flere.
 #' 
 ## ----subsetEks, tidy=FALSE-----------------------------------------------
-# aid$country == "ARG"
-# 
-# which(aid$country == "ARG")
-# 
-# aid[which(aid$country == "ARG"), ]
+aid$country == "ARG"
+
+which(aid$country == "ARG")
+
+# data[rader,kolonner]
+aid[which(aid$country == "ARG"), ]
 
 
 argentina <- aid[which(aid$country == "ARG"), ]
 rm(argentina)
 
 argentina <- subset(aid, country == "ARG")
-rm(argentina)
 
+not_argentina <- subset(aid, country != "ARG")
+rm(argentina, not_argentina)
 
 
 
 #######
+is.na(aid$policy)
+
 is.na(aid$policy) == FALSE
 
-nomiss_policy <- aid[which(is.na(aid$policy) == FALSE), ]
+nomiss_policy <- aid[which(is.na(aid$policy) == FALSE), c("country", "policy")]
 rm(nomiss_policy)
 
 nomiss_policy <- subset(aid, is.na(policy) == FALSE)
 rm(nomiss_policy)
 
 # "&" Betyr AND, "|" betyr OR
+is.na(aid$gdp_growth) == FALSE & is.na(aid$policy) == FALSE
+which(is.na(aid$gdp_growth) == FALSE & is.na(aid$policy) == FALSE)
+
 nomiss_policy_growth <- aid[which(is.na(aid$gdp_growth) == FALSE & is.na(aid$policy) == FALSE), ]
 
-nomiss_policy_growth <- aid[which(is.na(aid$gdp_growth) == FALSE | is.na(aid$policy) == FALSE), ]
+nomiss_policy_growth2 <- aid[which(is.na(aid$gdp_growth) == FALSE | is.na(aid$policy) == FALSE), ]
 
 
 
 nomiss_policy_growth <- subset(aid, is.na(gdp_growth) == FALSE | is.na(policy) == FALSE)
 
-rm(nomiss_policy_growth)
+rm(nomiss_policy_growth, nomiss_policy_growth2)
 
 #' 
 #' 
@@ -174,7 +182,10 @@ aid$regions2 <- ifelse(aid$sub_saharan_africa == 1, "Sub-Saharan Africa",
 table(aid$regions, aid$regions2)
 
 #######
+factor(aid$regions)
+
 aid$regions <- factor(aid$regions, levels = c("Other", "Sub-Saharan Africa", "East Asia"))
+
 table(aid$regions)
 
 #' 
@@ -193,10 +204,12 @@ model5 <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac * assasinations +
                institutional_quality + m2_gdp_lagged + regions + policy * aid +
                factor(period),
              data = aid, na.action = "na.exclude")
+
 results <- summary(model5)
 results
 
-round(coef(model5), digits = 2)
+round(results$coefficients, digits = 2)
+#round(coef(model5), digits = 2)
 
 # "Heteroskedasticity-consistent standard errors"
 library(sandwich)
@@ -228,6 +241,7 @@ ggplot(aid, aes(x = restledd, y = pred)) + geom_point() +
   geom_smooth(method = "lm") +
   labs(x = "Restledd", y = "Forventet Y")
 
+hist(aid$restledd)
 
 #' 
 #' Ser dette bra ut?
@@ -242,13 +256,15 @@ snitt_data <- data.frame(gdp_pr_capita_log = mean(aid$gdp_pr_capita_log, na.rm =
                          institutional_quality = mean(aid$institutional_quality, na.rm = TRUE),
                          m2_gdp_lagged = mean(aid$m2_gdp_lagged, na.rm = TRUE),
                          regions = "Other",
-                         policy = c(rep(0, 9), rep(1, 9)),
-                         aid = rep(0:8, 2),
+                         policy = c(rep(-1, 9), rep(0, 9), rep(1, 9)),
+                         aid = rep(0:8, 3),
                          period = median(aid$period, na.rm = TRUE))
 
+summary(aid$aid)
 predict(model5, newdata = snitt_data, se = TRUE, interval = "confidence")
 
 snitt_data <- cbind(snitt_data, predict(model5, newdata = snitt_data, se = TRUE, interval = "confidence"))
+snitt_data
 
 ggplot(snitt_data, aes(x = aid, y = fit.fit, 
                        group = factor(policy), 
@@ -257,6 +273,8 @@ ggplot(snitt_data, aes(x = aid, y = fit.fit,
   geom_line() +
   geom_ribbon(aes(ymin = fit.lwr, ymax = fit.upr, color = NULL), alpha = .2) +
   scale_y_continuous(breaks = seq(-12, 12, 2)) +
+  scale_colour_manual(values = c("darkred", "darkcyan", "yellow4")) +
+  scale_fill_manual(values = c("darkred", "darkcyan", "yellow4")) +
   labs(x = "Bistandsnivå", y = "Forventet GDP vekst", color = "Policy", fill = "Policy")
 
 #' 

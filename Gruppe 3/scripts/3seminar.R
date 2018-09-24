@@ -20,7 +20,7 @@ load("./data/aidgrowth/aidgrowth.rda")
 head(aid, 3)
 
 rm(aid) # rm() fjerner objektet fra Environment
-
+class(aid)
 
 #' 
 #' 
@@ -32,7 +32,7 @@ library(haven)
 
 aid <- read_sav("./data/aidgrowth/aidgrowth.sav")
 head(aid, 3)
-
+class(aid)
 rm(aid)
 
 #' 
@@ -58,7 +58,9 @@ head(aid, 3)
 # aid[which(aid$country == "ARG"), ]
 
 
+
 argentina <- aid[which(aid$country == "ARG"), ]
+argentina
 rm(argentina)
 
 argentina <- subset(aid, country == "ARG")
@@ -68,7 +70,11 @@ rm(argentina)
 
 
 #######
+is.na(aid$policy)
+
 is.na(aid$policy) == FALSE
+
+# cbind(is.na(aid$policy[1:10]), is.na(aid$policy[1:10]) == FALSE)
 
 nomiss_policy <- aid[which(is.na(aid$policy) == FALSE), ]
 rm(nomiss_policy)
@@ -86,6 +92,7 @@ nomiss_policy_growth <- aid[which(is.na(aid$gdp_growth) == FALSE | is.na(aid$pol
 nomiss_policy_growth <- subset(aid, is.na(gdp_growth) == FALSE | is.na(policy) == FALSE)
 
 rm(nomiss_policy_growth)
+
 
 #' 
 #' 
@@ -189,6 +196,8 @@ table(aid$regions)
 #' Nå er vi faktisk klar til å kjøre regresjonen! Legg merke til at vi har satt inn `factor(period)` direkte i regresjonen
 ## ----fixedOLS, tidy=FALSE------------------------------------------------
 
+aid$regions <- factor(aid$regions, levels = c("Other", "East Asia", "Sub-Saharan Africa"))
+
 model5 <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac * assasinations +
                institutional_quality + m2_gdp_lagged + regions + policy * aid +
                factor(period),
@@ -242,13 +251,14 @@ snitt_data <- data.frame(gdp_pr_capita_log = mean(aid$gdp_pr_capita_log, na.rm =
                          institutional_quality = mean(aid$institutional_quality, na.rm = TRUE),
                          m2_gdp_lagged = mean(aid$m2_gdp_lagged, na.rm = TRUE),
                          regions = "Other",
-                         policy = c(rep(0, 9), rep(1, 9)),
-                         aid = rep(0:8, 2),
+                         policy = c(rep(-4, 9), rep(0, 9), rep(4, 9)),
+                         aid = rep(0:8, 3),
                          period = median(aid$period, na.rm = TRUE))
 
 predict(model5, newdata = snitt_data, se = TRUE, interval = "confidence")
 
 snitt_data <- cbind(snitt_data, predict(model5, newdata = snitt_data, se = TRUE, interval = "confidence"))
+snitt_data
 
 ggplot(snitt_data, aes(x = aid, y = fit.fit, 
                        group = factor(policy), 
