@@ -11,6 +11,12 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## ToDO:
+
+Legg inn del om missing.
+
+Legg inn del om forutsetninger for logistisk regresjon.
+
 ## Neste seminar
 
 I neste seminar, skal vi se nærmere på regresjonsdiagnostikk for OLS og logistisk regresjon i første time. Andre time kommer til å gå med til flernivå. Det R-tekniske i første time blir ganske greit, i stedet kommer vi til å fokusere mye på substansielle tolkninger.

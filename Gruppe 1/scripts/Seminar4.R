@@ -5,11 +5,11 @@
 #### Forberedelser ####
 
 ## pakker til seminaret
-#install.packages("nnet")
+
 #install.packages("car")
 #install.packages("stargazer")
 
-library(nnet)
+
 library(car)
 library(stargazer)
 
@@ -101,20 +101,4 @@ summary(m6e <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations +
 stargazer(m6, m6c, m6d, m6e, type="text")
 
 
-## Lager variabel til multinomisk:
-summary(aid$gdp_growth)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth<0, 1, NA)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=0 & aid$gdp_growth< 1, 2, aid$gdp_g_categories)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=1 & aid$gdp_growth<3, 3, aid$gdp_g_categories)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=3, 4, aid$gdp_g_categories)
 
-table(aid$gdp_g_categories) #test
-
-
-## Kjører regresjon
-m7 <- multinom(gdp_g_categories ~ gdp_pr_capita_log + 
-           institutional_quality + m2_gdp_lagged +
-           sub_saharan_africa + fast_growing_east_asia + policy + aid, data= aid,
-         Hess = T, na.action="na.exclude")
-stargazer(m7, type="text")
-summary(m7)
