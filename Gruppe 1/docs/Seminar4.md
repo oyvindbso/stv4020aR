@@ -61,7 +61,7 @@ Det skal ikke være en perfekt lineær sammenheng mellom et sett av de uavhengig
 
 
 ## Regresjonsdiagnostikk i R
-Jeg anbefaler `car` pakken til John Fox til regresjonsdiagnostikk. Den gir ikke like vakre figurer som `ggplot`, men er veldig lett å bruke for nybegynnere, og inneholder alle slags funksjoner man trenger for regresjonsdiagnostikk. På sikt kan dere lære dere å konstruere disse plottene selv med `ggplot`. Pass imidlertid på at dere forstår hva plot dere bruker faktisk innebærer (det er lov å spørre om hjelp på **slack**).
+Jeg anbefaler `car` pakken til John Fox til regresjonsdiagnostikk. Den gir ikke like vakre figurer som `ggplot`, men er veldig lett å bruke for nybegynnere, og inneholder alle slags funksjoner man trenger for regresjonsdiagnostikk. På sikt kan dere lære dere å konstruere disse plottene selv med `ggplot`. Pass imidlertid på at dere forstår hva plot dere bruker faktisk innebærer (det er lov å spørre om hjelp på **slack**). I kapittel 6 av boken *An R Companion to Applied Regression* (Fox og Weisberg), gjennomgås diagnostikk med `car` i detalj.
 
 I tillegg til å teste antagelsene over (med unntak av antagelse 1), skal vi også se på innflytelsesrike observasjoner, og multikolinearitet. 
 
@@ -89,15 +89,17 @@ Vi kan teste for heteroskedastisitet ved hjelp av plot av studentiserte residual
 ### Multikolinearitet:
 Vi kan teste for multikolinearitet ved hjelp av en vif-test. Funksjonen for dette er `vif()`. Med vif tester vi om det er en sterk lineær sammenheng mellom uavhengige variabler, dersom dette er tilfellet er det gjerne nødvendig med store mengder data for å skille effektene av ulike variabler fra hverandre/få presise estimater (små standardfeil), men bortsett fra å samle mer data er det ikke så mye vi gjøre dersom vi mener begge variablene må være med i modellen. 
 
-### Uteliggere og innflytelsesrike observasjoner
-Innflytelsesrike observasjoner (leverage), er observasjoner som "trekker" regresjonslinjen mot seg med stor kraft. Disse observasjonene har gjerne uvanlige kombinasjoner av verdier på de uavhengige variablene, og predikeres gjerne dårlig av modellen. Vi bruker gjerne hatte-verdier som mål på innflytelsesrike observasjoner.  
+### Outliers, leverage og innflytelsesrike observasjoner
 
-Uteliggere er observasjoner som predikeres dårlig av modellen. Studentiserte residualer brukes ofte som mål på uteliggere. 
+Observasjoner med uvanlige/ekstreme verdier på de uvahengige variablene (når man tar høyde for korrelasjonsmønstre), har høy leverage (Vi bruker gjerne hatte-verdier som mål på leverage observasjoner i lineær regresjon). Observasjoner med høy leverage vil ha stor innflytelse på regresjonslinjen, hvis modellen predikerer slike observasjoner dårlig. Observasjoner som blir predikert dårlig av en modell får store residualer. Vi kaller gjerne slike observasjoner "regression outliers" (Studentiserte residualer brukes ofte som mål på "regression outliers"). Innflytelsesrike observasjoner har dermed høy leverage/er dårlig predikert av modellen, og "trekker" regresjonslinjen mot seg med stor kraft. 
+
+ 
 
 Det er ofte lurt å se nærmere på innflytelsesrike enheter og uteliggere, vi kan bruke `influenceIndexPlot()` til å identifisere slike observasjoner. Spesifiser hvor mange observasjoner du vil ha nummerert med argumentet `id.n = 5`. Deretter kan vi se nærmere på disse observasjonene ved hjelp av indeksering. En form for robusthetstesting er å kjøre regresjonen på nytt uten uteliggere og innflytelsesrike observasjoner, for å sjekke om man får samme resultat. Dersom man ikke gjør dette, er ikke resultatene dine særlig robuste.
 
-Vi kan også se på Cook's distance, som kombinerer informasjon om uteliggere og innflytelsesrike observasjoner. `influenceIndexPlot()` gir oss alle disse målene.
+Vi kan også se på Cook's distance, som kombinerer informasjon om uteliggere, leverage og innflytelsesrike observasjoner. `influenceIndexPlot()` gir oss alle disse målene.
 
+Dersom du kun er interessert i observasjoners innflytelse på en enkeltvariabel, kan du bruke funksjonen `dfbetas()`, som gir deg hver observasjons innflytelse på koeffisientene til alle variablene i en modell.
 
 ### Manglende informasjon/missing:
 
@@ -330,6 +332,8 @@ cor(full[, c("bdgdpg", "bdaid", "policy", "bdlpop", "ethnic_frac", "assasination
 ```
 
 
+**Metode 2: Analyse av dummy-variabler for missing**
+
 Ved å sammenligne disse korrelasjonsmatrisene, kan vi få et inntrykk av konsekvensene av å fjerne missing med listwise deletion. En alternativ metode å utforske missing i en analyse på, er med funksjonen `complete.cases()`, som gjør en logisk test av om en observasjon har missing. Vi kan bruke denne funksjonen til å lage en dummy for observasjoner som har missing/ikke har missing på noen av observasjonene som inngår i analysen vår.
 
 
@@ -447,7 +451,22 @@ I de fleste tilfeller er `ifelse()` en fin funksjon til å definere missing. Sta
 
 
 ## Logistisk regresjon:
-Mange av metodene for diagnostikk som vi har sett på i dag fungerer også for logistisk regresjon. Jeg legger ut et eget notat med diagnostikk for logistisk regresjon som vil være mest relevant til hjemmeoppgaven. Dersom dere synes formen på presentasjonen her er fin, legger jeg opp på samme måte.
+Mange av metodene for diagnostikk som vi har sett på i dag fungerer også for logistisk regresjon. Funksjonene `ceresplot()`, `dfbetas()`, `influenceIndexPlot()` m.m. fungerer også for logistisk regresjon. Husk forøvrig på at forutsetninger om homoskedastiske, normalfordelte restledd ikke gjelder logistisk regresjon. I tillegg viste jeg hvordan du kan lage ROC-kurver i introduksjonen til [dagens seminar](https://github.com/martigso/stv4020aR/blob/master/Gruppe%201/docs/Introduksjon_seminar4.md). 
+
+Tomme celler vil føre til at modellen ikke lar seg estimere, eller at du ikke får estimert standardfeil/ekstremt høye standardfeil, og er således greit å oppdage. Spredningsplot mellom variabler fra regresjonen kan brukes til å undersøke nærmere.
+
+Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
+
+Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken `ResourceSelection`
+
+Se medfølgende script for demonstrarsjon av de to siste funksjonene.
+
+**Husk:** I tillegg til formell diagnostikk, må du aldri glemme generelle validitets/metode-vurderinger.
+
+
+
+
+
 
 
 
