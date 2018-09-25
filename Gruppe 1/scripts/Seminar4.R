@@ -182,7 +182,7 @@ anova(miss_mod2, miss_mod2b)
 
 ## Hosmer-lemeshow:
 
-install.packages("ResourceSelection")
+#install.packages("ResourceSelection")
 library(ResourceSelection)
 
 hoslem.test(miss_mod2$y, fitted(miss_mod2), g = 10) # ikke signifikant.

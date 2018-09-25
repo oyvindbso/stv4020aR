@@ -45,25 +45,30 @@ fm1 <- lmer(trust_police ~ (1|country), data=ess)
 summary(fm1)
 ranef(fm1)
 
+
 ### Flernivå med uavh. var på mikronivå, fixed effects, random intercept:
 fm2 <- lmer(trust_police ~ (1|country) + income_decile, data=ess)
 summary(fm2)
 ranef(fm2)
 
+
 ### Flernivå med uavh. var på mikronivå, random slopes:
 fm3 <- lmer(trust_police ~ income_decile + (income_decile|country), data=ess)
 summary(fm3)
 ranef(fm3)
+VarCorr(fm3)
 
 ### Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå
 fm4 <- lmer(trust_police ~ income_decile + (income_decile|country) + lvl2_legalsys, data=ess)
 summary(fm4)
 ranef(fm4)
+VarCorr(fm4)
 
 ### Flernivå med uavh. var på mikronivå med random effects, kryssnivåsamspill, og uavhengig variabel på makronivå:
 fm5 <- lmer(trust_police ~ income_decile*lvl2_legalsys + (income_decile|country), data=ess)
 summary(fm5)
 ranef(fm5)
+VarCorr(fm5)
 
 ## Compare models:
 stargazer(fm1, fm2, fm3, fm4, fm5, type="text") # Gives AIC/BIC
@@ -76,4 +81,4 @@ anova(fm5, fm4)
 summary(fm1)
 0.6473/(0.6473 + 4.8832)
 
-
+  
