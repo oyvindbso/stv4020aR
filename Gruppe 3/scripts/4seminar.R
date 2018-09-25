@@ -18,7 +18,6 @@ rm(list = ls())
 
 load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/ess_norge.rda"))
 
-
 head(ess_nor, 3)
 
 #' 
@@ -106,6 +105,7 @@ table(ess_nor$trust_politicians, useNA = "always")
 attributes(ess_nor$trust_politicians)
 
 attr(ess_nor$trust_politicians, "labels")
+attr(ess_nor$income_decile, "labels")
 
 
 
@@ -129,6 +129,7 @@ exp(coef(party_reg))
 
 # Regner litt på Arbeiderpartiet vs. Fremskrittspartiet
 exp(0.7870249) / (1 + exp(0.7870249))
+exp(-2.4546861) / (1 + exp(-2.4546861))
 
 exp(0.7870249 + (-0.34755333 * 10)) / (1 + exp(0.7870249 + (-0.34755333 * 10)))
 
@@ -138,10 +139,10 @@ confint(party_reg)
 # Vi kan også se på hvordan modellen tenker med tanke på sannsynligheter
 test_set <- data.frame(trust_politicians = 0:10)
 
-predict(party_reg, newdata = test_set)
-predict(party_reg, newdata = test_set, type = "probs")
+cbind(test_set, predict(party_reg, newdata = test_set))
+cbind(test_set,predict(party_reg, newdata = test_set, type = "probs"))
 
-
+table(ess_nor$party_vote_short, ess_nor$trust_politicians)
 #' 
 #' Det er ganske åpenbart at modellen vår ikke er veldig god. Noen problemer:
 #' 1. Små partier er problematiske (liten N)
@@ -153,6 +154,15 @@ predict(party_reg, newdata = test_set, type = "probs")
 #' Først oppretter vi et nytt datasett der vi fjerner enheter fra de små partiene. Legg merke til at SV, KRF, SP, og V også er veldig nær smertegrensen her; vi kan få problemer med disse også. 
 #' 
 ## ----subsetLargParties---------------------------------------------------
+
+ess_nor$samle_parti <- ess_nor$party_vote_short
+ess_nor$samle_parti[which(ess_nor$party_vote_short == "RØDT" |
+                            ess_nor$party_vote_short == "KYST" | 
+                            ess_nor$party_vote_short == "MDG")] <- "Andre"
+
+table(ess_nor$samle_parti, ess_nor$party_vote_short, useNA = "always")
+
+
 larger_parties <- ess_nor[which(ess_nor$party_vote_short != "RØDT" &
                                   ess_nor$party_vote_short != "KYST" & 
                                   ess_nor$party_vote_short != "MDG" & 
@@ -179,13 +189,15 @@ attributes(larger_parties$income_feel)
 attributes(ess_nor$income_feel)
 
 ######
+# install.packages("labelled")
 library(labelled)
 
 larger_parties$income_feel <- copy_labels(ess_nor$income_feel, 
                                           larger_parties$income_feel)
+
 attr(larger_parties$income_feel, "labels")
 ######
-
+# & = OG, | = ELLER, ! = IKKE
 larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, larger_parties$income_feel)
 
 table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
@@ -195,7 +207,9 @@ larger_parties$income_decile <- copy_labels(ess_nor$income_decile,
                                             larger_parties$income_decile)
 attr(larger_parties$income_decile, "labels")
 #####
+
 attributes(ess_nor$income_decile)
+
 larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, larger_parties$income_decile)
 
 table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "always")
