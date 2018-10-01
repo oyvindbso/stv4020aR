@@ -11,9 +11,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Forutsetninger for OLS
+## Forutsetninger for regresjon
 
-Dere vil se disse forutsetningene formulert på litt forskjellige måter i ulike metodetekster, men alle bygger på de samme matematiske formuleringene. Noen ganger vil dere også se at forutsetningene om restledd er utelatt, fordi det antas at man bruker en eller annen form for robuste standardfeil som passer til data, andre ganger vil dere kunne se en antagelse om at kurtosen ikke er uendelig stor. Noen vil kategorisere ingen innflytelsesrike observasjoner og ikke perfekt multikolinearitet som antagelser, mens andre vil kategorisere det som problemer. Jeg følger Field og Cristophersens forelesning her (tettere enn Skog):
+Dere vil se forutsetningene for OLS formulert på litt forskjellige måter i ulike metodetekster. Det er blant annet forskjell på forutsetninger for at OLS skal være forventningsrett og konsistent, og at OLS skal være BLUE. Det går også ann å formulere de samme forutsetningene i ulik språkdrakt, selv når forutsetningene bygger på de samme matematiske formuleringene. Noen ganger vil dere også se at forutsetningene om restledd er utelatt, fordi det antas at man bruker en eller annen form for robuste standardfeil som passer til data, andre ganger vil dere kunne se en antagelse om at kurtosen ikke er uendelig stor. Noen vil kategorisere ingen innflytelsesrike observasjoner og ikke perfekt multikolinearitet som antagelser, mens andre vil kategorisere det som problemer/trusler. Dere forholder dere til pensum, jeg følger Cristophersens forelesning her (tettere enn Skog):
+
+**Kritiske aspekter i modellvurdering - OLS:**
 
 1. Ingen utelatt variabelskjevhet
 2. Lineær sammenheng mellom variablene
@@ -21,8 +23,7 @@ Dere vil se disse forutsetningene formulert på litt forskjellige måter i ulike
 4. Normalfordelte residualer
 5. Homoskedastiske residualer
 6. Ingen perfekt multikollinearitet
-
-
+7. Manglende opplysninger(missing values)
 
 
 ### Ingen utelatt variabelskjevhet
@@ -33,7 +34,7 @@ Hva innebærer denne antagelsen?
 
 **Merk:** korrelasjon er lineær sammenheng mellom to variabler, ikke et årsaksforhold. Så lenge to variabler påvirker den avhengige variabelen, og de er korrelert (selv om de ikke påvirker hverandre på noe vis), får vi utelatt variabelskjevhet dersom vi ikke kontrollerer for den andre variabelen. 
 
-Denne antagelsen kan vi ikke teste. Det finnes imidlertid metoder for å estimere effekten av utelatte variabler med ulike egenskaper. Denne formen for robusthetstesting kalles *sensivity analysis*
+Denne antagelsen kan vi ikke teste, dersom vi ikke har data for alle variabler. Det finnes imidlertid metoder for å estimere effekten av utelatte variabler med ulike egenskaper. Denne formen for robusthetstesting kalles *sensivity analysis*
 
 ### Lineær sammenheng mellom variablene
 Metoden vi bruker for å regne ut lineær regresjon tar blant annet utgangspunkt i kovarians mellom uavhengige variabler og avhengige variabler. I likhet med korrelasjon, er kovarians et mål på lineær sammenheng mellom to variabler. Derfor forutsetter lineær regresjon en lineær sammenheng mellom uavhengig av avhengig variabel. Brudd på denne forutsetningen kan potensielt gi svært missvisende resultater, f.eks. ved å gjøre en U-formet sammenheng om til *ingen lineær sammenheng*.
@@ -48,7 +49,7 @@ I noen tilfeller er hypotesen vår er mer spesifikk, for eksempel at en sammenhe
 2. Om regresjonen med et andregradsledd passer til data.
 
 
-Det finnes flere måter å teste linearitetsantagelsen på. Field gjør en grafisk test, ved å plotte residualene til den avhengige variabelen mot residualene til den uavhengige variabelen vi er interessert i. Jeg viser en annen test som gjør samme nytten, men som har noen fordeler.
+Det finnes flere måter å teste linearitetsantagelsen på. Man kan gjøre en grafisk test, ved å plotte residualene til den avhengige variabelen mot residualene til den uavhengige variabelen vi er interessert i. Jeg viser en annen test som gjør samme nytten, men som har noen fordeler.
 
 **Viktig:** Dersom dere legger inn andregradsledd eller andre polynomer, husk på å tolke alle leddene for den variabelen sammen. Det er lettest å gjøre dette ved hjelp av plot (eller derivasjon for dem som er glad i matte).
 
@@ -67,11 +68,12 @@ Det skal ikke være en perfekt lineær sammenheng mellom et sett av de uavhengig
 
 
 ## Regresjonsdiagnostikk i R
-Jeg anbefaler `car` pakken til John Fox til regresjonsdiagnostikk. Den gir ikke like vakre figurer som `ggplot`, men er veldig lett å bruke for nybegynnere, og inneholder alle slags funksjoner man trenger for regresjonsdiagnostikk. På sikt kan dere lære dere å konstruere disse plottene selv med `ggplot`. Pass imidlertid på at dere forstår hva plot dere bruker faktisk innebærer (det er lov å spørre om hjelp i statistikk-kanalen vår på **slack**).
+Jeg anbefaler `car` pakken til John Fox til regresjonsdiagnostikk. Den gir ikke like vakre figurer som `ggplot`, men er veldig lett å bruke for nybegynnere, og inneholder alle slags funksjoner man trenger for regresjonsdiagnostikk. På sikt kan dere lære dere å konstruere disse plottene selv med `ggplot`. Pass imidlertid på at dere forstår hva plot dere bruker faktisk innebærer (det er lov å spørre om hjelp på **slack**). I kapittel 6 av boken *An R Companion to Applied Regression* (Fox og Weisberg), gjennomgås diagnostikk med `car` i detalj.
 
 I tillegg til å teste antagelsene over (med unntak av antagelse 1), skal vi også se på innflytelsesrike observasjoner, og multikolinearitet. 
 
 ### Data - Burnside og Dollar 2000
+
 I dag skal vi se på en ekte artikkel, og gjøre regresjonsdiagnostikk på denne.
 Jeg har valgt en artikkel som tidligere var på pensum i fordypningsemnet i statistikk som holdes av Håvard Strand, jeg har altså hatt replikasjon av denne artikkelen som hjemmeoppgave. I tillegg til diagnostikken som vi gjør i seminaret, er det fint å se på deskriptiv statistikk, effektplot, samt diskusjon av data. Jeg skal laste opp et tilleggsnotat som dere kan se nærmere på med deskriptiv statistikk og diskusjon av data til denne artikkelen etterpå. Til sammen utgjør dermed dagens seminar og tilleggsnotatet fine ressurser for dem som er interessert i å gjøre replikasjon i hjemmeoppgaven sin. Dersom noen er interessert, kan jeg også tipse om noen nyttige artikler om replikasjon gjennom **slack**.
 
@@ -92,24 +94,133 @@ Vi kan teste for normalfordelte residualer ved å plotte studentiserte residuale
 Vi kan teste for heteroskedastisitet ved hjelp av plot av studentiserte residualer mot standardiserte predikerte verdier fra modellen. Dette kan gjøres med `spreadLevelPlot()`, dere kan også se på Martin sitt script fra seminar 3, der han bruker `ggplot()` i stedet.
 
 ### Multikolinearitet:
-Vi kan teste for multikolinearitet ved hjelp av en vif-test. Funksjonen for dette er `vif()`. Med vif tester vi om det er en sterk lineær sammenheng mellom uavhengige variabler, dersom dette er tilfellet er det gjerne nødvendig med store mengder data for å skille effektene av ulike variabler fra hverandre, men bortsett fra å samle mer data er det ikke så mye vi gjøre dersom vi mener begge variablene må være med i modellen. Field skriver at vif over 10 er problematisk.
+Vi kan teste for multikolinearitet ved hjelp av en vif-test. Funksjonen for dette er `vif()`. Med vif tester vi om det er en sterk lineær sammenheng mellom uavhengige variabler, dersom dette er tilfellet er det gjerne nødvendig med store mengder data for å skille effektene av ulike variabler fra hverandre/få presise estimater (små standardfeil), men bortsett fra å samle mer data er det ikke så mye vi gjøre dersom vi mener begge variablene må være med i modellen. 
 
-### Uteliggere og innflytelsesrike observasjoner
-Innflytelsesrike observasjoner (leverage), er observasjoner som "trekker" regresjonslinjen mot seg med stor kraft. Disse observasjonene har gjerne uvanlige kombinasjoner av verdier på de uavhengige variablene, og predikeres gjerne dårlig av modellen. Vi bruker gjerne hatte-verdier som mål på innflytelsesrike observasjoner.  
+### Outliers, leverage og innflytelsesrike observasjoner
 
-Uteliggere er observasjoner som predikeres dårlig av modellen. Studentiserte residualer brukes ofte som mål på uteliggere. 
+Observasjoner med uvanlige/ekstreme verdier på de uvahengige variablene (når man tar høyde for korrelasjonsmønstre), har høy leverage (Vi bruker gjerne hatte-verdier som mål på leverage observasjoner i lineær regresjon). Observasjoner med høy leverage vil ha stor innflytelse på regresjonslinjen, hvis modellen predikerer slike observasjoner dårlig. Observasjoner som blir predikert dårlig av en modell får store residualer. Vi kaller gjerne slike observasjoner "regression outliers" (Studentiserte residualer brukes ofte som mål på "regression outliers"). Innflytelsesrike observasjoner har dermed høy leverage/er dårlig predikert av modellen, og "trekker" regresjonslinjen mot seg med stor kraft. 
+
+ 
 
 Det er ofte lurt å se nærmere på innflytelsesrike enheter og uteliggere, vi kan bruke `influenceIndexPlot()` til å identifisere slike observasjoner. Spesifiser hvor mange observasjoner du vil ha nummerert med argumentet `id.n = 5`. Deretter kan vi se nærmere på disse observasjonene ved hjelp av indeksering. En form for robusthetstesting er å kjøre regresjonen på nytt uten uteliggere og innflytelsesrike observasjoner, for å sjekke om man får samme resultat. Dersom man ikke gjør dette, er ikke resultatene dine særlig robuste.
 
-Vi kan også se på Cook's distance, som kombinerer informasjon om uteliggere og innflytelsesrike observasjoner. `influenceIndexPlot()` gir oss alle disse målene.
+Vi kan også se på Cook's distance, som kombinerer informasjon om uteliggere, leverage og innflytelsesrike observasjoner. `influenceIndexPlot()` gir oss alle disse målene.
+
+Dersom du kun er interessert i observasjoners innflytelse på en enkeltvariabel, kan du bruke funksjonen `dfbetas()`, som gir deg hver observasjons innflytelse på koeffisientene til alle variablene i en modell.
+
+### Manglende informasjon/missing:
+
+**Å identifisere missing i R:**
+
+I R kan missing være kodet på flere måter. Dersom missing er eksplisitt definert i R, vil vi se missing som `NA` når vi ser på datasettet. Vi vil også kunne sjekke om vi har missing på en variabel med `table(is.na(data$myvar))`. La oss teste:
+```{r}
+load("../data/bd_full.Rdata")
+table(is.na(full$bdaid)) # Burnside og Dollar sin originale variabel
+table(is.na(full$elraid)) # Easterly sin utvidede variabel
+```
+
+Noen ganger leses ikke missing inn som `NA`. Missing på variabler i datasett fra andre statistikkprogramm kan f.eks. leses som `character` med verdi `" "`, eller som `numeric` med verdi `-99`. For å sjekke dette, bør du lese kodebok. Det er ikke sikkert at `" "` bør omkodes til missing. Du kan også se på en tabell, for å identifisere suspekte verdier:
+```{r}
+table(full$regions) # ingen suspekte verdier
+```
+
+Moral: **alltid sjekk kodeboken**, og se på verdiene til data med tabell for å identifisere missing. 
+
+
+En annen måte data kan være missing på, er at en hel observasjon simpelthen er utelatt fra datasettet. Vi kan for eksempel ha et datasett med boligprisene for en gjennomsnittlig treromsleilighet fra 2013 til i dag i 2 bydeler som ser slik ut:
+```{r}
+boligpris <- data.frame(year = c(2013, 2015:2017), bydel = c(rep("Sagene", 4), rep("Manglerud", 4)), pris = c(2.8, 3.6, 4.2, 4, 2.6, 3.1, 3.4, 3.3))
+table(is.na(boligpris))
+boligpris
+```
+Her er det ingen eksplisitte missing, men all informasjon for 2014 er implisitt missing. Pass opp for denne typen missing, særlig i panel data. 
+En lettvint måte å kikke etter slike metoder er å vise den grunnleggende datastrukturen med `table()`, der du legger inn variablene som danner grunnlaget for datastrukturen (land og år i datasettet `full`). Heldigvis er det sjeldent at vi får ubalanserte datasett når vi bruker ferdiglagde datasett.
+
+Til slutt er det viktig å være oppmerksom på konsekvensene av missing på en eller flere variabler når vi gjennomfører en statistisk analyse. I regresjonsmodelle blir observasjoner som har missing på en av variablene som inngår i en modell kastet ut av analysen. I regresjonsoutput fra `summary(model)` får vi vite hvor mange observasjoner som blir fjernet. Dette er fin informasjon, men vi kan også undersøke konsekvensene av missing nærmere. Under skisserer jeg noen måter dere kan bruke R på for å lære mer om missingstruktur:
+
+**Metode 1: korrelasjonsmatriser**
+
+Korrelasjonsmatriser viser korrelasjoner mellom variabler av klassene `numeric` og `integer`.
+Dersom vi vil få et raskt inntrykk av konsekvensene av missing i en modell, kan vi lage en korrelasjonsmatrise med variablene som inngår i modellen, og varierer hvordan vi håndterer missing i korrelasjonsmatrisen. Her er et eksempel:
+
+```{r}
+m1 <- lm(bdgdpg ~ bdaid*policy + as.factor(period) + bdlpop + ethnic_frac*assasinations, data = full )
+summary(m1) # output viser at 1077 observasjoner fjernes pga. missing
+```
+
+Lager korrelasjonsmatrise med variablene som inngår:
+```{r}
+# Siden as.factor(period) lager en dummvariabel for alle perioder unntatt periode 1, må vi gjøre dette for å inkludere denne variabelen i korrelasjonsmatrisen (inkluder gjerne også periode 1 i matrise):
+
+full$period2 <- ifelse(full$period==2, 1, 0)
+full$period3 <- ifelse(full$period==3, 1, 0)
+full$period4 <- ifelse(full$period==4, 1, 0)
+full$period5 <- ifelse(full$period==5, 1, 0)
+full$period6 <- ifelse(full$period==6, 1, 0)
+full$period7 <- ifelse(full$period==7, 1, 0)
+full$period8 <- ifelse(full$period==8, 1, 0)
+
+cor(full[, c("bdgdpg", "bdaid", "policy", "bdlpop", "ethnic_frac", "assasinations", "period2", "period3", "period4", "period5", "period6", "period7")], use = "pairwise.complete.obs")
+
+# Alternativet "pairwise.complete.obs" fjerner bare missing for de enkelte bivariate korrelasjonene
+
+cor(full[, c("bdgdpg", "bdaid", "policy", "bdlpop", "ethnic_frac", "assasinations", "period2", "period3", "period4", "period5", "period6", "period7")], use = "complete.obs")
+
+# Alternativet "complete.obs" fjerner alle observasjoner som har missing på en av variablene som inngår, mao. det samme som regresjonsanalysen.
+```
+
+
+**Metode 2: Analyse av dummy-variabler for missing**
+
+Ved å sammenligne disse korrelasjonsmatrisene, kan vi få et inntrykk av konsekvensene av å fjerne missing med listwise deletion. En alternativ metode å utforske missing i en analyse på, er med funksjonen `complete.cases()`, som gjør en logisk test av om en observasjon har missing. Vi kan bruke denne funksjonen til å lage en dummy for observasjoner som har missing/ikke har missing på noen av observasjonene som inngår i analysen vår.
+
+```{r}
+table(complete.cases(full[, c("bdgdpg", "bdaid", "policy", "bdlpop", "ethnic_frac", "assasinations", "period2", "period3", "period4", "period5", "period6", "period7")]))
+full$m1_miss <- complete.cases(full[, c("bdgdpg", "bdaid", "policy", "bdlpop", "ethnic_frac", "assasinations", "period2", "period3", "period4", "period5", "period6", "period7")])
+```
+
+Vi kan bruke denne variabelen til plot. Både spredningsplot og boxplot kan gi god innsikt i hvordan observasjoner med missing skiller seg fra andre. Et annet alternativ, er å se på en logistisk regresjon, med den nye dummyen som avhengig variabel. Her fjerner jeg de variablene som fører til flest missing:
+
+```{r}
+miss_mod <- glm(m1_miss ~ bdaid*policy + bdlpop + as.factor(period), data = full)
+summary(miss_mod) # ingen store forskjeller, signifikante uavh. var her er ikke bra.
+```
+
+I dette særtilfellet, kan vi også bruke utvidelsen av det originale datasettet til Burnside og Dollar fra Easterly til å gjøre samme test:
+
+```{r}
+miss_mod2 <- glm(m1_miss ~ elraid + elrsacw + elrbb + elrinfl + elrlpop + as.factor(period), data = full)
+summary(miss_mod2)
+# Her er koeffisienten til bistand negativ og signifikant. Dette indikerer at land som fjernes pga missing, får mindre bistand enn land som ikke fjernes. Ser også at land med større befolkning i mindre grad fjernes pga. missing.
+```
+
+Vi kunne også definert dummy-variabler for missing på de enkeltvariablene vi er mest interessert i (her: `bdgdpg`, `bdaid` og `policy`), og gjennomført tilsvarende analyser, ved hjelp av funksjonen `is.na()`. 
+
+I de fleste tilfeller er `ifelse()` en fin funksjon til å definere missing. Statistiske R-funksjoner har stort sett et eller flere argumenter der du kan velge hvordan missing skal håndteres (se for eksempel `?cor`, og argumentene `use` og `na.rm`). Husk på det dere har lært på forelesning, og ta aktive valg om hvordan missing bør håndteres. 
+
+
 
 
 ## Logistisk regresjon:
-Mange av metodene for diagnostikk som vi har sett på i dag fungerer også for logistisk regresjon. Jeg legger ut et eget notat med diagnostikk for logistisk regresjon som vil være mest relevant til hjemmeoppgaven. Dersom dere synes formen på presentasjonen her er fin, legger jeg opp på samme måte.
+Mange av metodene for diagnostikk som vi har sett på i dag fungerer også for logistisk regresjon. Funksjonene `ceresplot()`, `dfbetas()`, `influenceIndexPlot()` m.m. fungerer også for logistisk regresjon. Husk forøvrig på at forutsetninger om homoskedastiske, normalfordelte restledd ikke gjelder logistisk regresjon. I tillegg viste jeg hvordan du kan lage ROC-kurver i introduksjonen til [dagens seminar](https://github.com/martigso/stv4020aR/blob/master/Gruppe%201/docs/Introduksjon_seminar4.md). 
+
+Tomme celler vil føre til at modellen ikke lar seg estimere, eller at du ikke får estimert standardfeil/ekstremt høye standardfeil, og er således greit å oppdage. Spredningsplot mellom variabler fra regresjonen kan brukes til å undersøke nærmere.
+
+Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
+
+Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken `ResourceSelection`
+
+Se medfølgende script for demonstrarsjon av de to siste funksjonene.
+
+**Husk:** I tillegg til formell diagnostikk, må du aldri glemme generelle validitets/metode-vurderinger.
 
 
-## Multinomisk logistisk regresjon:
-Her skal jeg bare kort demonstrere hvordan man gjør multinomisk logistisk regresjon. Det finnes mange pakker for å gjøre dette i R, her bruker jeg funksjonen `multinom()` fra pakken `nnet`. For å slippe å laste inn flere datasett, og for å øve på omkoding har jeg laget en ny avhengig variabel med utgangspunkt i datasettet til Burnside og Dollar. Vi skiller mellom land som har negativ vekst, land som har lav vekst (under 1), land som har middels vekst (fra 1 til 3) og land som har høy vekst. Hvordan kan man gjøre denne omkodingen ved hjelp av `ifelse()`?
+
+
+
+
+
+
 
 
 
