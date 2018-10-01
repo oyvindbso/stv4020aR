@@ -235,7 +235,8 @@ larger_parties$party_vote_short <- factor(larger_parties$party_vote_short,
                                           levels = c("SV", "A", "SP", "KRF", "V", "H", "FRP"))
 
 library(MASS)
-rang_party <- polr(party_vote_short ~ trust_politicians + income_decile2 + income_feel2 + age + gender,
+rang_party <- polr(party_vote_short ~ trust_politicians + income_decile2 + 
+                     income_feel2 + age_sen + gender,
                        data = larger_parties, Hess = TRUE, na.action = "na.exclude")
 summary(rang_party)
 

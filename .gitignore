@@ -10,15 +10,12 @@
 ## Docs
 # Gruppe 2
 Gruppe\ 2/docs/*.Rmd
-Gruppe\ 2/docs/seminar6*
 
 # Gruppe 3
 Gruppe\ 3/docs/*.Rmd
-Gruppe\ 3/docs/seminar6*
 
 ## Data
 # Gruppe 2
-
 
 # Gruppe 3
 
@@ -39,8 +36,7 @@ Gruppe\ 3/prove/*
 ## Scripts
 # Gruppe 2
 Gruppe\ 2/scripts/ekstra/*
-Gruppe\ 2/scripts/6seminar.R
 
 # Gruppe 3
 Gruppe\ 3/scripts/ekstra/*
-Gruppe\ 3/scripts/6seminar.R
+

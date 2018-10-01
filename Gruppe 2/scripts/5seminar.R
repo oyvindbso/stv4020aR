@@ -3,7 +3,9 @@
 #' Vi fortsetter der vi slapp sist! Altså med European Social Survey data (Norge subsett).
 #' 
 ## ----lasterda------------------------------------------------------------
-load("./data/ess_norge.rda")
+
+load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/ess_norge.rda"))
+
 
 #' 
 #' 
@@ -46,6 +48,9 @@ larger_parties <- ess_nor[which(ess_nor$party_vote_short != "RØDT" &
                                   ess_nor$party_vote_short != "KYST" & 
                                   ess_nor$party_vote_short != "MDG" & 
                                   is.na(ess_nor$party_vote_short) == FALSE), ]
+
+table(ess_nor$party_vote_short, ess_nor$trust_politicians)
+
 table(larger_parties$party_vote_short, useNA = "always")
 
 #' 
@@ -62,9 +67,14 @@ table(larger_parties$party_vote_short, useNA = "always")
 ## ----incomeCode----------------------------------------------------------
 library(labelled)
 
+attr(ess_nor$income_feel, "labels")
+
+attr(larger_parties$income_feel, "labels")
+
 larger_parties$income_feel <- copy_labels(ess_nor$income_feel, larger_parties$income_feel)
 attr(larger_parties$income_feel, "labels")
 
+larger_parties$income_feel > 4
 larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, larger_parties$income_feel)
 
 table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
@@ -72,7 +82,9 @@ table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
 larger_parties$income_decile <- copy_labels(ess_nor$income_decile, larger_parties$income_decile)
 attr(larger_parties$income_decile, "labels")
 
-larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, larger_parties$income_decile)
+larger_parties$income_decile2 <- ifelse(test = larger_parties$income_decile > 10,
+                                        yes = NA, 
+                                        no = larger_parties$income_decile)
 
 table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "always")
 
@@ -123,19 +135,22 @@ test_set2
 #' Når vi har opprettet dette objektet kan vi binde sammen kolonnene av test settet vår og predikerte verdier på test settet. Mer spesifikt bruker vi regresjonsobjektet vårt (alle beta og Xer) og regner ut ligningen gitt at data ser ut som test settet vårt (*newdata*-argumentet sier altså at vi skal løse ligningen for vårt hypotetiske datasett). Legg også merke til argumentet *type*, som med multinomisk regresjon enten kan gi partiet med høyest sannsynlighet for hver rad (dette er *default*), eller sannsynlighet for hver rad å havne i hvert parti.
 #' 
 ## ----predikerteSannsynligheter-------------------------------------------
+predict(party_reg2, newdata = test_set2, type = "probs")
 
 test_set2 <- cbind(test_set2, predict(party_reg2, newdata = test_set2, type = "probs"))
 test_set2
+
+table(ess_nor$trust_politicians, ess_nor$party_vote_short)
 
 #' 
 #' Vi gjør også et siste lille triks før vi plotter ut effekten av *trust_politicians*. `ggplot()` (og veldig mange andre funksjoner i R) liker nemlig best data i **long** heller enn **wide format**. Pakken **reshape2** kan hjelpe oss med denne konverteringen, og er generelt en pakke som brukes veldig mye.
 #' 
 #' Her "smelter" vi ned data slik at vi får en egen kolonne for parti (heller enn en kolonne per parti). 
 ## ----smelteData----------------------------------------------------------
+# install.packages("reshape2")
 library(reshape2)
 test_set2 <- melt(test_set2, measure.vars = c("A", "FRP", "H", "KRF", "SP", "SV", "V"))
-
-
+head(test_set2, 20)
 #' 
 #' Til slutt kan vi bruke `ggplot()` som vi ellers ville gjort. Da får vi et veldig godt bilde av hvordan variabelen vår oppfører seg i regresjonen. Vi ser også at Solveig var smartere enn meg når hun slo sammen til tre kategorier...
 #' 
@@ -145,10 +160,15 @@ library(ggplot2)
 ggplot(test_set2, aes(x = trust_politicians, y = value, color = variable)) + 
   geom_line() +
   theme_minimal() +
+  scale_x_continuous(breaks = seq(0, 10, 2)) +
   scale_color_manual(values = c("darkred", "darkblue", "blue", "yellow4",
                                 "darkgreen", "red2", "green")) +
-  labs(x = "Tillit til politikere", y = "Forventet verdi på Y", color = "Parti")
+  labs(x = "Tillit til politikere", y = "Forventet verdi på Y",
+       color = "Parti") +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank())
 
+table(larger_parties$party_vote_short, larger_parties$trust_politicians)
 
 #' 
 #' Husk at alt bortsett fra *trust_politicians* er konstant her; *all else equal*!
@@ -161,18 +181,22 @@ ggplot(test_set2, aes(x = trust_politicians, y = value, color = variable)) +
 #' 
 ## ----essAll--------------------------------------------------------------
 rm(list = ls())
-load("./data/ess.rda")
-
+# load("./data/ess.rda")
+load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%203/data/ess.rda"))
 table(ess$country)
+colnames(ess)
 
-#' 
-#' 
+noen_land <- subset(ess, country == "Denmark" | country == "Norway")
+table(noen_land$country)
+rm(noen_land)
+
 #' 
 #' ## Flernivå vs. fixed effects
 #' *Fixed effects* er en samlebetegnelse for å kontrollere bort varians som kan åpne *backdoor paths* i regresjonen vår på en enkel måte: vi bare plugger inn dummyset for, i akkurat denne sammenhengen, land. Har man paneldata vil du også lage fixed effects for år (eller periode etc). Legg merke til at R squared ofte blir høy når vi gjør dette.
 #' 
 ## ----FE------------------------------------------------------------------
-fe <- lm(trust_politicians ~ gender + age + income_decile + factor(income_feel) + factor(country), 
+fe <- lm(trust_politicians ~ gender + age + income_decile + 
+           factor(income_feel) + country, 
          data = ess)
 summary(fe)
 
@@ -191,12 +215,24 @@ summary(fe)
 #' De fleste behov innenfor flernivåanalyse kan tilfredsstilles med pakken **lme4**. OLS flernivå kan kjøres med funksjonen `lmer()`. Syntaksen for denne funksjonen er også veldig lik alle andre regresjonsanalyser, med ett viktig unntak. Legg merke til leddet `(1|country)` under: her sier vi at vi har hierarkisk struktur i data, der *country* er nivå 2 enheter. Dette er altså bare en *random intercept* modell.
 #' 
 ## ----flernivå------------------------------------------------------------
+# install.packages("lme4")
 library(lme4)
 
-trust_polit <- lmer(trust_politicians ~ age + gender + income_feel + income_decile + (1|country),
+trust_polit0 <-lmer(trust_politicians ~ (1|country),
+                    data = ess)
+summary(trust_polit0)
+
+# ICC
+1.220 / (1.220 + 4.749)
+
+
+trust_polit <- lmer(trust_politicians ~ age + gender + income_feel + 
+                      income_decile + (1|country),
                     data = ess)
 summary(trust_polit)
-
+fixef(trust_polit)
+ranef(trust_polit)
+coef(trust_polit)
 #' 
 #' Andre spesifikasjoner:
 ## ----flernivå2-----------------------------------------------------------
@@ -215,7 +251,8 @@ summary(trust_polit)
 # lmer(AV ~ UV_nivå1 * UV_nivå2 + (1 + UV_nivå1 | Gruppe_nivå2), data = data) 
       # = random intercept, cross-level interaction
 
-trust_polit2 <- lmer(trust_politicians ~ age + gender + income_feel + income_decile + (income_feel|country),
+trust_polit2 <- lmer(trust_politicians ~ age + gender + income_feel + 
+                       income_decile + (income_feel|country),
                     data = ess) # random intercept, random slope
 summary(trust_polit2)
 
@@ -225,7 +262,12 @@ summary(trust_polit2)
 #' 
 ## ----trekkeUtLmerTing----------------------------------------------------
 coef(trust_polit2)
+fixef(trust_polit2)
 ranef(trust_polit2)
+
+# coef() gir forventet effekt for each individual
+# coef() er verdien av fixef() for hver enhet pluss verdien av ranef().
+
 
 library(lattice)
 dotplot(ranef(trust_polit2, condVar = TRUE))
@@ -235,4 +277,14 @@ dotplot(ranef(trust_polit2, condVar = TRUE))
 ## ----ikketenkpådenne, eval=FALSE, echo=FALSE-----------------------------
 ## knitr::purl("./docs/seminar5.Rmd", output = "./scripts/5seminar.R", documentation = 2)
 ## 
+
+
+ess$age_sen <- ess$age - median(ess$age, na.rm = TRUE)
+
+trust_polit2 <- lmer(trust_politicians ~ age_sen + gender + income_feel + 
+                       income_decile + (income_feel|country),
+                     data = ess) # random intercept, random slope
+summary(trust_polit2)
+
+rm(fe)
 
