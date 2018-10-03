@@ -119,7 +119,7 @@ landplot("MEX")
 
 ##### Oppgave 7 #####
 
-full$elrgdpg_lag <- lag(full$elrgdpg)
+full$elrgdpg_lag <- ifelse(full$country==lag(full$country), lag(full$elrgdpg), NA)
 
 summary(lm(elraid ~ elrpolicy + elrgdpg_lag + elrlpop, data = full))
 
