@@ -237,23 +237,23 @@ coef(trust_polit)
 #' Andre spesifikasjoner:
 ## ----flernivå2-----------------------------------------------------------
 # lmer(AV ~ 1 + (1 | Gruppe_nivå2), data = data) 
-      # = random intercept only
+# = random intercept only
 
 # lmer(AV ~ UV_nivå1 + (1 | Gruppe_nivå2), data = data) 
-      # = ranomd intercept plus fixed effect
+# = ranomd intercept plus fixed effect
 
 # lmer(AV ~ UV_nivå1 + (UV_nivå1 | Gruppe_nivå2), data = data) 
-      # = random intercept, random slope
+# = random intercept, random slope
 
 # lmer(AV ~ UV_nivå1 + UV_nivå2 + (1 + UV_nivå1 | Gruppe_nivå2), data = data) 
-      # = random intercept, individual and group predictor
+# = random intercept, individual and group predictor
 
 # lmer(AV ~ UV_nivå1 * UV_nivå2 + (1 + UV_nivå1 | Gruppe_nivå2), data = data) 
-      # = random intercept, cross-level interaction
+# = random intercept, cross-level interaction
 
 trust_polit2 <- lmer(trust_politicians ~ age + gender + income_feel + 
                        income_decile + (income_feel|country),
-                    data = ess) # random intercept, random slope
+                     data = ess) # random intercept, random slope
 summary(trust_polit2)
 
 #' 

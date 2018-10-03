@@ -34,11 +34,16 @@ library(stargazer) # Regresjonstabeller
 #' La oss tenke oss at våre tillitsvariabler **sammen** måler et (eller flere) underliggende konsep -- for eksemple politisk tillit. Det første vi vil gjøre er å bare sjekke korrelasjonen mellom disse variablene. Jeg bruker `cor.plot()` for å visualisere kjapt hvordan korrelasjonsmatrisen ser ut. Vi kunne brukt `ggplot()` også her, men det tar litt lenger tid (når dere skriver oppgaver: pass på å gjøre figurer/tabeller finere enn dette).
 #' 
 ## ----trustVars-----------------------------------------------------------
+ess[1:10, ]
 
 korrel <- cor(ess[, c("trust_parl", "trust_legalsys", "trust_police", 
                       "trust_politicians", "trust_polparties", "trust_eurparl",
-                      "trust_unitednations")], use = "complete.obs")
+                      "trust_unitednations")], 
+              use = "complete.obs")
 korrel
+
+cor.plot(korrel, numbers = TRUE)
+
 KMO(korrel)
 
 bartlett.test(formula = ~., ess[, c("trust_parl", "trust_legalsys", "trust_police", 
@@ -46,7 +51,6 @@ bartlett.test(formula = ~., ess[, c("trust_parl", "trust_legalsys", "trust_polic
                           "trust_eurparl", "trust_unitednations")])
 
 
-cor.plot(korrel, numbers = TRUE)
 
 
 # Et triks når det er et mønster i variablene vi skal ha:
@@ -80,6 +84,7 @@ trust_factor <- factanal(~., 3, ess[, c("trust_parl", "trust_legalsys", "trust_p
                         "trust_politicians", "trust_polparties", 
                         "trust_eurparl", "trust_unitednations")])
 
+loadings(trust_factor)
 
 print(loadings(trust_factor), cutoff = .5)
 
@@ -97,18 +102,19 @@ promax(loadings(trust_factor))
 #' Det siste som da gjenstår, er å lage våre tre faktorer om til en additiv indeks -- det er også mulig å vekte faktorene forskjellig. Her summerer vi rett fram veridene for variablene på hver faktor og deler på antall variabler.
 #' 
 ## ----lageIndekser--------------------------------------------------------
-
 ess$political_trust <- (ess$trust_parl + ess$trust_politicians + ess$trust_polparties) / 3
 ess$legal_trust <- (ess$trust_legalsys + ess$trust_police) / 2
 ess$international_trust <- (ess$trust_unitednations + ess$trust_eurparl) / 2
+
+summary(ess$political_trust)
 
 
 #' 
 ## ----plotIndekses--------------------------------------------------------
 
 
-
 plot_data <- ess[which(is.na(ess$gender) == FALSE), ]
+plot_data <- subset(ess, is.na(gender) == FALSE)
 
 ggplot(plot_data, aes(x = gender, y = as.numeric(political_trust))) + 
   geom_boxplot() +
@@ -136,7 +142,9 @@ trust_polit0 <-lmer(political_trust ~ (1|country),
                     data = reg_data)
 summary(trust_polit0)
 
+#########
 # ICC
+########
 1.377 / (1.377 + 3.743)
 
 trust_polit1 <- lmer(political_trust ~ income_feel + (1|country),
@@ -150,8 +158,13 @@ trust_polit3 <- lmer(political_trust ~ income_feel + income_decile + age + gende
                     data = reg_data)
 
 trust_polit4 <- lmer(political_trust ~ income_feel + income_decile + age + gender + 
-                       (gender|country),
+                       (gender + income_decile|country),
                     data = reg_data)
+
+# lmer(AV ~ UV_nivå1 * UV_nivå2 + (1 + UV_nivå1 | Gruppe_nivå2), data = data) 
+# = random intercept, cross-level interaction
+
+
 
 # To mål på model-fit, som straffer at vi legger inn flere variabler
 # AIC(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4)

@@ -18,8 +18,7 @@ knitr::opts_knit$set(root.dir = "../")
 #' 
 ## ----essAll--------------------------------------------------------------
 rm(list = ls())
-load("./data/ess.rda")
-
+load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%203/data/ess.rda"))
 
 library(psych)     # Viktig pakke for ting rundt faktoranalyse
 library(lme4)      # Flernivåanalyse
@@ -39,6 +38,8 @@ korrel <- cor(ess[, c("trust_parl", "trust_legalsys", "trust_police",
                       "trust_politicians", "trust_polparties", "trust_eurparl",
                       "trust_unitednations")], use = "complete.obs")
 korrel
+cor.plot(korrel, numbers = TRUE)
+
 KMO(korrel)
 
 bartlett.test(formula = ~., ess[, c("trust_parl", "trust_legalsys", "trust_police", 
@@ -46,7 +47,6 @@ bartlett.test(formula = ~., ess[, c("trust_parl", "trust_legalsys", "trust_polic
                           "trust_eurparl", "trust_unitednations")])
 
 
-cor.plot(korrel, numbers = TRUE)
 
 
 # Et triks når det er et mønster i variablene vi skal ha:
@@ -68,6 +68,7 @@ trust_prin <- princomp(~., ess[, c("trust_parl", "trust_legalsys", "trust_police
                        scores = TRUE)
 
 loadings(trust_prin)
+
 screeplot(trust_prin, type = "lines")
 
 
@@ -80,6 +81,7 @@ trust_factor <- factanal(~., 3, ess[, c("trust_parl", "trust_legalsys", "trust_p
                         "trust_politicians", "trust_polparties", 
                         "trust_eurparl", "trust_unitednations")])
 
+loadings(trust_factor)
 
 print(loadings(trust_factor), cutoff = .5)
 
@@ -102,11 +104,14 @@ ess$political_trust <- (ess$trust_parl + ess$trust_politicians + ess$trust_polpa
 ess$legal_trust <- (ess$trust_legalsys + ess$trust_police) / 2
 ess$international_trust <- (ess$trust_unitednations + ess$trust_eurparl) / 2
 
+summary(ess[, c("political_trust", "legal_trust", "international_trust")])
+
 
 #' 
 ## ----plotIndekses--------------------------------------------------------
 
-
+# is.na(ess$gender[100:120])
+# is.na(ess$gender[100:120]) == FALSE
 
 plot_data <- ess[which(is.na(ess$gender) == FALSE), ]
 
@@ -132,6 +137,10 @@ ggplot(plot_data, aes(x = gender, y = as.numeric(political_trust))) +
 reg_data <- na.omit(ess[, c("political_trust", "income_feel", "income_decile",
                             "gender", "age", "country")])
 
+# reg_data <- ess[which(is.na(ess$political_trust) == FALSE &
+#                         is.na(ess$income_feel) == FALSE &
+#                         ...)]
+
 trust_polit0 <-lmer(political_trust ~ (1|country),
                     data = reg_data)
 summary(trust_polit0)
@@ -141,6 +150,11 @@ summary(trust_polit0)
 
 trust_polit1 <- lmer(political_trust ~ income_feel + (1|country),
                     data = reg_data)
+summary(trust_polit1)
+
+fixef(trust_polit1)
+ranef(trust_polit1)
+coef(trust_polit1)
 
 trust_polit2 <- lmer(political_trust ~ income_feel + income_decile + (1|country),
                     data = reg_data)
@@ -153,6 +167,11 @@ trust_polit4 <- lmer(political_trust ~ income_feel + income_decile + age + gende
                        (gender|country),
                     data = reg_data)
 
+summary(trust_polit4)
+
+library(lattice)
+
+dotplot(coef(trust_polit4))
 # To mål på model-fit, som straffer at vi legger inn flere variabler
 # AIC(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4)
 # BIC(trust_polit0, trust_polit1, trust_polit2, trust_polit3, trust_polit4)
