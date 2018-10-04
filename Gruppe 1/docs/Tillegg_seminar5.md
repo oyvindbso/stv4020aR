@@ -11,7 +11,7 @@ output:
 
 ### Introduksjon
 
-I dette dokumentet gir jeg en oversikt over ytterligere R-ressurser for de av dere som planlegger å bruke flernivå/multinomisk logistisk regresjon/faktoranalyse i hjemmeoppgaven. Dere vil ikke bli testet i disse emnene til prøven. Dokumentet er *Work in progress*, skal få ferdig deler om flernivå og faktoranalyse **asap**.
+I dette dokumentet gir jeg en oversikt over ytterligere R-ressurser for de av dere som planlegger å bruke flernivå/multinomisk logistisk regresjon/faktoranalyse/paneldata i hjemmeoppgaven. Dere vil ikke bli testet i disse emnene til prøven. Dokumentet er *Work in progress*, skal få ferdig deler om flernivå og faktoranalyse **asap**. Si i fra dersom du savner noe,
 
 ### Multinomisk logistisk regresjon
 
@@ -195,7 +195,7 @@ str(m7.eff)
 ##   .. .. ..- attr(*, "order")= int [1:7] 1 1 1 1 1 1 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x00000000215512a8> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x000000001c36dab0> 
 ##   .. .. ..- attr(*, "predvars")= language list(gdp_g_categories, gdp_pr_capita_log, institutional_quality, m2_gdp_lagged,      sub_saharan_africa, fast_gro| __truncated__
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:8] "factor" "numeric" "numeric" "numeric" ...
 ##   .. .. .. ..- attr(*, "names")= chr [1:8] "gdp_g_categories" "gdp_pr_capita_log" "institutional_quality" "m2_gdp_lagged" ...
@@ -414,5 +414,632 @@ ggplot(plot_data, aes(x = aid, y = probability, col = variable)) +
 
 
 
+### Paneldata:
+
+I denne seksjonen viser jeg hvordan noen triks vi allerede har lært kan brukes til å analysere paneldata. Jeg viser også metoder for paneldata som ble gjennomgått på forelesning. Vær sikker på at du forstår hva som foregår dersom du velger å bruke noen av disse funksjonene (både statistisk og i R).
+
+**Balansert eller ubalansert panel?**
+
+```r
+# sjekker om panelet er balansert.
+table(aid$country, aid$period) 
+```
+
+```
+##      
+##       2 3 4 5 6 7
+##   ARG 1 1 1 1 1 1
+##   BOL 1 1 1 1 1 1
+##   BRA 1 1 1 1 1 1
+##   BWA 1 1 1 1 1 1
+##   CHL 1 1 1 1 1 1
+##   CIV 1 1 1 1 1 1
+##   CMR 1 1 1 1 1 1
+##   COL 1 1 1 1 1 1
+##   CRI 1 1 1 1 1 1
+##   DOM 1 1 1 1 1 1
+##   DZA 1 1 1 1 1 1
+##   ECU 1 1 1 1 1 1
+##   EGY 1 1 1 1 1 1
+##   ETH 1 1 1 1 1 1
+##   GAB 1 1 1 1 1 1
+##   GHA 1 1 1 1 1 1
+##   GMB 1 1 1 1 0 0
+##   GTM 1 1 1 1 1 1
+##   GUY 1 1 1 1 1 0
+##   HND 1 1 1 1 1 1
+##   HTI 1 1 1 1 1 1
+##   IDN 1 1 1 1 1 1
+##   IND 1 1 1 1 1 1
+##   JAM 1 1 1 1 1 1
+##   KEN 1 1 1 1 1 1
+##   KOR 1 1 1 1 1 1
+##   LKA 1 1 1 1 1 1
+##   MAR 1 1 1 1 1 1
+##   MDG 1 1 1 1 1 1
+##   MEX 1 1 1 1 1 1
+##   MLI 1 1 1 1 1 1
+##   MWI 1 1 1 1 1 1
+##   MYS 1 1 1 1 1 1
+##   NER 1 1 1 1 1 1
+##   NGA 1 1 1 1 1 1
+##   NIC 1 1 1 1 0 0
+##   PAK 1 1 1 1 1 1
+##   PER 1 1 1 1 1 1
+##   PHL 1 1 1 1 1 1
+##   PRY 1 1 1 1 1 1
+##   SEN 1 1 1 1 1 1
+##   SLE 1 1 1 1 1 1
+##   SLV 1 1 1 1 1 1
+##   SOM 1 1 1 1 1 1
+##   SYR 1 1 1 1 1 1
+##   TGO 1 1 1 1 1 1
+##   THA 1 1 1 1 1 1
+##   TTO 1 1 1 1 1 1
+##   TUN 1 1 1 1 1 1
+##   TUR 1 1 1 1 1 1
+##   TZA 1 1 1 1 1 1
+##   URY 1 1 1 1 1 1
+##   VEN 1 1 1 1 1 1
+##   ZAR 1 1 1 1 1 1
+##   ZMB 1 1 1 1 1 1
+##   ZWE 1 1 1 1 1 1
+```
+
+```r
+# sjekker om panelet er balansert etter at missing er fjernet, gjør dette for datasett.
+# med kun variablene du bruker i analysene dine.
+with(aid[complete.cases(aid),], table(country, period))
+```
+
+```
+##        period
+## country 2 3 4 5 6 7
+##     ARG 1 1 1 1 1 1
+##     BOL 1 1 1 1 1 1
+##     BRA 1 1 1 1 1 1
+##     BWA 0 0 1 1 1 0
+##     CHL 1 1 1 1 1 1
+##     CIV 0 0 1 0 0 0
+##     CMR 0 1 1 1 1 1
+##     COL 1 1 1 1 1 1
+##     CRI 1 1 1 1 1 1
+##     DOM 1 1 1 1 1 1
+##     DZA 1 1 0 0 0 0
+##     ECU 1 1 1 1 1 1
+##     EGY 0 1 1 1 1 1
+##     ETH 0 0 0 1 1 0
+##     GAB 1 1 1 1 1 1
+##     GHA 1 1 1 1 1 1
+##     GMB 1 1 1 1 0 0
+##     GTM 1 1 1 1 1 1
+##     GUY 1 1 1 1 1 0
+##     HND 1 1 1 1 1 1
+##     HTI 1 1 1 1 1 0
+##     IDN 1 1 1 1 1 1
+##     IND 1 1 1 1 1 1
+##     JAM 0 1 1 1 0 0
+##     KEN 1 1 1 1 1 1
+##     KOR 1 1 1 1 1 1
+##     LKA 1 1 1 1 1 1
+##     MAR 1 1 1 1 1 1
+##     MDG 1 1 0 0 1 1
+##     MEX 1 1 1 1 1 1
+##     MLI 0 0 0 0 1 0
+##     MWI 0 0 1 1 1 1
+##     MYS 1 1 1 1 1 1
+##     NER 0 1 1 0 0 0
+##     NGA 1 1 1 1 1 1
+##     NIC 1 1 1 1 0 0
+##     PAK 1 1 1 1 1 1
+##     PER 1 1 1 1 1 1
+##     PHL 1 1 1 1 1 1
+##     PRY 1 1 1 1 1 1
+##     SEN 1 1 1 1 0 0
+##     SLE 1 1 1 1 1 1
+##     SLV 1 1 1 1 1 1
+##     SOM 0 1 1 0 0 0
+##     SYR 1 1 1 0 1 1
+##     TGO 0 1 1 1 1 0
+##     THA 1 1 1 1 1 1
+##     TTO 1 1 1 1 1 0
+##     TUN 0 0 0 1 1 1
+##     TUR 0 0 0 0 0 1
+##     TZA 0 0 0 1 1 0
+##     URY 1 1 1 1 1 1
+##     VEN 1 1 1 1 1 1
+##     ZAR 1 1 1 1 1 0
+##     ZMB 1 1 1 1 1 1
+##     ZWE 0 0 0 1 1 1
+```
 
 
+**Visualisere trender i ulike land på avh.var, se også funksjon i fasit til oppgaver sem 2:**
+
+```r
+library(ggplot2)
+# Vurder å plotte færre land om gangen 
+ggplot(aid, aes(x = period, y = gdp_growth)) + geom_line() + facet_wrap(~country)
+
+# Enda mer info i plottet:
+# Oppretter standardiserte versjoner av aid og gdp_growth 
+aid$aid_s <- (aid$aid - mean(aid$aid, na.rm = T))/sd(aid$aid, na.rm = T)
+aid$gdp_growth_s <- (aid$gdp_growth - mean(aid$gdp_growth, na.rm = T))/sd(aid$gdp_growth, na.rm = T)
+# Lager plot der jeg tegner to linjer oppå hverandre, ut fra verdier på standardiserte var.
+ggplot(aid) + geom_line(aes(x = period, y = gdp_growth_s, col = "growth")) + 
+   geom_line(aes(x = period, y = aid_s, col = "aid")) +
+  facet_wrap(~country) +
+  ylab("Standardized values for aid and growth")
+
+# ggplot er ganske fleksibelt:)
+
+# Husk at du kan forstørre bildet ved å trykke på Zoom. 
+# Du kan også bestemme størrelse på bilder du lagrer med ggsave
+```
+
+**Fixed-effects i OLS**
+Ved å kode en variabel til `factor`, blir alle det opprettet dummyer for aller verdier på variabelen bortsett fra en referansekategori. Vi kan bruke dette trikse rett inn i en OLS med `as.factor()`, eller opprette en faktor-variabel og bestemme referansekategori med `relevel()`:
+
+```r
+class(aid$country)
+```
+
+```
+## [1] "character"
+```
+
+```r
+aid$country_f <- as.factor(aid$country)
+levels(aid$country_f)
+```
+
+```
+##  [1] "ARG" "BOL" "BRA" "BWA" "CHL" "CIV" "CMR" "COL" "CRI" "DOM" "DZA"
+## [12] "ECU" "EGY" "ETH" "GAB" "GHA" "GMB" "GTM" "GUY" "HND" "HTI" "IDN"
+## [23] "IND" "JAM" "KEN" "KOR" "LKA" "MAR" "MDG" "MEX" "MLI" "MWI" "MYS"
+## [34] "NER" "NGA" "NIC" "PAK" "PER" "PHL" "PRY" "SEN" "SLE" "SLV" "SOM"
+## [45] "SYR" "TGO" "THA" "TTO" "TUN" "TUR" "TZA" "URY" "VEN" "ZAR" "ZMB"
+## [56] "ZWE"
+```
+
+```r
+aid$country_f <- relevel(aid$country_f, ref = "EGY") # Setter Egypt som referanse
+```
+
+Siden fixed-effects vanligvis legges inn som kontrollvariabler, og ikke for substansiell tolkning, er det som regel ikke behov for å definere referansekategori, slik jeg gjorde over. I stedet kan du legge inn `as.factor()` direkte i regresjonsligningen:
+
+
+```r
+summary(lm(gdp_growth ~ aid + policy + as.factor(country), data = aid))
+```
+
+```
+## 
+## Call:
+## lm(formula = gdp_growth ~ aid + policy + as.factor(country), 
+##     data = aid)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.1531  -1.3755   0.1155   1.4889  11.6146 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)            0.56589    1.27598   0.443   0.6578    
+## aid                   -0.00795    0.23867  -0.033   0.9735    
+## policy                 0.93455    0.22873   4.086  6.1e-05 ***
+## as.factor(country)BOL -1.98247    1.89213  -1.048   0.2959    
+## as.factor(country)BRA  2.01426    1.80333   1.117   0.2652    
+## as.factor(country)BWA  2.52274    2.36166   1.068   0.2866    
+## as.factor(country)CHL -0.52457    1.88469  -0.278   0.7810    
+## as.factor(country)CIV -3.55763    3.38259  -1.052   0.2940    
+## as.factor(country)CMR -0.78613    1.96668  -0.400   0.6897    
+## as.factor(country)COL  0.03422    1.85166   0.018   0.9853    
+## as.factor(country)CRI -0.53135    1.86438  -0.285   0.7759    
+## as.factor(country)DOM  1.15762    1.82963   0.633   0.5276    
+## as.factor(country)DZA  1.24287    2.57313   0.483   0.6295    
+## as.factor(country)ECU -0.10537    1.89464  -0.056   0.9557    
+## as.factor(country)EGY  2.87731    1.97837   1.454   0.1472    
+## as.factor(country)ETH -4.62822    2.43912  -1.897   0.0590 .  
+## as.factor(country)GAB -0.14461    1.87596  -0.077   0.9386    
+## as.factor(country)GHA -2.59071    1.89432  -1.368   0.1728    
+## as.factor(country)GMB -0.40533    2.36219  -0.172   0.8639    
+## as.factor(country)GTM -1.41199    1.84939  -0.763   0.4460    
+## as.factor(country)GUY -1.40097    1.95642  -0.716   0.4747    
+## as.factor(country)HND -0.81447    1.90346  -0.428   0.6691    
+## as.factor(country)HTI -2.62636    1.87484  -1.401   0.1626    
+## as.factor(country)IDN  1.39547    1.96132   0.711   0.4775    
+## as.factor(country)IND  0.79082    1.81761   0.435   0.6639    
+## as.factor(country)JAM -3.58553    2.23478  -1.604   0.1100    
+## as.factor(country)KEN -0.02628    1.90180  -0.014   0.9890    
+## as.factor(country)KOR  3.41936    1.96545   1.740   0.0833 .  
+## as.factor(country)LKA  1.13568    1.85368   0.613   0.5407    
+## as.factor(country)MAR -0.32338    1.86325  -0.174   0.8624    
+## as.factor(country)MDG -3.15441    2.13100  -1.480   0.1402    
+## as.factor(country)MEX -0.33916    1.83381  -0.185   0.8534    
+## as.factor(country)MLI  2.32153    3.86381   0.601   0.5485    
+## as.factor(country)MWI -2.18760    2.42926  -0.901   0.3688    
+## as.factor(country)MYS  1.15480    1.93127   0.598   0.5505    
+## as.factor(country)NER  0.08481    2.86421   0.030   0.9764    
+## as.factor(country)NGA -0.58247    1.81947  -0.320   0.7492    
+## as.factor(country)NIC -3.49192    2.05172  -1.702   0.0901 .  
+## as.factor(country)PAK  1.61635    1.82256   0.887   0.3761    
+## as.factor(country)PER -1.41420    1.80749  -0.782   0.4348    
+## as.factor(country)PHL -1.08130    1.84746  -0.585   0.5589    
+## as.factor(country)PRY  0.20284    1.85255   0.109   0.9129    
+## as.factor(country)SEN -1.62709    2.20849  -0.737   0.4620    
+## as.factor(country)SLE -1.24649    1.85119  -0.673   0.5014    
+## as.factor(country)SLV -2.18902    1.89269  -1.157   0.2487    
+## as.factor(country)SOM -0.52772    2.37750  -0.222   0.8245    
+## as.factor(country)SYR  1.82785    1.95483   0.935   0.3508    
+## as.factor(country)TGO -1.25180    2.39063  -0.524   0.6011    
+## as.factor(country)THA  1.61694    1.96568   0.823   0.4116    
+## as.factor(country)TTO -0.98105    1.91393  -0.513   0.6087    
+## as.factor(country)TUN -0.91658    2.26229  -0.405   0.6857    
+## as.factor(country)TUR  1.25200    1.82392   0.686   0.4931    
+## as.factor(country)TZA -0.68832    2.60496  -0.264   0.7918    
+## as.factor(country)URY -0.09145    1.81864  -0.050   0.9599    
+## as.factor(country)VEN -2.46018    1.84332  -1.335   0.1833    
+## as.factor(country)ZAR -3.79873    1.87986  -2.021   0.0445 *  
+## as.factor(country)ZMB -2.65594    2.13573  -1.244   0.2149    
+## as.factor(country)ZWE -1.63316    1.93764  -0.843   0.4002    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.123 on 226 degrees of freedom
+##   (47 observations deleted due to missingness)
+## Multiple R-squared:  0.4099,	Adjusted R-squared:  0.2611 
+## F-statistic: 2.754 on 57 and 226 DF,  p-value: 5.494e-08
+```
+
+Dersom dere husker tilbake til analysen av `beer` datasettet fra introen og første seminar, var det dette vi gjorde i en av oppgavene der.
+
+**Praise-Winsten**
+
+
+```r
+#install.packages("prais")
+library(prais)
+library(stargazer)
+```
+
+```
+## 
+## Please cite as:
+```
+
+```
+##  Hlavac, Marek (2018). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+```
+
+```
+##  R package version 5.2.2. https://CRAN.R-project.org/package=stargazer
+```
+
+```r
+pw1 <-prais.winsten(gdp_growth ~ aid*policy, data = aid) # bytt lm med prais.winsten
+pw1 # her fungerer ikke summary så bra
+```
+
+```
+## [[1]]
+## 
+## Call:
+## lm(formula = fo)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -12.3616  -1.6230   0.2097   1.7060  11.5213 
+## 
+## Coefficients:
+##           Estimate Std. Error t value Pr(>|t|)    
+## Intercept -0.05209    0.35451  -0.147    0.883    
+## aid       -0.19107    0.11591  -1.648    0.100    
+## policy     1.30035    0.16968   7.663 2.95e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.209 on 281 degrees of freedom
+## Multiple R-squared:  0.2543,	Adjusted R-squared:  0.2464 
+## F-statistic: 31.95 on 3 and 281 DF,  p-value: < 2.2e-16
+## 
+## 
+## [[2]]
+##        Rho Rho.t.statistic Iterations
+##  0.1171306        1.979471          4
+```
+
+```r
+# Funksjon for å gjøre det lettere å jobbe med output, løsning herfra:
+# https://stackoverflow.com/questions/49109282/how-to-work-with-prais-winsten-results-in-stargazer-and-broom-r
+prais.winsten2 <- function (formula, data, iter = 50, rho = 0, tol = 1e-08) 
+{
+    mod <- model.frame(formula, data = data)
+    lm <- lm(mod)
+    n <- length(mod[, 1])
+    list.rho <- c(0)
+    imax <- ncol(mod) - 1
+    fo <- as.formula(paste("y ~ -1 + x0 +", paste(paste0("x", 
+        1:imax), collapse = "+")))
+    if (rho != 0) {
+        y <- c((1 - rho^2)^(1/2) * mod[1, 1], mod[2:n, 1] - rho * 
+            mod[1:(n - 1), 1])
+        x0 <- c((1 - rho^2)^(1/2), rep(1 - rho, n - 1))
+        for (i in 1:imax) {
+            x <- c((1 - rho^2)^(1/2) * mod[1, (i + 1)], mod[2:n, 
+                (i + 1)] - rho * mod[1:(n - 1), (i + 1)])
+            assign(paste("x", i, sep = ""), x)
+        }
+        lm <- lm(fo)
+        j <- 1
+        rho.tstat <- "none"
+    }
+    else {
+        res <- lm$res
+        res_1 <- c(NA, res[-n])
+        for (i in 1:iter) {
+            rho.lm <- lm(res ~ res_1 - 1)
+            rho <- rho.lm$coeff[1]
+            if (abs(rho - tail(list.rho, n = 1)) < tol) {
+                j <- i
+                break
+            }
+            else {
+                list.rho <- append(list.rho, rho)
+                y <- c((1 - rho^2)^(1/2) * mod[1, 1], mod[2:n, 
+                  1] - rho * mod[1:(n - 1), 1])
+                x0 <- c((1 - rho^2)^(1/2), rep(1 - rho, n - 1))
+                for (k in 1:imax) {
+                  x <- c((1 - rho^2)^(1/2) * mod[1, (k + 1)], 
+                    mod[2:n, (k + 1)] - rho * mod[1:(n - 1), 
+                      (k + 1)])
+                  assign(paste("x", k, sep = ""), x)
+                }
+                lm <- lm(fo)
+                fit <- as.vector(rep(lm$coef[1], n)) + as.vector(as.matrix(mod[, 
+                  2:(imax + 1)]) %*% lm$coef[2:(imax + 1)])
+                res <- mod[, 1] - fit
+                res_1 <- c(NA, res[-n])
+                j <- i
+                rho.tstat <- summary(rho.lm)$coef[1, 3]
+            }
+        }
+    }
+    if (iter == 50) 
+        i <- j - 1
+    else i <- j
+    attr(lm$coefficients, "names") <- c("Intercept", names(mod)[2:ncol(mod)])
+    s <- summary(lm)
+    r <- data.frame(Rho = rho, `Rho.t-statistic` = rho.tstat, 
+        Iterations = i, row.names = c(""))
+    results <- list(s, r)
+    return(lm)
+}
+pw2 <- prais.winsten2(gdp_growth ~ aid*policy, data = aid)
+summary(pw2)
+```
+
+```
+## 
+## Call:
+## lm(formula = fo)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -12.3616  -1.6230   0.2097   1.7060  11.5213 
+## 
+## Coefficients:
+##           Estimate Std. Error t value Pr(>|t|)    
+## Intercept -0.05209    0.35451  -0.147    0.883    
+## aid       -0.19107    0.11591  -1.648    0.100    
+## policy     1.30035    0.16968   7.663 2.95e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.209 on 281 degrees of freedom
+## Multiple R-squared:  0.2543,	Adjusted R-squared:  0.2464 
+## F-statistic: 31.95 on 3 and 281 DF,  p-value: < 2.2e-16
+```
+
+```r
+stargazer(pw2, type = "text")
+```
+
+```
+## 
+## ===============================================
+##                         Dependent variable:    
+##                     ---------------------------
+##                                  y             
+## -----------------------------------------------
+## aid                           -0.191           
+##                               (0.116)          
+##                                                
+## policy                       1.300***          
+##                               (0.170)          
+##                                                
+## Constant                      -0.052           
+##                               (0.355)          
+##                                                
+## -----------------------------------------------
+## Observations                    284            
+## R2                             0.254           
+## Adjusted R2                    0.246           
+## Residual Std. Error      3.209 (df = 281)      
+## F Statistic           31.947*** (df = 3; 281)  
+## ===============================================
+## Note:               *p<0.1; **p<0.05; ***p<0.01
+```
+
+```r
+# For å se på rho, må du indeksere fra pw1:
+pw1[2]
+```
+
+```
+## [[1]]
+##        Rho Rho.t.statistic Iterations
+##  0.1171306        1.979471          4
+```
+
+**Hausman-test**
+Skal du velge random effects eller fixed effects? Hausman-testen gir en indikasjon. Her bruker jeg `plm` pakken, som er laget for å jobbe med paneldata. Se [her](http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/plm/plmEN.pdf) for en tutorial.
+
+
+
+```r
+#install.packages("plm")
+library(plm)
+```
+
+```
+## Loading required package: Formula
+```
+
+```r
+# Sett model = "within" for faste effekter
+pm1 <- plm(gdp_growth ~ aid + policy, data = aid, index = c("country", "period"), model = "within")
+summary(pm1) # gjemmer de faste effektene fra output, ellers likt som modell med lm over.
+```
+
+```
+## Oneway (individual) effect Within Model
+## 
+## Call:
+## plm(formula = gdp_growth ~ aid + policy, data = aid, model = "within", 
+##     index = c("country", "period"))
+## 
+## Unbalanced Panel: n = 56, T = 1-6, N = 284
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -11.15307  -1.37545   0.11554   1.48887  11.61458 
+## 
+## Coefficients:
+##          Estimate Std. Error t-value Pr(>|t|)    
+## aid    -0.0079495  0.2386666 -0.0333   0.9735    
+## policy  0.9345478  0.2287252  4.0859  6.1e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    2367.7
+## Residual Sum of Squares: 2204.9
+## R-Squared:      0.068789
+## Adj. R-Squared: -0.16607
+## F-statistic: 8.34731 on 2 and 226 DF, p-value: 0.00031802
+```
+
+```r
+# Sett model = "random" for random effects
+pm2 <- plm(gdp_growth ~ aid + policy, data = aid, index = c("country", "period"), model = "random")
+summary(pm2)
+```
+
+```
+## Oneway (individual) effect Random Effect Model 
+##    (Swamy-Arora's transformation)
+## 
+## Call:
+## plm(formula = gdp_growth ~ aid + policy, data = aid, model = "random", 
+##     index = c("country", "period"))
+## 
+## Unbalanced Panel: n = 56, T = 1-6, N = 284
+## 
+## Effects:
+##                  var std.dev share
+## idiosyncratic 9.7560  3.1235 0.945
+## individual    0.5687  0.7541 0.055
+## theta:
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.02793 0.12005 0.13926 0.12828 0.13926 0.13926 
+## 
+## Residuals:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -12.2215  -1.6276   0.2527   0.0028   1.7152  12.1667 
+## 
+## Coefficients:
+##              Estimate Std. Error t-value  Pr(>|t|)    
+## (Intercept) -0.059179   0.353846 -0.1672    0.8673    
+## aid         -0.180912   0.116159 -1.5575    0.1205    
+## policy       1.288358   0.168487  7.6466 3.292e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    3410.9
+## Residual Sum of Squares: 2775.3
+## R-Squared:      0.18634
+## Adj. R-Squared: 0.18055
+## F-statistic: 32.1756 on 2 and 281 DF, p-value: 2.6155e-13
+```
+
+```r
+# hausman test
+phtest(pm1, pm2)
+```
+
+```
+## 
+## 	Hausman Test
+## 
+## data:  gdp_growth ~ aid + policy
+## chisq = 5.6297, df = 2, p-value = 0.05991
+## alternative hypothesis: one model is inconsistent
+```
+
+
+
+**OLS PCSE**
+
+```r
+#install.packages("lmtest")
+library(lmtest)
+```
+
+```
+## Loading required package: zoo
+```
+
+```
+## 
+## Attaching package: 'zoo'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+```
+
+```r
+library(plm)
+#?vcovBK -> les under Details!
+pm3 <- plm(gdp_growth ~ aid + policy, data = aid, index = c("country", "period"), model = "pooling")
+# Sjekk vcovHC() fra sandwich pakken for å lage andre typer standardfeil
+vcovBK(pm1, type = "HC3", cluster = "group")
+```
+
+```
+##                 aid       policy
+## aid     0.075935524 -0.002405484
+## policy -0.002405484  0.059589642
+## attr(,"cluster")
+## [1] "group"
+```
+
+```r
+coeftest(pm3, vcov=vcovBK(pm1, type = "HC3", cluster = "group"))
+```
+
+```
+## 
+## t test of coefficients:
+## 
+##        Estimate Std. Error t value  Pr(>|t|)    
+## aid    -0.19701    0.27556 -0.7149    0.4752    
+## policy  1.33027    0.24411  5.4495 1.105e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+ 
