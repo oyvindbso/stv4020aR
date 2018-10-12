@@ -132,7 +132,7 @@ colnames(data) <- c("var1", "var2", "var3")
 colnames(data)[1] <- "VAR1"
 ## Informasjon i en ekstern data-fil
 
-#data <- load("datasett.Rdata") # .Rdata er R sitt eget filformat
+#load("datasett.Rdata") # .Rdata er R sitt eget filformat
 #data <- read.csv("datasett.csv") # .csv er en filtype som brukes mye, og som stammer fra excel.
 #data <- read.table("datasett.txt") # Beslektet med read.csv. Har argumenter for å angi strukturen til tabeller
 #data <- read_spss("datasett.sav")  # Leser .sav og .por filer fra SPSS, funksjonen stammer fra pakken haven
