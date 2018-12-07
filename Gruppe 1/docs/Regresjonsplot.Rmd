@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = FALSE)
 
 ```
 ## En generell tilnærming til å plotte regresjon
@@ -118,7 +118,7 @@ p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high)) +
 ```{r, include=F, warning=FALSE}
 ## Pyntet versjon
 p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high), alpha=.15) +
-    geom_line(data=plot_data, aes(y=fit), col=wes_palette(n=1, name="Zissou"))
+    geom_line(data=plot_data, aes(y=fit), col=wes_palette(n=1, name="Zissou1"))
 ```
 ```{r, include=F}
 ggsave("regplot2.png")
@@ -148,7 +148,7 @@ p + geom_rangeframe() +
   theme_tufte() + 
   scale_x_continuous(breaks = extended_range_breaks()(mtcars$wt)) +
   scale_y_continuous(breaks = extended_range_breaks()(mtcars$mpg)) +
-  geom_smooth(method="lm", col=wes_palette(n=1, name="Zissou")) + 
+  geom_smooth(method="lm", col=wes_palette(n=1, name="Zissou1")) + 
   ylab("Miles per Gallon") +
   xlab("Weight")
 ```
@@ -241,7 +241,7 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   xlab("Weight") + 
   geom_point() +
   geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high), alpha=.2) +
-  geom_line(data=plot_data, aes(y=fit), col=wes_palette(n=1, name="Zissou"))
+  geom_line(data=plot_data, aes(y=fit), col=wes_palette(n=1, name="Zissou1"))
 p
 ```
 ```{r, include=F}
@@ -652,6 +652,7 @@ Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette l
 
 ```{r, eval = F, warning=F}
 rm(mtcars)
+
 ## Trinn 1: Kjører  logistisk regresjonsmodell
 gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
 ## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec.
@@ -660,16 +661,17 @@ data_for_prediction <- data.frame(hp   = seq(min(mtcars$hp),
                                   qsec = median(mtcars$qsec))
 
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
-predicted_data <- predict(gm1, newdata = data_for_prediction,  type = "response",  
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil (i logit):
+predicted_data <- predict(gm1, newdata = data_for_prediction,  type = "link",  
                                         se=TRUE)
 
 ## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
-plot_data$low  <- plot_data$fit - 1.96*plot_data$se
-plot_data$high <- plot_data$fit + 1.96*plot_data$se
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil. Regner om fra logit til predikerte sannsynligheter.
+plot_data$low  <- exp(plot_data$fit - 1.96*plot_data$se)/(1 + exp(plot_data$fit - 1.96*plot_data$se))
+plot_data$high <- exp(plot_data$fit + 1.96*plot_data$se)/(1 + exp(plot_data$fit + 1.96*plot_data$se))
+plot_data$fit <- exp(plot_data$fit)/(1+ exp(plot_data$fit))
 
 ## Trinn 6: Plot
 p <- ggplot(mtcars, aes(x = hp, y = am)) +
@@ -693,16 +695,17 @@ data_for_prediction <- data.frame(hp   = seq(min(mtcars$hp),
                                   qsec = median(mtcars$qsec))
 
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
-predicted_data <- predict(gm1, newdata = data_for_prediction,  type = "response",  
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil (i logit):
+predicted_data <- predict(gm1, newdata = data_for_prediction,  type = "link",  
                                         se=TRUE)
 
 ## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
-plot_data$low  <- plot_data$fit - 1.96*plot_data$se
-plot_data$high <- plot_data$fit + 1.96*plot_data$se
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil. Regner om fra logit til predikerte sannsynligheter.
+plot_data$low  <- exp(plot_data$fit - 1.96*plot_data$se)/(1 + exp(plot_data$fit - 1.96*plot_data$se))
+plot_data$high <- exp(plot_data$fit + 1.96*plot_data$se)/(1 + exp(plot_data$fit + 1.96*plot_data$se))
+plot_data$fit <- exp(plot_data$fit)/(1+ exp(plot_data$fit))
 
 ## Trinn 6: Plot
 p <- ggplot(mtcars, aes(x = hp, y = am)) +

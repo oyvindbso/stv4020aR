@@ -1,6 +1,11 @@
-# Plotte regresjon med ggplot2
-Erlend Langørgen  
-25 august 2017  
+---
+title: "Plotte regresjon med ggplot2"
+author: "Erlend Langørgen"
+date: "25 august 2017"
+output: 
+  html_document:
+    keep_md: TRUE
+---
 
 
 ## En generell tilnærming til å plotte regresjon
@@ -39,45 +44,44 @@ Her illustrerer jeg den generelle tilnærmingen for å plotte regresjon med data
 
 ```r
 ## Trinn 1: Kjører regresjonsmodell
-m1 <- lm(mpg ~ wt, data = mtcars)
+m1 <- lm(mpg ~ wt, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt
-data_for_prediction <- data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt), 0.1))
+data_for_prediction <- data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt), .1))
 # Ved veldig få observasjoner i dette datasettet kan plottet bli kornete
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og
-## standardfeil:
-predicted_data <- predict(m1, newdata = data_for_prediction, se = TRUE)
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
+predicted_data <- predict(m1, newdata = data_for_prediction, 
+                                        se=TRUE)
 
-## Trinn 4: Kombinerer data fra trinn 2 og 3:
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til
-## plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
-plot_data$low <- plot_data$fit - 1.96 * plot_data$se
-plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+plot_data$low  <- plot_data$fit - 1.96*plot_data$se
+plot_data$high <- plot_data$fit + 1.96*plot_data$se
 
-## Trinn 6: Plot av effekt med konfidensintervall, viser i to steg: Steg 6.1: lager
-## scatterplot med de faktiske verdiene til variablene fra mtcars
-p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()
+## Trinn 6: Plot av effekt med konfidensintervall, viser i to steg:
+## Steg 6.1: lager scatterplot med de faktiske verdiene til variablene fra mtcars
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
 p
 ```
 
 
 
-<img src="../pics/regplot1.png" width="2100" />
+![](../pics/regplot1.png)<!-- -->
 
 
 
 ```r
-## Steg 6.2: Tegner inn regresjonslinje og konfidensintervaller fra det nye datasettet
-## plot_data på toppen av scatterplottet:
-p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high)) + geom_line(data = plot_data, 
-    aes(y = fit))
+## Steg 6.2: Tegner inn regresjonslinje og konfidensintervaller fra det nye datasettet plot_data på toppen av scatterplottet:
+p + geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high)) +
+    geom_line(data=plot_data, aes(y=fit))
 ```
 
 
 
-<img src="../pics/regplot2.png" width="2100" />
+![](../pics/regplot2.png)<!-- -->
 
 
 
@@ -85,13 +89,15 @@ Regresjon med en uavhengig variabel er et spesialtilfelle, der vi ikke trenger �
 
 
 ```r
-p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point() + ggtitle("Cars")
-p + geom_smooth(method = "lm")
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  ggtitle("Cars") 
+p +  geom_smooth(method="lm")
 ```
 
 
 
-<img src="../pics/regplot3.png" width="2100" />
+![](../pics/regplot3.png)<!-- -->
 
 Dersom vi prøver å legge inn flere variabler i plottet vårt får vi imidlertid bedre kontroll ved å bruke den generelle tilnærmingen.
 
@@ -140,7 +146,7 @@ p
 
 
 
-<img src="../pics/regplot4.png" width="2100" />
+![](../pics/regplot4.png)<!-- -->
 
 Vi kan nå begynne å legge inn forskjellige utvidelser av plottet over.
 Som dere kanskje husker fra forelesning, kan man visualisere effekten av dummyvariabler som ulike skjæringspunkt med y-aksen. Plottet under er likt plottet over, bortsett fra at jeg nå også visualiserer effekten av dummy-variabelen am, som var holdt konstant til verdien 1 i sted. For å gjøre dette, lager jeg et datasett til plotting med alle plotte-verdier for wt 2 ganger, en gang for `am = 0`, og en gang for `am = 1`.
@@ -183,15 +189,12 @@ p
 
 
 
-<img src="../pics/regplot5.png" width="2100" />
+![](../pics/regplot5.png)<!-- -->
 
 Muligheten til å kontrollere verdiene til kontrollvariabler, lar oss sjekke effekten for ulike grupper i datasettet. I plottet under er basert på samme modell som forrige plot, men jeg har satt alle kontrollvariablene til sin minimumsverdi. Dette kan være nyttig, siden vi kanskje har teoretisk motivasjon for å være spesielt interessert i effekten for en gruppe med en bestemt kombinasjon verdier på kontrollvariablene. Jeg plotter forøvrig også effekten av am i dette plottet. Koden er dermed det samme som over, bortsett fra at trinn 2 nå ser slik ut:
 
 ```r
-## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og
-## hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg
-## lager. Jeg velger minimumsverdiene til kontrollvariablene. Jeg plotter også effekten av
-## am.
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger minimumsverdiene til kontrollvariablene. Jeg plotter også effekten av am.
 ```
 
 ```r
@@ -207,7 +210,7 @@ Ved å bytte ut denne delen av koden får vi følgende plot:
 
 
 
-<img src="../pics/regplot6.png" width="2100" />
+![](../pics/regplot6.png)<!-- -->
 
 ### Multippel lineær regresjon med samspill <a name="samspill"></a>
 Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen vi må gjøre for å plotte samspill i forrige seksjon, ved å plotte `am`. Trikset er å lage et datasett i trinn 2, med alle kombinasjoner av verdier vi trenger for plotting. La oss nå lage en ny modell som inkluderer samspill mellom `am` og `wt`. Som dere kanskje husker fra forelesning, vil slikt samspill kunne føre til ulik helning på regresjonslinjen for `wt` for de to ulike verdiene av am. Under ser dere kode for hvordan jeg plotter denne modellen, her har jeg ikke fjernet pynt.
@@ -216,39 +219,44 @@ Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen 
 
 ```r
 ## Trinn 1: kjører regresjon med samspill mellom am og wt.
-m3 <- lm(mpg ~ wt * as.factor(am) + as.factor(cyl) + qsec + hp, data = mtcars)
-## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og
-## hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg
-## lager. Jeg repeterer sekvensen for wt to ganger, slik at jeg kan se på effekten av
-## variabelen for både am = 0 og am = 1. Jeg velger medianverdien til qsec, gjennomsnittet
-## til hp.
-data_for_prediction <- data.frame(wt = rep(seq(min(mtcars$wt), max(mtcars$wt), 0.1), 2), qsec = median(mtcars$qsec), 
-    hp = mean(mtcars$hp), cyl = as.factor(6), am = as.factor(c(rep(1, 40), rep(0, 40))))
+m3 <- lm(mpg ~ wt*as.factor(am) + as.factor(cyl) + qsec + hp, data=mtcars)
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg repeterer sekvensen for wt to ganger, slik at jeg kan se på effekten av variabelen for både am = 0  og am = 1. Jeg velger medianverdien til qsec, gjennomsnittet til hp. 
+data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+                                                 max(mtcars$wt), .1),2),
+                                  qsec = median(mtcars$qsec),
+                                  hp   = mean(mtcars$hp),
+                                  cyl  = as.factor(6),
+                                  am   = as.factor(c(rep(1, 40), rep(0, 40))))
 
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og
-## standardfeil:
-predicted_data <- predict(m3, newdata = data_for_prediction, se = TRUE)
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
+predicted_data <- predict(m3, newdata = data_for_prediction, 
+                                        se=TRUE)
 
-## Trinn 4: Kombinerer data fra trinn 2 og 3:
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til
-## plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
-plot_data$low <- plot_data$fit - 1.96 * plot_data$se
-plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+plot_data$low  <- plot_data$fit - 1.96*plot_data$se
+plot_data$high <- plot_data$fit + 1.96*plot_data$se
 
 ## Trinn 6: Plot
-p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_rangeframe() + ggtitle("Cars") + theme_tufte() + 
-    scale_x_continuous(breaks = extended_range_breaks()(mtcars$wt)) + scale_y_continuous(breaks = extended_range_breaks()(mtcars$mpg)) + 
-    ylab("Miles per Gallon") + xlab("Weight") + geom_point() + geom_ribbon(data = plot_data, 
-    aes(y = fit, ymin = low, ymax = high, fill = am), alpha = 0.2) + geom_line(data = plot_data, 
-    aes(y = fit, colour = am))
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_rangeframe() +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  scale_x_continuous(breaks = extended_range_breaks()(mtcars$wt)) +
+  scale_y_continuous(breaks = extended_range_breaks()(mtcars$mpg)) +
+  ylab("Miles per Gallon") +
+  xlab("Weight") + 
+  geom_point() +
+  geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high, fill=am), alpha=.2) +
+  geom_line(data=plot_data, aes(y=fit, colour=am))
 p
 ```
 
 
-<img src="../pics/regplot7.png" width="2100" />
+![](../pics/regplot7.png)<!-- -->
 
 Plottet viser tydelig at regresjonslinjen for `wt` får ulik helning for ulike verdier av `wt` (men vi må fortsatt gjøre hypotesetesting for å vite om samspillet er statistisk signifikant).
 
@@ -257,49 +265,54 @@ Ved hjelp av funksjonen `facet_wrap()` kan vi faktisk også visualisere to samsp
 
 ```r
 ## Trinn 1: kjører regresjon med samspill mellom am og wt.
-m4 <- lm(mpg ~ wt * as.factor(am) + wt * as.factor(cyl) + qsec + hp, data = mtcars)
-## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og
-## hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg
-## lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg lar verdiene til
-## am og cyl variere.
+m4 <- lm(mpg ~ wt*as.factor(am) + wt*as.factor(cyl) + qsec + hp, data=mtcars)
+## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg lar verdiene til am og cyl variere.
 
-data_for_prediction <- data.frame(wt = rep(seq(min(mtcars$wt), max(mtcars$wt), 0.1), 6), qsec = median(mtcars$qsec), 
-    hp = mean(mtcars$hp), cyl = as.factor(rep(c(rep(4, 40), rep(6, 40), rep(8, 40)), 2)), am = as.factor(rep(c(rep(1, 
-        40), rep(0, 40)), 3)))
+data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+                                                 max(mtcars$wt), .1),6),
+                                  qsec = median(mtcars$qsec),
+                                  hp   = mean(mtcars$hp),
+                                  cyl  = as.factor(rep(c(rep(4, 40), rep(6, 40), rep(8, 40)), 2)),
+                                  am   = as.factor(rep(c(rep(1, 40), rep(0, 40)), 3)))
 
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og
-## standardfeil:
-predicted_data <- predict(m4, newdata = data_for_prediction, se = TRUE)
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
+predicted_data <- predict(m4, newdata = data_for_prediction, 
+                          se=TRUE)
 
-## Trinn 4: Kombinerer data fra trinn 2 og 3:
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til
-## plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
 
-plot_data$low <- plot_data$fit - 1.96 * plot_data$se
-plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+plot_data$low  <- plot_data$fit - 1.96*plot_data$se
+plot_data$high <- plot_data$fit + 1.96*plot_data$se
 
 ## Trinn 6: Viser først scatterplot, legger deretter på linjer.
 
-p <- ggplot(mtcars, aes(x = wt, y = mpg)) + ggtitle("Cars") + theme_tufte() + ylab("Miles per Gallon") + 
-    xlab("Weight") + geom_point() + facet_wrap(~as.factor(cyl))
-p
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  ylab("Miles per Gallon") +
+  xlab("Weight") + 
+  geom_point() +
+  facet_wrap(~as.factor(cyl))
+p 
 ```
 
 
-<img src="../pics/regplot8.png" width="2100" />
+![](../pics/regplot8.png)<!-- -->
 
 
 ```r
 ## Plotter med regresjonslinje og konfidensintervall
-p + geom_ribbon(data = plot_data, aes(y = fit, ymin = low, ymax = high, fill = am), alpha = 0.2) + 
-    geom_line(data = plot_data, aes(y = fit, colour = am))
+p +
+  geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high, fill=am), alpha=.2) +
+  geom_line(data=plot_data, aes(y=fit, colour=am))
 ```
 
 
-<img src="../pics/regplot9.png" width="2100" />
+![](../pics/regplot9.png)<!-- -->
 
 I dette tilfellet er datasettet så lite at det ikke har mye for seg å modellere to samspill (konfidensintervallene er enorme, noe som betyr at det er enorm usikkerhet. Årsaken er lite data), men i andre tilfeller kan slik visualisering av data være nyttig. Legg forøvrig merke til at det ser ut som om det er en tydelig sammenheng mellom `wt` og `cyl` (se på plassering av verdier på x-aksen i de tre plottene). Ytterligere utvidelser er også mulig, man kunne for eksempel visualisert to samspill ved hjelp av tredimensjonale plot. 
 
@@ -320,7 +333,7 @@ p
 
 
 
-<img src="../pics/regplot10.png" width="2100" />
+![](../pics/regplot10.png)<!-- -->
 
 Her er alle variablene i regresjonen visualisert. I dette tilfellet synes jeg ikke visualiseringen fungerer spesielt godt, men vi ser at am = 1 ser ut til å være korrelert med lavt antall sylindre, høy verdi på `hp` og høy verdi på `qsec`. Det generelle poenget er imidlertid at man kan visualisere mange variabler samtidig med ggplot. Man kan også legge inn histogram eller andre typer plot, i tillegg til eller i stedet for scatterplot. Slike visualiseringer kan gjøre det lettere å forstå hva regresjonskoeffisientene sier, og hvordan uavhengig variabel er relatert til kontrollvariabler. Jeg anbefaler derfor visualisering som et virkemiddel for å forstå hvordan en modell fungerer.
 
@@ -366,10 +379,9 @@ Regresjonskoeffisientene blir her angitt i logits, som ikke er så lette å tolk
 
 
 ```r
-# setter inn koeffisienter fra modell over for minimumsverdi og maksimumsverdi til
-# horsepower (hp), setter qsec til medianverdi: maks:
-exp(38.77277 + -0.04468 * max(mtcars$hp) + -1.84289 * median(mtcars$qsec))/(1 + exp(38.77277 + 
-    -0.04468 * max(mtcars$hp) + -1.84289 * median(mtcars$qsec)))
+# setter inn koeffisienter fra modell over for minimumsverdi og maksimumsverdi til horsepower (hp), setter qsec til medianverdi:
+# maks:
+exp(38.77277 + -0.04468*max(mtcars$hp) + -1.84289*median(mtcars$qsec))/(1 + exp(38.77277 + -0.04468*max(mtcars$hp) + -1.84289*median(mtcars$qsec)))
 ```
 
 ```
@@ -378,8 +390,7 @@ exp(38.77277 + -0.04468 * max(mtcars$hp) + -1.84289 * median(mtcars$qsec))/(1 + 
 
 ```r
 # minimum
-exp(38.77277 + -0.04468 * min(mtcars$hp) + -1.84289 * median(mtcars$qsec))/(1 + exp(38.77277 + 
-    -0.04468 * min(mtcars$hp) + -1.84289 * median(mtcars$qsec)))
+exp(38.77277 + -0.04468*min(mtcars$hp) + -1.84289*median(mtcars$qsec))/(1 + exp(38.77277 + -0.04468*min(mtcars$hp) + -1.84289*median(mtcars$qsec)))
 ```
 
 ```
@@ -391,35 +402,42 @@ Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette l
 
 ```r
 rm(mtcars)
-## Trinn 1: Kjører logistisk regresjonsmodell
+
+## Trinn 1: Kjører  logistisk regresjonsmodell
 gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
-## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er
-## interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg
-## velger medianverdien til qsec.
-data_for_prediction <- data.frame(hp = seq(min(mtcars$hp), max(mtcars$hp), 0.1), qsec = median(mtcars$qsec))
+## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec.
+data_for_prediction <- data.frame(hp   = seq(min(mtcars$hp),
+                                                 max(mtcars$hp), .1),
+                                  qsec = median(mtcars$qsec))
 
 
-## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og
-## standardfeil:
-predicted_data <- predict(gm1, newdata = data_for_prediction, type = "response", se = TRUE)
+## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil (i logit):
+predicted_data <- predict(gm1, newdata = data_for_prediction,  type = "link",  
+                                        se=TRUE)
 
-## Trinn 4: Kombinerer data fra trinn 2 og 3:
+## Trinn 4: Kombinerer data fra trinn 2 og 3: 
 plot_data <- cbind(predicted_data, data_for_prediction)
 
-## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til
-## plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil
-plot_data$low <- plot_data$fit - 1.96 * plot_data$se
-plot_data$high <- plot_data$fit + 1.96 * plot_data$se
+## Trinn 5: Kalkulerer konfidensintervall med standardfeil fra trinn 3 og legger til plot_data fra trinn 4. Her lager jeg 95% CI med vanlige standardfeil. Regner om fra logit til predikerte sannsynligheter.
+plot_data$low  <- exp(plot_data$fit - 1.96*plot_data$se)/(1 + exp(plot_data$fit - 1.96*plot_data$se))
+plot_data$high <- exp(plot_data$fit + 1.96*plot_data$se)/(1 + exp(plot_data$fit + 1.96*plot_data$se))
+plot_data$fit <- exp(plot_data$fit)/(1+ exp(plot_data$fit))
 
 ## Trinn 6: Plot
-p <- ggplot(mtcars, aes(x = hp, y = am)) + geom_rangeframe() + ggtitle("Cars") + theme_tufte() + 
-    ylab("Predicted probabilities for automatic") + xlab("Weight") + geom_point() + geom_ribbon(data = plot_data, 
-    aes(y = fit, ymin = low, ymax = high), alpha = 0.2) + geom_line(data = plot_data, aes(y = fit))
+p <- ggplot(mtcars, aes(x = hp, y = am)) +
+  geom_rangeframe() +
+  ggtitle("Cars")  + 
+  theme_tufte() + 
+  ylab("Predicted probabilities for automatic") +
+  xlab("Weight") + 
+  geom_point() +
+  geom_ribbon(data=plot_data, aes(y=fit, ymin=low, ymax=high), alpha=.2) +
+  geom_line(data=plot_data, aes(y=fit))
 p
 ```
 
 
 
-<img src="../pics/regplot11.png" width="2100" />
+![](../pics/regplot11.png)<!-- -->
 
 Dette plottet gir oss en bedre forståelse av den predikerte sannsynligheten enn utregningen over, derfor oppfordrer jeg til bruk av plot ved tolkning av effekten av kontinuerlige uavhengige variabler i logistisk regresjon. For å legge inn samspill/flere nyanser i plottet, går du frem som med lineær regresjon.
