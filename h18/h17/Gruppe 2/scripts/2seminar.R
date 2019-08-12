@@ -1,0 +1,214 @@
+#' 
+## ----Titanic2, eval=FALSE------------------------------------------------
+## setwd("~/Der/du/vil/jobbe/fra")
+## 
+## passengers <- read.csv("titanic.csv", stringsAsFactors = FALSE)
+## 
+
+#' 
+#' Jeg laster bare direkte inn fra linken. Legg merke til argumentet `stringsAsFactors = FALSE`. Dette står som default til `TRUE`. Argumentet konverterer alle variabler (kolonner) til klassen `factor()`, som er tilnærmet det samme som ordinalt målenivå -- det vil vi ikke! Hvorfor vil vi ikke? Fordi vi vil ha lavest målenivå og heller sette det opp om vi finner ut at det gir mening, gitt data og det vi skal gjøre.
+#' 
+## ----Titanic-------------------------------------------------------------
+
+passengers <- read.csv("https://folk.uio.no/martigso/stv4020/titanic.csv", stringsAsFactors = FALSE)
+
+class(passengers$Name)
+class(passengers$Age)
+
+#' 
+#' ## Jobbe med variabler i dataset
+#' Helt kort, noen av funksjonene vi gikk gjennom sist, som er viktige å bruke når man har et datasett man ikke kjenner.
+#' 
+## ----data_desc-----------------------------------------------------------
+class(passengers)
+head(passengers)
+tail(passengers)
+colnames(passengers)
+
+summary(passengers)
+summary(passengers$Age)
+
+mean(passengers$Survived)
+
+table(passengers$Pclass)
+table(passengers$Age)
+
+hist(passengers$Age)
+
+
+#' 
+#' Vil også repetere litt på missing. Dette er viktig å forstå! Vi kan ikke bruke data vi ikke har...
+#' 
+## ----missing-------------------------------------------------------------
+mean(passengers$Age)
+
+table(is.na(passengers$Age))
+
+mean(passengers$Age, na.rm = TRUE)
+
+#' 
+#' ## Litt omkoding
+#' 
+#' Ofte er vi heller ikke fornøyd med hvordan data er strukturert. Her er en av hovedfordelene med R; vi kan gjøre så og si hva som helst for å få dataene i det formatet vi ønsker. La oss si at vi, for eksempel, har en hypotese om at eldre personer hadde mindre sannsynlighet for å overleve enn yngre personer. Som dere husker fra forelesning :) kan det være lurt å sentrere variabler som alder fordi vi sjelden har et naturlig nullpunkt, som igjen gjør at konstantleddet i en evt regresjon ikke gir substansiell mening. La oss derfor sentrere alder:
+#' 
+## ----omkoding------------------------------------------------------------
+median(passengers$Age, na.rm = TRUE)
+
+passengers$age_cent <- passengers$Age - median(passengers$Age, na.rm = TRUE)
+summary(passengers$age_cent)
+#' 
+#' Dette er en veldig god anledning til å se litt på **pakker**. R har nemlig et helt insane stort *open source* bibliotek med brukerlagede pakker alle har lov å bruke. Vi installerer en pakke med funksjonen `install.packages()` (husk å ha pakkenavnet i hermetegn her). Det er faktisk ikke nok å bare installer pakken, vi må også pakke den opp. Det gjør vi med `library()`. Pakken vil da være lastet *inn* til du avslutter R-sessionen du har åpen. Såååå, "ggplot2" er en pakke for å lage grafikk, som vi kommer til å bruke mye (R har også en innebygd grafikk-fuksjon: `plot()`).
+#' 
+#' Nedenfor sjekker jeg om omkodingen vi gjorde er riktig. Syns dere det ser sånn ut?
+#' 
+## ----sjekkeomkoding------------------------------------------------------
+# install.packages("ggplot2")
+
+library("ggplot2")
+
+ggplot(passengers, aes(x = Age, y = age_cent))
+
+ggplot(passengers, aes(x = Age, y = age_cent)) + geom_point()
+
+ggplot(passengers, aes(x = Sex, y = age_cent)) + geom_boxplot()
+
+#' 
+#' Vi kan også gjøre grafikken mye finere, men denne figuren vil ikke bli brukt i et evt paper. Så det er greit at den er litt quick and dirty. Kommer tilbake til det senere.
+#' 
+#' ## Korrelasjon
+#' La oss også sjekke korrelasjonen mellom to av variablene våre. Her bruker vi funksjonen `cor()` for bare korrelasjonsestimat, og `cor.test()` for å se om estimatet er signifikant forskjellig fra null:
+#' 
+## ----korrelasjon---------------------------------------------------------
+cor(passengers$age_cent, passengers$Survived)
+
+cor(passengers$age_cent, passengers$Survived, use = "complete.obs")
+
+cor.test(passengers$age_cent, passengers$Survived, use = "complete.obs")
+
+
+#' 
+#' Også her må vi håndtere missingverdier (ref første linje over). Men med korrelasjon er det, som dere vet, forskjellige måter å håndere missing på: pairwise og listwise exclusion. Dette er ikke viktig med korrelasjon mellom bare to variabler, men med flere variabler er det viktig:
+#' 
+## ----korrelasjon_missing, results='hold'---------------------------------
+
+cor(passengers[, c("age_cent", "Survived", "Fare")], use = "complete.obs")
+
+cor(passengers[, c("age_cent", "Survived", "Fare")], use = "pairwise.complete.obs")
+
+
+#' 
+#' 
+#' ## Bivariat OLS
+#' OLS er veldig enkelt å kjøre i R (alle typer analyser er ganske enkle, egentlig). Vi bruker funksjonen `lm()`, som står for *linear model*. Her er avhengig variabel *Survived*, og uavhenig variabel *age_cent*. Vi skiller mellom AV og UV med en tilde: ~ . Sjekk ut hjelpefilen `?lm`.
+#' 
+## ----ols-----------------------------------------------------------------
+pass_reg <- lm(Survived ~ age_cent, data = passengers)
+summary(pass_reg)
+
+#' 
+#' Her er det lurt å øve seg på å tolke hva resultatene betyr. Vi kan også gjøre en enkel visualisering med *ggplot* når vi har en binær regresjon.
+#' 
+## ----regplot-------------------------------------------------------------
+
+# install.packages("ggplot")
+library(ggplot2)
+
+theme_set(theme_classic())
+
+ggplot(passengers, aes(x = age_cent, y = Survived)) +
+  geom_smooth(method = "lm")
+
+#' 
+#' Kan dere tenke dere noen variabler som vi burde inkludere i denne regresjonen?
+#' 
+#' \newpage
+#' 
+#' ## Multipel OLS
+#' "Women and children", right:
+## ----ols2----------------------------------------------------------------
+pass_reg2 <- lm(Survived ~ age_cent + Sex, data = passengers)
+summary(pass_reg2)
+
+#' 
+#' 
+#' Og noen personer er viktiger enn andre...:
+## ----ols3----------------------------------------------------------------
+table(passengers$Pclass)
+
+passengers$Pclass <- factor(passengers$Pclass, levels = c(3, 1, 2))
+
+pass_reg3 <- lm(Survived ~ age_cent + Sex + Pclass, data = passengers)
+summary(pass_reg3)
+
+#' 
+#' 
+#' For å lage andregradsledd er det to alternativer, her er ett: (det andre er å bruke funksjonen `poly()`)
+#' 
+#' ## Andregradsledd (polynomer)
+## ----polynom, tidy=FALSE-------------------------------------------------
+
+passengers$age_cent_andregrad <- passengers$age_cent^2
+
+andregrads_reg <- lm(Survived ~ age_cent + age_cent_andregrad + Sex + Pclass,
+                     data = passengers)
+summary(andregrads_reg)
+# andregrads_reg <- lm(Survived ~ poly(age_cent, 2, raw = TRUE) + Sex + factor(Pclass),
+#                      data = passengers[which(is.na(passengers$age_cent) == FALSE), ])
+
+summary(andregrads_reg)
+
+
+#' 
+#' ## Logistisk regresjon
+#' Logistisk regresjon er veldig likt i oppbygning. Det er i familien **general linearized models** (`glm()`). Det viktige her er argumentet `family = "binomial"`, som spesifiserer at vi snakker om en binær avhengig variabel -- kan også skrive `binomial(link = "logit")`. 
+## ----logit, tidy=FALSE---------------------------------------------------
+
+pass_logit <- glm(Survived ~ age_cent + Sex + Pclass,
+                  data = passengers, family = binomial(link = "logit"))
+
+summary(pass_logit)
+
+# Odds
+exp(0.160800)
+
+# Sannsynlighet
+exp(0.160800) / (1 + exp(0.160800))
+
+exp(0.160800 + 1.270826) / (1 + exp(0.160800 + 1.270826))
+
+exp(0.160800 + 2.580625 + (-0.036985 * -28)) / (1 + exp(0.160800 + 2.580625 + (-0.036985 * -28)))
+
+#' 
+#' ## Neste gang:
+#' - Mer wrangling
+#' - Samspill
+#' - Diagnostisering
+#' - Plotte effekter med multipel regresjon
+#' - Ønsker?
+#' 
+#' \newpage
+#' 
+#' ## Bonus for \LaTeX -elskere:
+## ----stargazer,results='asis',tidy=FALSE---------------------------------
+# install.packages("stargazer")
+library(stargazer)
+stargazer(pass_reg, pass_reg2, pass_reg3, pass_logit,
+          star.cutoffs = c(.05, .01, .001),
+          column.sep.width = ".01cm",
+          no.space = FALSE,
+          covariate.labels = c("Alder (sentrert)", "Kjønn (mann)",
+                               "Klasse (2)", "Klasse (3)", "Konstantledd"),
+          keep.stat = c("n", "rsq", "adj.rsq", "ll"))
+
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+## ----ikketenkpådenne, eval=FALSE, echo=FALSE-----------------------------
+## knitr::purl("./docs/seminar2.Rmd", output = "./scripts/2seminar.R", documentation = 2)
+## 
+
+#' 

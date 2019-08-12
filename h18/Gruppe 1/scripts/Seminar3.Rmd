@@ -1,0 +1,107 @@
+---
+title: "Seminar 3 - Lineær og logistisk regresjon"
+author: "Erlend Langørgen"
+date: "13 september 2017"
+output:
+  html_document:
+    keep_md: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
+```
+
+## Dagens seminar:
+
+* Terpe på basics i databehandling
+* Tolkning av regresjonsanalyse (logistisk og OLS)
+* Plotte regresjonsresultater
+
+I dag fokuserer vi på det R-tekniske ved å gjøre regresjonsanalyse, og substansiell tolkning av analysene. For å gjøre substansiell tolkning på best mulig vis, skal jeg lære dere [å plotte regresjon](https://github.com/martigso/stv4020aR/blob/master/Gruppe%201/docs/Regresjonsplot.md). 
+
+I første time av neste seminar skal vi gå gjennom mer formell diagnostikk for OLS og logistisk regresjon, som dere kan gjøre etter analysen for å teste modeller. Hensikten med denne organiseringen, er å tydeliggjøre likhetene mellom lineær og logistisk regresjon. I undervisningsmateriall til de to første seminarene finner dere også en god del oppgaver som viser viktigheten av å forstå datasettet du bruker i en regresjon. Dette fortjener å gjentas:
+
+**Når vi gjør dataanalyse må vi forstå data! Visualiser, gjør deskriptiv statistikk og les kodebok**. I statsvitenskap har vi ofte data som ikke er helt ideelle. Kanskje er variablene våre upresise, eller kanskje vi forsøker å studere en bestemt egenskap som kjennetegner vestlige demokratier, f.eks., helsevesen men mangler data/design til å skille effekten av denne variabelen fra andre kjennetegn ved vestlige demokratier. For å bli flinke til å analysere data, må dere forstå informasjonen dere har i datasettet deres, før dere gjør analysen. **Visualisering, deskriptiv statistikk og kodebok er fantastiske, uunværlige hjelpemidler**, se på undervisningsmateriell til de to første seminarene dersom dere ikke forstår hva jeg snakker om. 
+
+
+
+
+
+## Plan for resten av seminarene:
+* Komme oss gjennom alle analyseformer, samt verktøy for diagnostikk
+* Statistikk vs. R-teknisk fokus - avhengig av deres preferanser 
+* Jeg vil ikke stresse gjennom seminarene, dette kan bety at vi ikke rekker å gå gjennom alt i timen. Dermed må dere se gjennom undervisningsmateriale jeg legger ut på egenhånd. Jeg kommer til å holde av tid i siste seminar til å gå gjennom ting vi ikke har fått tid til å gå grundig gjennom. Dess bedre forberedt dere stiller på metode og R, dess mer rekker vi i seminarene. Videre kommer både jeg og Martin til å være tilgjengelig på slack, og i R-veiledningstimene senere i høst.
+* Jeg kommer til å legge ut en del ekstra undervisningsmateriell, som ikke vil være pensum til prøven, men som vil kunne være ekstremt nyttig.
+
+I dag skal dere få gjøre oppgaver i lineær og logistisk regresjon.
+Jeg satser på å snakke så lite som mulig i plenum, og heller gå rundt for å gi individuell oppfølging.
+
+
+##  Repetisjon: Lineær regresjon
+I R bruker vi `lm()` funksjonen for å kjøre lineær regresjon. Vi må spesifisere to argumenter: 
+1. Regresjonsformelen, som vi spesifiserer med `avh.var ~ uavh.var1 + uavh.var2`. Samspill spesifiserer i regresjonsformelen spesifiserer vi med `*`, som i `avh.var ~ uavh.var1*uavh.var2`. Andregradsledd og polynomer av høyere grad spesifiseres med `I(uavh.var^2)`, som i `avh.var ~ uavh.var1 + I(uavh.var1^2) + I(uavh.var1^3)`.
+2. Data, som vi spesifiserer med `data = mitt_datasett`.
+
+Vi pleier å opprette objekter av modeller. Bruk `class()`, `names()` og `str()` for å lære mer om modellobjektene deres. Se også på hjelpefilene for regresjonsanalyse, med `?lm`.
+
+Som jeg nevnte, skal vi gjøre regresjonsdianostikk i neste seminar, dermed blir det naturlig å snakker mer om forutsetninger for regresjon i neste seminar, men jeg vil gjerne vite om noen husker antagelsene på stående fot. Jeg vil også at dere skal tenke på utelatte variabler når vi kjører modeller i dag, da dette er en forutsetning som vi ikke kan teste.
+
+
+Tolkning:
+Substansiell tolkning av lineær regresjonsanalyse er stort sett ganske greit, siden avhengig variabel stort sett er substansielt meningsfull, og siden vi får oppgitt effekten til en uavhengig variabel i endring i enheter i avhengig variabel. Det er for eksempel ganske klart at en variabel som øker et lands BNP med 200 kroner har en svak effekt, mens en variabel som øker BNP med 5 000 000 000 har en ganske sterk substansiell effekt. I noen tilfeller kan det være vanskeligere, da bør vi se på variasjon i avhengig og uavhengig variabel og tenke oss godt om. Vi kan også standardisere.
+
+For å forstå regresjonsanalysen vår bedre er det fint å plotte regresjonslinjen og usikkerheten, dette er særlig nyttig ved samspill.
+
+## Logistisk regresjon
+
+Teori: Vi gjør basically det samme som med OLS, vi bruker en matematisk metode for å finne den linjen som beskriver sammenhengen vi spesifiserer mellom uavhengig og avhengig variabel best. På grunn av at den avhengige variabelen er dikotom, må den imidlertid transformeres for at regresjonen vår skal fungere. Dette er tankegangen bak logistisk regresjon, og beslektede metoder som probit. Det er også en vanlig begrunnelse for andre alternative regresjonsmodeller.
+
+Konsekvenser i praksis:
+
+* Den største praktiske forskjellen er at substansiell tolkning blir vanskeligere. OLS gir oss en rett linje (eller polynom) som beskriver en sammenheng i substansielt meningsfulle enheter, som f.eks. antall kroner til kommunene over statsbudsjett som en funksjon av hvor venstre/høyre-vridd regjeringen er. Logistisk regresjon gir oss en rett linje (eller polynom) på logits skalaen, som vi ikke kan tolke substansielt uten videre. Odds-ratio er heller ikke uten videre lett å forstå. Dersom alle var supersmarte matematikere, ville det vært mulig å se på logits, og regne om til sannsynlighet i hodet, for å deretter visualisere sammenhengen mellom uavhengige variabler og sannsynlighet for utfall grafisk. Dessverre er vi ikke så smarte, formen på sammenhengen er ikke-lineær, og sterkt avhengig av verdiene til kontrollvariabler. Derfor anbefaler jeg plotting av regresjonslinjen til logistisk regresjon på det aller sterkeste, da dette gjør substansiell tolkning av logistisk regresjon **mye** lettere. Vi kan også regne ut predikerte sannsynligheter "for hånd" ved å plugge inn koeffisienter og variabelverdier i formelen for å regne ut predikerte sannsynligheter. Predikerte sannsynligheter er greie å tolke, det er meningsfullt å snakkeom hvor mye en uavhengig variabel endrer sannsynligheten for et positivt utfall relativt til referansekategorien.
+
+* I R må vi huske å bytte `lm()` med `glm()` og spesifisere alternativet `family = binomial`. De resterende argumentene er like.
+
+**Oppvarmings-oppgave i plenum:**
+Les hjelpefil, hva må vi spesifisere for å kjøre en logistisk regresjon? Forklar til sidemannen.
+
+Last ned datasettet `bd_full.Rdata`, dersom du ikke har gjort det enda [her](https://github.com/martigso/stv4020aR/raw/master/Gruppe%201/data/bd_full.Rdata). Lagre i en mappe, sett working directory, og last inn datasettet i R med `load()`.
+
+Opprett en ny variabel `elrgdpg_d`, slik at observasjoner vekst mindre eller lik 0, og andre observasjoner får verdien 1.
+
+Kjør deretter følgende logistiske regresjon:
+
+```{r, eval = F}
+m1 <- glm(elrgdpg_d ~ elraid*elrpolicy + as.factor(period) + elrlpop + elrassas*elrethnf, data = full, family = binomial(lin = "logit"))
+summary(m1)
+```
+
+Diskuter raskt med sidemannen hva slags informasjon du får fra regresjons-output
+
+For å regne om til predikert sannsynlighet for hånd, bruker vi følgende formel:
+`exp(b0 + b1X1 + b2X2 + ... + bnXn)/(1 + exp(b0 + b1X1 + b2X2 + ... + bnXn))` , der b0 er konstantledd. 
+
+1. Regn ut den predikerte sannsynligheten for positiv vekst for et land med `elraid` lik `-3` i periode 8, med resterende variabler satt til sin medianverdi (ikke legg inn koeffisienter for andre perioder enn periode 8!).
+2. Regn ut den predikerte sannsynligheten for positiv vekst for et land med `elraid` lik `3` i periode 8, med resterende variabler satt til sin medianverdi (ikke legg inn koeffisienter for andre perioder enn periode 8!).
+
+Jeg har satt opp noe dere kan copy-paste under til hjelp, men dere må sørge for at formelen blir riktig selv:
+
+
+```{r, eval = F}
+exp(-4.046138 + -0.102802*(-3) + 1.654813*median(full$elrpolicy, na.rm =T) + 0.008147*median(full$elrpolicy, na.rm =T)*(-3) +  -0.770560*1 + 0.381205*median(full$elrlpop, na.rm =T) + -0.216738*median(full$elrassas, na.rm = T) + -0.449168*median(full$elrethnf, na.rm =T) + 0.490778*median(full$elrassas, na.rm = T)*median(full$elrethnf, na.rm =T))
+```
+
+Er effekten av elraid substansiell?
+
+Dette er ganske mye arbeid for få predikerte sannsynligheter, derfor skal jeg gjennomgå plotting av effekter på slutten av timen. Om noen kommer til første plotte-oppgave før den tid, og ikke har sett på introduksjonen til dagens seminar, kikk på den introduksjonen.
+
+
+
+
+
+
+
+
+
+
+
