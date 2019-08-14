@@ -744,11 +744,10 @@ Histogram:
 ggplot(aid, aes(elrgdpg)) + geom_histogram(bins = 50)
 ```
 
-```
-## Warning: Removed 369 rows containing non-finite values (stat_bin).
-```
 
-![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+![](../bilder/introforelesning1.png)<!-- -->
+
 
 Kontinuerlig fordeling:
 
@@ -757,11 +756,9 @@ Kontinuerlig fordeling:
 ggplot(aid, aes(elrgdpg)) + geom_density()
 ```
 
-```
-## Warning: Removed 369 rows containing non-finite values (stat_density).
-```
 
-![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
+![](../bilder/introforelesning2.png)<!-- -->
 
 
 Scatterplot:
@@ -776,7 +773,11 @@ ggplot(aid) + geom_point(aes(x = period, y = elrgdpg, col = elraid)) # Viser øk
 ## Warning: Removed 369 rows containing missing values (geom_point).
 ```
 
-![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+
+
+
+![](../bilder/introforelesning3.png)<!-- -->
 
 Scatterplot med regresjonslinje
 
@@ -793,7 +794,12 @@ ggplot(aid) + geom_point(aes(x = period, y = elrgdpg, col = elraid)) + geom_smoo
 ## Warning: Removed 369 rows containing missing values (geom_point).
 ```
 
-![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+
+
+
+![](../bilder/introforelesning4.png)<!-- -->
+
 
 Scatterplot for hvert år separat:
 
@@ -807,7 +813,12 @@ ggplot(aid) + geom_point(aes(x = period, y = elrgdpg, col = elraid)) + facet_wra
 ## Warning: Removed 369 rows containing missing values (geom_point).
 ```
 
-![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](Introduksjonsforelesning_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
+
+
+
+
+![](../bilder/introforelesning5.png)<!-- -->
 
 
 
