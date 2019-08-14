@@ -50,3 +50,6 @@ Du trenger imidlertid ikke lese alle kapitlene like nøye. Under følger mine fo
 * **Kapittel 14:** Dersom du vil lage en numerisk variabel basert på en tekstvariabel, eller gjøre andre operasjoner på tekst, bør du lese dette kapittelet.
 * **Kapittel 15:** Dersom du opplever feilmeldinger som sier noe om klassen til en variabel eller om `factor` bør du ta en titt på dette kapittelet. Du vil nesten helt sikkert få bruk for dette kapittelet på ett eller annet tidspunkt, så det kan være vel verdt å gjøre for alle. Særlig relevant for dem som ikke forstår hvorfor egen kode ikke fungerer.
 * **Kapittel 16:** Les dette kapittelet dersom du skal jobbe med datoer/tidspunkt. 
+
+
+For å sikre deg at du har forstått kapitlene du jobber med er det fint å løse oppgavene. [Her](https://jrnold.github.io/r4ds-exercise-solutions/) finner dere løsningsforslag. Jeg har ikke sett gjennom alt, så ta kontakt med meg eller en annen seminarleder dersom det er noe som ikke fungerer/du lurer på.
