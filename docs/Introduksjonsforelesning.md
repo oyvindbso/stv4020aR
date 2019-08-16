@@ -25,8 +25,8 @@ Velkommen til innføring i R!
 
 1. Få R og Rstudio til å virke på egen PC.
 2. Gå frem i passelig tempo
-3. Forstå hvordan R-studio er satt opp.
-4. Forstå grunnleggende konsepter i R: indeksering, objekter, funksjoner m.m.
+3. Forstå hvordan R-studio er satt opp, og hvordan man kjører kode.
+4. Forstå grunnleggende konsepter i R: indeksering, objekter og funksjoner.
 5. Laste inn et datasett og lage noen fine figurer.
 
 
@@ -221,7 +221,7 @@ R kan evaluere logiske utsagn, og bedømme om de er `TRUE` eller `FALSE`:
 | `>=` | større eller lik       |
 | `!=` | ikke lik               |
 | `!x` | ikke x                 |
-| `|`  | eller                 |
+| `\|`  | eller                 |
 | `&`  | og                     |
 
 Logiske operatorer er viktig å forstå i R. Dersom vi vil gjøre endringer i et datasett, bruker vi som regel en logisk test.
@@ -673,7 +673,7 @@ Vi skal i hovedsak indeksere variabler og datasett. Under får dere noen regler 
 
 
 ```r
-# Det finnes mange måter å indeksere datasett på! For datasett skal vi skal holde oss til:
+# Det finnes mange måter å indeksere datasett på! For datasett skal vi holde oss til:
 
 aid$country # Velg en variabel fra et datasett med $
 aid$country[1:5] # Velg observasjon 1:5 på variabelen country
@@ -801,7 +801,7 @@ ggplot(aid) + geom_point(aes(x = period, y = elrgdpg, col = elraid)) + geom_smoo
 ![](../bilder/introforelesning4.png)<!-- -->
 
 
-Scatterplot for hvert år separat:
+Scatterplot med separate paneler for Land i og utenfor Afrika Sør for Sahara :
 
 
 
@@ -827,7 +827,7 @@ ggplot(aid) + geom_point(aes(x = period, y = elrgdpg, col = elraid)) + facet_wra
 Funksjoner er helt sentralt i R. De over 10 000 pakkene som finnes til R på CRAN inneholder som regel funksjoner. Derfor kan et google-søk ofte finne en funksjon som passer til akkurat ditt formål. Ofte er det imidlertid minst like effektivt å skrive sin egen funksjon. Dersom du skal gjenta en operasjon mange ganger, kan en funksjon ofte være mer effektivt enn copy-paste (særlig med litt trening). En god tommelfingerregel for en erfaren R-bruker er at det vil lønne seg å skrive en funksjon hvis du må copy-paste mer enn 3 ganger. For en nybegynner vil det være betraktelig høyere terskel før det lønner seg å skrive en funksjon, men man må starte å øve for å bli flink til å skrive funksjoner. Dersom du forsøker å skrive funksjoner en gang i blant, vil du også øke din egen R-forståelse. Dersom du jobber deg gjennom del 3 av **R for Data Science** vil du få mer trening i å skrive funksjoner. Du trenger ikke å lære deg dette for å lykkes med hjemmeoppgaven, hensikten med denne delen er å gi deg en smaksprøve på neste nivå i R.
 
 
-La oss forsøke å sentrere en variabel:
+La oss forsøke å sentrere en variabel, slik at gjennomsnittet til variabelen blir `0`:
 
 
 ```r
