@@ -12,7 +12,7 @@ output:
 
 ## R-undervisningen på STV 4020A:
 
-Møt til seminarene, oppmøte 4 av 5 ganger er obligatorisk. Der kommer dere til å lære mye - dere bør møte hver gang. En forutsetning for å lykkes med en kvantitativ hjemmeoppgave, er å ha tilstrekkelige basisferdigheter. Dette fordrer noe egenarbeid i tillegg til seminarene. Min anbefaling å ta en titt på denne [egenstudieguiden](https://github.com/langoergen/stv4020aR/blob/master/docs/Studieguide_R.md) - her har jeg skrevet et forslag til hvordan dere kan gå frem for å lære tilstrekkelig R til å lykkes med hjemmeoppgaven på en effektiv måte. Jeg anbefaler også at dere samarbeider/hjelper hverandre med R-kode - i tillegg til å være effektivt er det en fin måte lære på. Mot slutten av semesteret blir det også R-hjelpetimer.
+Møt til seminarene, oppmøte 4 av 5 ganger er obligatorisk. Der kommer dere til å lære mye - dere bør møte hver gang. En forutsetning for å lykkes med en kvantitativ hjemmeoppgave, er å ha tilstrekkelige basisferdigheter. Dette fordrer noe egenarbeid i tillegg til seminarene. Min anbefaling å ta en titt på denne [egenstudieguiden](https://github.com/langoergen/stv4020aR/blob/master/docs/Studieguide_R.md) - her har jeg skrevet et forslag til hvordan dere kan gå frem for å lære tilstrekkelig R til å lykkes med hjemmeoppgaven på en effektiv måte. Jobb helst gjennom de oppførte kapitlene fra **R for Data Science** på forhånd. Jeg anbefaler også at dere samarbeider/hjelper hverandre med R-kode - i tillegg til å være effektivt er det en fin måte lære på. Mot slutten av semesteret blir det også R-hjelpetimer.
 
 
 ## Introduksjon til R for 4020 A
@@ -214,15 +214,15 @@ R kan evaluere logiske utsagn, og bedømme om de er `TRUE` eller `FALSE`:
 
 | Operator      | Betydning     |
 | ------------- |:-------------:|
-| `==` | er lik |
-| `<`  | mindre enn       |
-| `>`  | større enn       |
-| `<=` | mindre eller lik |
-| `>=` | større eller lik |
-| `!=` | ikke lik         |
-| `!x` | ikke x           |
-| `|`  | eller            |
-| `&`  | og               |
+| `==` | er lik                 |                 
+| `<`  | mindre enn             |
+| `>`  | større enn             |
+| `<=` | mindre eller lik       |
+| `>=` | større eller lik       |
+| `!=` | ikke lik               |
+| `!x` | ikke x                 |
+| `|`  | eller                 |
+| `&`  | og                     |
 
 Logiske operatorer er viktig å forstå i R. Dersom vi vil gjøre endringer i et datasett, bruker vi som regel en logisk test.
 
@@ -257,7 +257,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages -------------------------------------------------------------------------------- tidyverse 1.2.1 --
+## -- Attaching packages --------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
@@ -276,7 +276,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Conflicts ----------------------------------------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts ------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
