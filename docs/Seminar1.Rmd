@@ -544,8 +544,8 @@ Her er et overlesset eksempel på et scatterplot (poenget er å illustrere mulig
 ```{r, eval=FALSE}
 library(ggplot2)
 ggplot(aid) +
-  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(region))) +
-  geom_smooth(aes(x=aid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
+  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as_factor(region))) +
+  geom_smooth(aes(x=elraid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +
   ylab("growth") +
@@ -553,10 +553,9 @@ ggplot(aid) +
 ```
 
 ```{r include=FALSE}
-library(ggplot2)
 ggplot(aid) +
-  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(region))) +
-  geom_smooth(aes(x=aid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
+  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as_factor(region))) +
+  geom_smooth(aes(x=elraid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +
   ylab("growth") +
