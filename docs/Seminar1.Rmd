@@ -1,0 +1,497 @@
+---
+title: "Første R-Seminar"
+author: "Erlend Langørgen"
+date: "15 august 2019"
+output:
+  html_document:
+    keep_md: TRUE
+    self_contained: no
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
+```
+
+# Velkommen!
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/welcome.jpg")
+```
+
+
+# Seminaropplegg
+
+De fleste seminarene vil bestå av to deler:
+
+1. En introduksjon fra seminarleder til dagens emner
+2. Oppgaver som trener deg i å jobbe med dagens emner - trening på anvendelse er nødvendig for å skaffe seg tilstrekkelig god forståelse. Vi har gjort vårt beste for å lage oppgaver som trener deg i ferdigheter som du ikke visste at du trengte, men som du vil få bruk for i hjemmeoppgaven.
+
+Løsningsforslag til oppgavene vil bli lagt ut etter seminarene. Alt seminaropplegg vil bli lenket til under moduler på Canvas - vi forbeholder oss retten til å gjøre endringer i undervisningsmateriale helt frem til seminaret.
+
+Dersom du skal skrive hjemmeoppgave med R, anbefaler vi at du forbereder deg til seminaret ved å se gjennom relevante kapitler fra **R for Data Science** eller tilsvarende ressurs. Det er også en svært stor fordel å være ajour med statistikkpensum før seminarene - dess færre nye momenter du blir introdusert til, dess lettere er det å tilegne seg nye kunnnskaper. Det er kjedelig å falle av i R-seminarene pga. at du ikke aner hva regresjonsanalyse er. Når det er sagt, har vi full forståelse for at dere har et travelt semester - gjør deres beste!
+
+Vi rekker ikke gå gjennom alt som kan være relevant av R-ferdigheter til hjemmeoppgaven, derfor har vi laget [studieguiden](https://github.com/langoergen/stv4020aR/blob/master/docs/Studieguide_R.md) til **R for Data Science**, samt noe ekstra undervisningsmateriale som viser hvordan du gjennomfører faktoranalyse og flernivåanalyse i hjemmeoppgaven. Dersom dere tror at det kan være aktuelt å bruke noen av disse analysemetodene til hjemmeoppgaven - ta en titt på dette undervisningsmaterialet før siste seminar. Da vil du få anledning til å spørre seminarleder om ting du lurer på.
+
+
+## Om å lære R:
+
+Øvelse gjør mester, jeg håper derfor at alle vil gjøre sitt beste med tiden dere har til rådighet i seminarene. Vi vil også anbefale dere å komme i gang med hjemmeoppgaven før de to siste R-seminarene. Dette vil gjøre det lettere for dere å lære R på en mer målrettet måte og øke utbytte fra seminarene. Dere vil også få betydelig bedre hjelp i skisseseminarene dersom dere allerede har valgt datasett og kjørt noen analyser (det er bedre å finne noen data og bruke dem i skissen enn å ikke bruke noen, selv om du bytter data senere).
+
+Still masse spørsmål, særlig i starten dersom alt er nytt og fremmed(gjørende) - det er slik du lærer. Bruk medstudenter aktivt, samarbeid og hjelp hverandre.
+
+Mot slutten av semesteret vil dere oppleve at dess mer du kan, dess bedre blir spørsmålene dine og hjelpen du får fra oss som underviser. Dersom du kan nok til å forstå problemet ditt, og til å vite at løsningen ikke finnes rett foran nesen din i et seminardokument eller **R for Data Science** vil du få gode svar. Dersom du spør om ting som ble gjennomgått i første seminar, vil du selvfølgelig få hjelp, men det kan hende at en del av hjelpen er at du blir bedt om å kikke på dokumentet til første seminar en gang til.
+
+Jeg vil at dere skal skrive mest mulig selvstendig kode i seminarene. Dette er den beste måten å trene dere til å løse hjemmeoppgaven, og den beste måten å sørge for at det ikke blir ubehagelige overraskelser på prøven. Det gir også meg muligheten til å gå rundt å gi individuell oppfølging til dere. For at dette skal fungere effektivt, må dere gjøre noe forberedelser. Derfor foreslår jeg at alle i det minste bruker en halvtime/et kvarter på å se på relevante kapitler i R for Data Science før seminaret, samt gjør sitt beste for å holde seg oppdatert på statistikkpensum.
+
+Undervisningsmateriell blir lenket til på Canvas. Selve opplegget blir lastet opp på [github](https://github.com/langoergen/stv4020aR). For øyeblikket ligger fjorårets opplegg ute, jeg kommer til å oppdatere alle seminaren i løpet av semester, da jeg har endret seminarstrukturen en god del.
+
+
+## Læringsressurser og nyttige R-lenker
+
+- [Gratis innføringsbok på nett - R for Data Science](http://r4ds.had.co.nz/)
+- **Hjelpefilene i R:** Det krever litt trening å lære seg å forstå hjelpefiler, men det er en av de beste investeringene du kan gjøre - finn all informasjonen du trenger ved hjelp av `?` og `??` i R
+- [Quick-R - et bra sted å søke etter ting, lett å forstå for nybegynnere](https://www.statmethods.net/)
+- [Interaktiv R-intro fra datacamp](https://www.datacamp.com/courses/free-introduction-to-r)
+- [Interaktiv tidyverse-intro fra datacamp](https://www.datacamp.com/courses/introduction-to-the-tidyverse)
+- [Stackoverflow - har svar på det R-problemet du sliter med](https://stackoverflow.com/questions/tagged/r)
+- [R-bloggers - har gode, kortfattede tutorials](https://www.r-bloggers.com/)
+- [Guide til ggplot2](http://docs.ggplot2.org/current/)
+- [Facebookgruppe for R for statsvitere på UiO - bruk!](https://www.facebook.com/groups/427792970608618/)
+- [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
+- [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+
+Du kan også finne videoer, flere gratis bøker m.m. hvis du googler/søker på stackoverflow/søker på youtube. Noe av det aller vikti Det viktigste er nok imidlertid å lære seg å lese og forstå hjelpefiler i R og stackoverflow. For å bli god i R er det lurt å huske noen grunnbegreper (dvs. en god del av det som du lærer i seminarene og **R for Data Science**), men ut over det bruker man hjelpefiler i R/stackoverflow som ordbøker hele tiden.
+
+
+## Dagens seminar: En første dataanalyse med R.
+
+I dagens seminar skal vi øve på å forberede og utforske data. Dette er som regel første del av enhver dataanalyse - også hjemmeoppgaven.
+Vi skal også øve på å forstå hjelpefiler til funksjoner.
+
+
+1. [Kort om funksjoner og hjelpefiler](#funksjoner)
+2. [Forberede og Manipulere data](#manipulere)
+3. [Utforsking av data og deskriptiv statistikk.](#deskriptiv)
+4. [Plotte-funksjonen `ggplot`.](#ggplot)
+
+
+Som i introduksjonsforelesningen, kommer det til å være noe kode dere kjører der vi ikke forklarer alt som skjer - vi kommer til å dekke mesteparten av dette i neste seminar, men det er også fint å prøve å forstå dette på egenhånd ved hjelp av hjelpfiler og **R for Data Science**
+
+Dere vil få oppgaver som trener dere i disse ferdighetene, samt i grunnleggende forståelse av R som språk. Dersom dere sliter med å forstå indeksering, funksjoner, objekter e.l., kan dere kikke på introduksjonsforelesningen, eller lese i **R for Data Science**, boken til Silje (**Lær deg R**) eller en tilsvarende ressurs. Vi kommer til å fortsette med å trene litt på basisferdigheter også i neste seminar.
+
+
+## Kort om  funksjoner og hjelpefiler <a name="funksjoner"></a>
+
+En grunnleggende byggestein i R er funksjoner. En funksjon tar i mot verdi(er), gjerne lagret i form av et R-objekt, utfører operasjoner basert på input, og produserer nye verdier. En typisk R-funksjon har følgende *syntaks*:
+
+```{r, eval=F}
+aFunction(x = "R-objekt", arg = "alternativ for funksjonens oppførsel")d
+## Merk: dette er ikke en faktisk funksjon i R. Funksjoner kan også ha andre syntakser.
+```
+Funksjoner som `c()`, `log()`, `summary()`, `str()` og `read_csv()` er eksempler på funksjoner.
+Dersom vi vil lære mer om en funksjon, kan vi spørre R om hjelp med `?`. Kjør `?c()` og `?log()`
+
+Dersom vi er på jakt etter en funksjon til et spesielt formål, kan vi bruke `??` (eller google).
+Si at vi har lyst til å lage en sekvens av tall, som med `:` (som teller på heltall), men bare inkludere partall. La oss se om vi kan finne en funksjon til å gjøre dette med følgende kode: `??sequence`
+
+Søket med `??` tyder på at funksjonen `seq()` kan gjøre jobben.
+La oss åpne hjelpefilen til `seq()` ved hjelp av `?seq()`
+
+**Oppgave:** Bruk to minutter på å lese hjelpefilen, og skriv ned hva du tror de to linjene med kode kommer til å gjøre:
+
+```{r}
+seq(from = 2, to = 20, by =2)
+seq(from = 20, to = 2, by = -2)
+```
+Dersom en funksjon produserer output av en type som fungerer som input i en annen funksjon, kan vi plassere funksjoner inne i andre funksjoner:
+```{r}
+c(seq(20 ,2 , -2), rep(1, 2), seq(2, 20, 2))
+```
+Som dere ser trenger vi ikke skrive argumentene, kjør `?rep` for å finne ut hva funksjonen i midten gjør. Fortsett å bruke `?` til å lære om nye funksjoner som introduseres resten av seminaret. Øv på å lese syntaks fra hjelpefilene, sammen med googling vil evnen til å lese syntaks sette dere i stand til å finne løsninger på alle slags problemer, med litt trening går dette stort sett ganske raskt.
+
+Mange funksjoner er i eksterne pakker (det finnes over 10 000!) som må lastes ned fra nettet med `install.packages("pakkenavn")` og gjøres tilgjengelig i R-sesjonen din før du kan bruke dem med `library(pakkenavn)`. Dersom du Lukker og åpner Rstudio på nytt trenger du altså ikke å kjøre `install.packages("pakkenavn")` på nytt, men du må kjøre `library(pakkenavn)` for å få tilgang på funksjoner fra pakkene i tidyverse.
+
+I dagens seminar skal dere innom `tidyverse`- pakkene `ggplot2`, `haven`, og `dplyr`, samt pakken `moments`.
+Under viser jeg koden for å installere `moments`. Skriv koden for å installere og laste inn de andre pakkene selv i scriptet ditt!
+```{r}
+#install.packages("moments") # dersom pakken allerede er installert trenger du ikke kjøre denne, klikk på packages i viduet nede til høyre for å sjekke, eller se om neste linje med kode kjører uten problemer.
+library(moments)
+```
+
+### Laste inn data - read_funksjoner()
+
+Vi skal starte med å laste inn data som et objekt i R. Funksjoner for å laste inn ulike datatyper har stort sett ganske lik syntaks (det kan være små variasjoner og ulike tilleggalternativ - dette finner du raskt ut av i hjelpefilen!)
+
+```{r, eval = F}
+library(tidyverse) # read_funksjoner fra readr i tidyvsere
+datasett <- read_filtype("filnavn.filtype")
+read_csv("filnavn.csv") # for .csv, sjekk også read.table
+load("")
+
+aid <-  read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
+
+library(haven)
+# Fra haven-pakken - dette skal vi se på i senere seminar
+read_spss("filnavn.sav")  # for .sav-filer fra spss
+read_dta("filnavn.dta") # for .dta-filer fra stata
+
+```
+
+Vi skal bruke samme kode for å laste inn datasettet `aid` som på introduksjonsforelesningen. Ta en kjapp titt på hjelpefilen, hva heter argumentet vi har spesifisert?
+
+```{r}
+# install.packages(tidyverse)
+library(tidyverse)
+aid <-  read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
+```
+
+**Legg merke til:** eksterne filer, som uinstallerte pakker og datasett som ikke er lastet inn som objekter, må alltid skrives i `" "` når vi refererer til dem. Informasjon som er lagret internt, som nedlastede pakker og opprettede objekter, refererer vi ikke til med `" "`
+
+Vi kommer til å snakke mer om import og kombinering av ulike typer data i senere seminarer.
+
+# Forberede og manipulere data <a name="manipulere"></a>
+
+Vi lærer R for å kunne gjøre statistiske analyser. Noen ganger er man så heldig å få et analyserklart datasett som har alle variablene man ønsker, men dette hører trolig til sjeldenhetene. Veldig ofte må man jobbe litt med å forberede og manipulere data, f.eks. ved å omkode variabler, eller hente inn variabler fra andre datakilder. Forberedelse av data er ikke rutinearbeid - det innbefatter svært ofte viktige metodologiske beslutninger, som f.eks. hvordan du ønsker å operasjonalisere når en konflikt ble avsluttet. Forsøk derfor alltid å tenke på metodologiske implikasjoner når du forbereder data. Dersom du lager en klar slagplan for hvordan du ønsker at dataene dine skal se ut på forhånd, blir det lettere å forberede data. Datamanipulasjon og dataforberedelser handler derfor om å stille seg selv følgende spørsmål:
+
+1. Hva slags data ønsker jeg?
+2. Hva slags data har jeg?
+3. Hva må jeg gjøre for å omarbeide de dataene jeg har til dataene jeg ønsker meg?
+
+Når du har svart på disse spørsmålene, har du laget en plan med et sett av oppgaver, datamanipuleringer du vet at du må gjøre - disse skal vi lære å løse i R. Dersom du ikke har en slik plan, blir datamanipulering vanskeligere. Tenk gjennom disse spørsmålene (særlig spm. 1 og 2) allerede før du åpner R, med utgangspunkt i teori, og det du vet om dataene dine fra kodebok eller artikklene du repliserer. Vi skal imidlertid lære hvordan R også kan være til stor hjelp for å lage arbeidsplanen din - også for å svare på spm. 1 og 2. Dersom du blir flink på koder for å manipulere data, blir denne planleggingsprosessen både lettere og mer kreativ fordi du ser flere muligheter.
+
+
+I dagens seminar, skal vi jobbe med utgangspunkt i følgende hypotese:  bistand fører til økonomisk vekst, men bare dersom de fører en god makroøkonomisk politikk. Datasettet `aid` som vi brukte i introduksjonsforelesningen, og som vi lastet inn i sted, ble brukt i en forskningsartikkel - *Aid, policies and growth* (**Burnside og Dollar, 2000**) - for å teste denne hypotesen. Disse dataene har observasjoner av en rekke land over flere tidsperioder. Dersom dere hadde lest denne artikkelen og kodeboken på nett - slik vi har gjort for dere - ville dere også visst at vi har data som blant annet inneholder:
+
+* Økonomisk vekst i prosent av BNP - variabelen `elrgdpg`
+* Økonomisk bistand som prosentandel av landets BNP - variabelen `elraid`
+* Tre variabler som ble brukt til å opprette en indeks for makroøkonomisk politikk - `elrsacw` (øk. åpenhet), `elrbb` (budsjettbalanse) og `elrinfl` (inflasjon).
+* En rekke potensielle kontrollvariabler
+
+Dersom vi har lyst til å kjøre den samme testen av hypotesen som det **Burnside og Dollar** gjorde - dette bør man alltid gjøre som første del av en replikasjon - er vi nødt til å opprette en indeks-variabel, som kombinerer de tre variablene som omhandler makroøkonomisk politikk. Dermed inneholder i hvert fall planen vår denne arbeidsoppgaven.
+
+
+
+### Sjekke strukturen til data
+
+Nå som vi har laget en tentativ plan for hva som må gjøre, og lastet inn et datasett, er det tid for å skaffe seg en enda bedre forståelse av hva slags data vi har ved hjelp av R. Husk at du i tillegg til å bruke R, **alltid** bør se på kodeboken/beskrivelsen av data i artikkelen du repliserer i denne fasen av analysen din. R og kodebok komplementerer hverandre.
+
+For å skaffe deg en forståelse av datasettet ditt i R, vil du som regel stille spørsmål av følgende type:
+
+1. Hva er observasjonene i datasettet? Ønsker jeg å omarbeide informasjonen slik at jeg får andre typer enheter?
+2. Hva heter variablene mine?
+3. Hva slags klasse har variablene mine? Hva slags informasjon inneholder variablene mine?
+4. Er det mange observasjoner som har manglende informasjon på noen av variablene jeg er interessert i?
+
+Spørsmål 1-3. bør du kunne svare på delvis ut fra kodeboken. Spørsmål 4. kan ofte bare besvares ved hjelp av et statistikkprogram som R. Uansett er det nyttig å bruke følgende koder i R for å svare på disse spørsmålene. Under viser jeg hvordan:
+
+1. Hva er enhetene i datasettet? Ønsker jeg å omarbeide informasjonen slik at jeg får andre enheter?
+
+**Klikk** på datasettet i Environment - da åpnes det i et nytt vindu. Legg merke til at koden `View(aid)` blir evaluert i Console. Les informasjonen langs en rad, og forsøk å tenke gjennom hvilke sentrale karakteristikker som skiller en enhet fra en annen - Nordmenn kan f.eks. skilles med utgangspunkt i fødselsnummer, eller med utgangspunkt i navn. Du kan også kjøre følgende koder:
+
+```{r, include = F}
+str(aid)
+aid # Printer samme informasjon som `str()` gjør for en data.frame hvis det er en tibble
+head(aid, 10) # første 10 observasjoner
+tail(aid, 10) # siste 10 observasjoner
+sample_n(aid, 20) # Velg 20 observasjoner tilfeldig
+```
+
+2. Hva heter variablene mine?
+```{r}
+names(aid)
+```
+3. Hva slags klasse har variablene mine? Hva slags informasjon inneholder variablene mine?
+
+Disse funksjonene er fine for å få en rask oversikt over data
+
+```{r}
+str(aid) # gir deg klasse for alle variabler samt noe informasjon om verdier
+class(aid) # klasse aid datasettet
+class(aid$elrgdpg) # gir deg klasse for en variabel
+
+table(aid$country, aid$period) # Fungerer bra for å se nærmere på verdiene til variabler som ikke er kontinuerlige (numeriske). Her får vi (ikke helt) tilfeldigvis også en oversikt over enhetene i datasettet.
+```
+
+Disse funksjonene for univariat statistikke er fine for å få en forståelse av fordelingen til kontinuerlige variabler vi er særlig interessert i.
+
+```{r}
+min(aid$elrgdpg, na.rm = TRUE)  # minimumsverdi, na.rm = T spesifiserer at missing skal droppes i beregning.
+max(aid$elrgdpg, na.rm = TRUE)  # maksimumsverdi
+mean(aid$elrgdpg, na.rm = TRUE) # gjennomsnitt
+median(aid$elrgdpg, na.rm =T )  # median
+sd(aid$elrgdpg, na.rm = T)      # standardavvik
+var(aid$elrgdpg, na.rm = T)     # varians
+quantile(aid$elrgdpg, na.rm = T)
+
+#install.packages("moments")
+library(moments)
+skewness(aid$elrgdpg) # skjevhet - fra moments
+kurtosis(aid$elrgdpg) # kurtose - fra moments
+
+summary(aid$elrgdpg) # forskjellig deskriptiv statistikk for en variabel
+summary(aid)            # deskriptiv statistikk for alle variabler i datasettet
+```
+
+4. Er det mange observasjoner som har manglende informasjon på noen av variablene jeg er interessert i?
+```{r}
+table(complete.cases(aid)) # tester hvor mange rader som ikke har missing
+table(is.na(aid$elrgdpg)) # tester hvor mange observasjoner som har missing på variabelen aid$elrgdpg
+aid %>%
+complete(country, period) # Tester alle mulige teoretiske kombinasjoner av verdier for variablene vi setter inn - ta utgangspunkt i variabler som definerer forskjellen på observasjonene. Dersom vi for eksempel har spurt et panel av førstegangsvelgere hva de har tenkt å stemme i mange runder, skiller vi med utgangspunkt i individ og spørsmålsrunde.
+```
+
+Manglende informasjon/missing data kan ha store implikasjoner, og kan håndteres på forskjellige måter - mer om dette senere. I første runde konsentrerer vi oss om å avdekke missing. Legg merke til at disse funksjonene er logiske tester - de tester om noe er sant eller galt.
+
+
+### Noen omkodingsfunksjoner:
+
+
+Etter at vi har kartlagt datastrukturen og hvilke variabler vi har, er det på tide å svare på følgende spørsmål en gang til: Hvilke endringer i data er det nødvendig å gjøre?
+
+Ofte vil en del av svaret være at det er nødvendig å omkode en eller flere variabler. Omkoding av variabler betyr at vi tar informasjon som finnes i en eller flere variabler og omarbeider denne informasjonen, slik at vi får en ny variabel. Dersom du synes dette høres ut som om noe du kan bruke en funksjon til, tenker du rett. Før vi gjennomgår noen funksjoner som er nyttig til å omkode variabker, skal dere få et godt råd. Ikke gjør en omkoding som overskriver variabler som allerede finnes, **opprett alltid nye variabler**, ellers kan det bli veldig kjedelig å gjøre feil (særlig dersom du har den eneste kopien av rådata-filen til masteroppgaven din).
+
+
+Den generelle syntaksen vi skal bruke for å omkode variabler er som følger:
+
+```{r, eval = F}
+data$ny_var <- funksjon(data$gammel_var)
+# Vi anvender en funksjon som omarbeider informasjonen i en gammel variabel i datasettet vårt, og legger den til datasettet vårt med et nytt navn
+```
+For å kjøre samme analyse som Burnside og Dollar (2000) må vi som nevnt opprette en ny variabel - en makroøkonimisk politkk-indeks - med utgangspunkt i variablene for inflasjon (`aid$elrinfl`), budsjettbalanse (`aid$elrbb`) og økonomisk åpenhet (`aid$elrsacw`)
+
+```{r}
+# oppretter policy-indeks variabel
+aid$policy <- aid$elrinfl + aid$elrbb + aid$elrsacw
+```
+
+I `tidyverse` og `dplyr` pakken bruker man som regel `mutate()` funksjonen sammen med andre funksjoner for å opprette nye variabler. Ved hjelp av `mutate()` kan du gjøre mange omkodinger i slengen - dette gir mer ryddig kode.
+
+```{r}
+aid %>% # Spesifiserer at vi skal jobbe med datasettet aid - R vil da lete etter variabler vi referer til her, slik at vi slipper aid$var
+  mutate(policy = elrsacw + elrinfl + elrbb) # lager variabelen policy ved å summere budsjettbalanse, inflasjon og en indeks for øk. åpenhet
+
+
+
+aid <- aid %>% # samme kode som over, men nå overskriver jeg data slik at variabelen legges til - gjør dette etter at du har testet at koden fungerte
+  mutate(policy = elrsacw + elrinfl + elrbb,
+         policy2 = elrsacw*elrinfl*elrbb)
+# Her lager jeg to versjoner av policyindeksen - en additiv og en multiplikativ indeks. Hva er den teoretiske forskjellen?
+# Dette er en ryddig måte å samle alle omkodinger på!
+```
+
+
+Her brukte vi enkle matematiske operasjoner, `+` og `*` for å opprette nye variabler. Andre nyttige matematiske funksjoner til omkoding er funksjoner som `log()`, `exp()` og `sqrt()`. Mot slutten av dokumentet til introduksjonsforelesningen viste jeg sentrering - dvs. å sørge for at gjennomsnittet til en variabel blir 0. Så lenge vi jobber med variabler av klassene `integer` eller `numeric` kan vi utføre omkodinger ved hjelp av alle slags matematiske operasjoner - bare teoretiske og metodologiske hensyn setter begrensninger. For variabler som ikke inneholder tall, vil naturlig nok denne typen omkoding ikke fungere. Vi kommer til å se såvidt på noen funksjoner for omkoding med utgangspunkt i tekstvariabler i et senere seminar.
+
+**Oppgave:** Sentrer de to nye variablene `policy` og `policy2`. Det er lov å bruke alle hjelpemidler!
+
+
+En annen type enkel omkoding består i å endre klassen til en variabel. Dette kan gjøres med utgangspunkt i to begrunnelser:
+
+1. Endre målenivå til en variabel - variabler av klassene `numeric` og `integer` vil stort sett behandles som kontinuerlige variabler. Variabler av klassene `factor` vil derimot stort sett håndteres som nominal-nivå variabler i statistiske funksjoner (her er det noen ganger forskjell mellom funksjoner - se på hjelpefil dersom du er i tvil).
+2. Endre klassen til en variabel for at en R-funksjon skal fungere på variabelen. Tenk gjennom konsekvensene for målenivå når du gjør dette.
+
+For å endre klassen til en variabel, bruk en funksjon av typen `as.klassenavn(data$variabel)` - her er noen eksempler på hvordan disse funksjonene brukes:
+
+```{r}
+library(tidyverse)
+as_factor(aid$period)
+as.numeric(as_factor(aid$country)) # Denne fungerer bare hvis variabelen inneholder noe som kan leses som tall, legg merke til hva den gjør med faktor-variabler!
+# Legg merke til . i as.numeric.
+as.character(aid$elrgdpg)
+```
+
+**Oppgave:** Opprett tre nye variabler i datasettet ditt ved å omkode klassen til tre valgfrier variabler, velg også navn selv. Bruk `mutate()`.
+
+### Omkoding med ifelse()
+
+Den funksjonen jeg bruker mest til omkoding, er `ifelse()`. Syntaksen til denne funksjonen kan forklares som følger:
+
+```{r, eval=FALSE}
+data$nyvar <- ifelse(test = my_data$my.variabel=="some logical condition",
+       yes  = "what to return if 'some condition' is TRUE",
+       no   = "what to return if 'some condition' is FALSE")
+```
+
+**Oppgave:** Opprett en ny variabel som får verdien 1 dersom de har positiv verdi på variabelen policy, og negativ verdi på variabelen policy2 - hvor mange slike observasjoner finnes? Hint: Her kan du bruke `&` for å binde sammen to logiske tester. Du kan også bruke `ifelse()` inne i `mutate()` - jeg viser et eksempel under.
+
+
+### Endre datatstruktur ved hjelp av aggregering:
+
+Tenk deg at vi ønsket å opprette en ny variabel, `relative_neighborhood_growth`, som viser differansen mellom et lands vekst i en periode, og gjennomsnittsveksten til alle land i samme region over hele tidsperioden. Dette høres kanskje fryktelig komplisert ut, og mangler en god teoretisk begrunnelse. Vi kan imidlertid finne informasjonen vi er på jakt etter ganske enkelt ved hjelp av funksjonene `group_by()` og `summarise()`. Først må vi imidlertid opprette en region-variabel - fordi informasjon om hvilken region et land tilhører er spredt ut over tre variabler - `elrssa`, `elrcentam` og `elreasia`. La oss bruke `ifelse()` og `mutate()` til dette:
+
+
+```{r}
+aid <- aid %>% # Forteller at vi skal jobbe med aid-datasettet
+       mutate(region = ifelse(elrssa == 1, "Sub-Saharan Africa",
+                               ifelse(elrcentam == 1, "Central America",
+                               ifelse(elreasia == 1, "East Asia", "Other"))))
+# Her nøster jeg ifelse-funksjoner inne i hverandre, ved å skrive en ifelse() funksjon som det som skal gjøres med observasjoner som får FALSE på at de ligger i Afrika sør for Sahara, osv. La oss sjekke omkodingen med en tabell
+table(aid$region)
+table(aid$elrssa) # ser at det er like mange land - kunne gjort det samme for resten av kategoriene
+```
+La oss se hvordan `group_by()` og `summarise()` fungerer:
+
+```{r}
+aid %>%
+   group_by(region) %>% # grupperer observasjoner basert på verdi på region-variabelen. Alle observasjoner med lik verdi (uavh. av tidsperiode) blir gruppert sammen.
+   summarise(neigh_growth = mean(elrgdpg, na.rm = T)) # regner gjennomsnitt for økonomisk vekst innad i hver gruppe - for hele tidsperioden data dekker sett under ett
+
+# Samme kode, men lagrer som et objekt - vi får et nytt datasett der vi har endret observasjonene - nå er det regioner som er observasjoner
+agg_aid <- aid %>%
+group_by(region) %>%
+summarise(neigh_growth = mean(elrgdpg, na.rm = T))
+
+# Litt annen kode - aggregerer til datasett der observasjonene er regions-perioder
+agg_aid <- aid %>%
+group_by(region, period) %>%
+summarise(region_growth = mean(elrgdpg, na.rm = T))
+
+# Endelig versjon - legger til en variabel som teller hvor mange land som finnes i hver gruppe:
+
+agg_aid <- aid %>%
+group_by(region) %>%
+summarise(region_growth = mean(elrgdpg, na.rm = T),
+          n_region = n()) # teller antall observasjoner i gruppene med n()
+
+```
+
+Nå har vi informasjonen vi trenger - men vi har ikke lagt den til det opprinnelige datasettet som en variabel. Dette kan vi gjøre ved hjelp av en `join` funksjon som slår sammen informasjon fra to datasett. Mer om `join` i senere seminar, og [her](https://r4ds.had.co.nz/relational-data.html).
+
+```{r}
+
+aid <- aid %>% left_join(agg_aid)
+# left_join er en av flere join funksjoner. Siden begge datasett har en variabel som heter region, brukes denne til å matche de to datasettene. All informasjon i agg_aid legges til aid
+
+# Ser på resultatet:
+table(aid$region_growth, aid$region)
+table(aid$n_region, aid$region)
+```
+
+Disse formene for omkoding og opprettelse av nye variabler kan fort være aktuelle for hjemmeoppgaven.
+
+## Utforsking av data og deskriptiv statistikk <a name="deskriptiv"></a>
+
+Disse funksjonene fungerer gir unviariat statistikk for kontinuerlige variabler:
+
+```{r}
+min(aid$elrgdpg, na.rm = TRUE)  # minimumsverdi, na.rm = T spesifiserer at missing skal droppes i beregning.
+max(aid$elrgdpg, na.rm = TRUE)  # maksimumsverdi
+mean(aid$elrgdpg, na.rm = TRUE) # gjennomsnitt
+median(aid$elrgdpg, na.rm =T )  # median
+sd(aid$elrgdpg, na.rm = T)      # standardavvik
+var(aid$elrgdpg, na.rm = T)     # varians
+
+#install.packages("moments")
+library(moments)
+skewness(aid$elrgdpg) # skjevhet - fra moments
+kurtosis(aid$elrgdpg) # kurtose - fra moments
+
+summary(aid$elrgdpg) # forskjellig deskriptiv staatistikk for en variabel
+summary(aid)            # deskriptiv statistikk for alle variabler i datasettet
+```
+
+For bivariat eller multivariat deskriptiv statistikk, ser vi gjerne på korrelasjon (pearsons R). Med funksjonen `cor()` kan vi få bivariat korrelasjon mellom to variabler, eller lage bivariate korrelasjoner mellom alle numeriske variabler i datasettet vårt:
+
+```{r}
+cor(aid$elrgdpg, aid$elraid, use = "pairwise.complete.obs") # argumentet use bestemmer missing-håndtering
+aid         # sjekker hvilke variabler som er numeriske, str(aid hvis du ikke har en tibble)
+
+aid %>%
+select(1:13) %>%
+head() # velger de substansielle numeriske variablene i datasettet
+
+aid %>%
+select(6:13) %>%
+cor(, use = "pairwise.complete.obs")  # korrelasjonsmatrise basert på numeriske variabler
+# Sjekk hva use = argumentet styrer i hjelpefilen
+```
+
+
+En av variablene i datasettet vårt, `aid$country`, er ikke kontinuerlig. Ved å ta `str(aid)`, ser vi at denne variabelen er kodet som en faktor. Dette innebærer at den vil behandles som en nominalnivå-variabel i statistisk analyse. For kategoriske variabler, er tabeller nyttig:
+
+```{r}
+table(aid$country)      # frekvenstabell
+prop.table(table(aid$country)) # prosentfordeling basert på frekvenstabell
+```
+
+Vi kan også lage tabeller med flere variabler. Under viser jeg hvordan du lager en tabell fordelingen av observasjoner som har høyere vekst enn medianveksten i utvalget, ved hjelp av en logisk test:
+```{r}
+table(aid$elrgdpg>median(aid$elrgdpg,na.rm=T))
+table(aid$elrgdpg>median(aid$elrgdpg,na.rm=T), aid$country)
+```
+
+De fleste land har vekst både over og under medianen. Dersom det hadde vært svært lite variasjon i veksten til land, ville kontrollvariabler for land kunne ha fjernet effekten av de fleste variabler - vi ville ikke hatt veldig godt datagrunnlag for å si så mye om effekten av bistand i samspill med policy (jeg sier ikke dermed nødvendigvis at dataene er gode generelt).
+
+
+## Plotte-funksjonen `ggplot` <a name="ggplot"></a>
+
+
+Hadley Wickham fra R studio skriver mange veldig gode tilleggspakker til R (i tillegg til gratis innføringsbøker på nett), blant annet pakken `ggplot2` (det kan være forvirrende at pakken heter `ggplot2`, mens funksjonen heter `ggplot()`). Jeg foretrekker å lage plot med `ggplot()` funksjonen fra ggplot2 over `plot()` fra *base* R. Grunnen til dette er først og fremst fordi jeg liker syntaksen bedre, og at jeg har brukt `ggplot()` mest, det er ingenting galt med `plot()`. Dersom jeg  bare vil ha et svært enkelt scatterplot bruker jeg ofte `plot()`. Med det sagt, her er de nødvendige elementene man må spesifisere i syntaksen til `ggplot()`:
+
+```{r, eval=F}
+ggplot(data = my_data) +
+  geom_point(aes(x = x-axis_var_name, y = y-axis_var_name, col=my.var3)))
+```
+
+Vi starter med å fortelle ggplot hvilket datasett vi bruker. Deretter bruker vi en `geom_...()`-funksjon, her `geom_point()` (det er en lang rekke alternativer), for å fortelle hvordan vi vil plotte data. Her har vi valgt å plotte data som punkter, dvs. lage et scatterplot. Vi må også spesifisere hvilke variabler fra datasettet vi vil plotte, etter `aes()` for aesthetics. Vi må minst velge å plotte en akse, som regel vil vi plotte minst to akser. Vi kan også velge å legge til argumentet `col` for å visualisere enda en variabel. Dette argumentet gir ulike farger til observasjonen avhengig av verdien de har på variabelen vi spesifiserte. Det finnes også alternative måter å visualisere mer enn to variabler, som f.eks. `size = my.var3`, eller `shape = my.var3`.
+
+Vi legger til nye argumer til plottet vårt med `+`. Etter at vi har spesifisert datasett, geom og aesthetics må vi ikke legge til flere argumenter, men det er mulig å legge til flere elementer (som en regresjonslinje) eller finjustere plottet i det uendelige (f.eks. angi fargekoder for alle farger i plottet manuelt). Man får imidlertid som regel et godt resultat med et par linjer kode. Vi skal se raskt på 3 `geom()`
+
+1. `geom_histogram` - histogram (et godt alternativ kan være å bruke `geom_bar()`)
+2. `geom_boxplot()` - box-whiskers plot
+3. `geom_point()`   - scatterplot
+
+```{r eval=FALSE}
+library(ggplot2)
+ggplot(aid) + geom_histogram(aes(x = elrgdpg), bins = 50) # lager histogram
+```
+
+Med et boxplot får du raskt oversikt over fordelingen til variabler innenfor ulike grupper.
+
+
+```{r, eval = F}
+ggplot(aid) + geom_boxplot(aes(x = as_factor(region), y = elraid))
+```
+
+**Oppgave:** Lag boxplot som viser fordelingen til variablene `policy` og `elrgpdg` innenfor hver region.
+
+Her viser jeg fordelingen til vekst (`elrgdpg`) opp mot bistand (`elraid`) og makroøkonomisk politikk (`policy`) ved hjelp av et spredningsplot (scatterplot)
+
+```{r}
+ggplot(aid) + geom_point(aes(x = elraid, y = elrgdpg, col = policy))
+```
+
+
+
+
+
+Her er et overlesset eksempel på et scatterplot (poenget er å illustrere muligheter, ikke å lage et pent plot):
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(aid) +
+  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(sub_saharan_africa))) +
+  geom_smooth(aes(x=aid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
+  ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
+  xlab("aid") +
+  ylab("growth") +
+  theme_minimal()
+```
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/sem1gg3.png")
+```
+
+
+**Oppgave:** Forsøk å legge til `facet_wrap(~sub_saharan_africa)`, hva gjør dette argumentet? Hvordan kan det være nyttig for å plotte samspill? Forsøk å fjerne ett og ett argument i plottet over for å se hva argumentene gjør.
+
+Dersom du lager et plot du er fornøyd med, kan du lagre det med `ggsave()`, som lagrer ditt siste ggplot.
+```{r, eval=FALSE}
+ggsave("testplot.png", width = 8, height = 5) # lagrer ditt siste ggplot i det formatet du vil på working directory
+```
+Mulighetene er endeløse, jeg har bare vist dere noen få muligheter her. Ved hjelp av [cheatsheet til ggplot2](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) og [annen dokumentasjon](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/) som dere kan google dere frem til, burde dere finne metoder for å lage akkurat det plottet dere ønsker.
+
+
+## Takk for i dag!
