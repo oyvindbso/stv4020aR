@@ -214,7 +214,7 @@ R kan evaluere logiske utsagn, og bedømme om de er `TRUE` eller `FALSE`:
 
 | Operator      | Betydning     |
 | ------------- |:-------------:|
-| `==` | er lik                 |                 
+| `==` | er lik                 |
 | `<`  | mindre enn             |
 | `>`  | større enn             |
 | `<=` | mindre eller lik       |
@@ -257,7 +257,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages --------------------------------- tidyverse 1.2.1 --
+## -- Attaching packages -------------------------------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
@@ -276,7 +276,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Conflicts ------------------------------------ tidyverse_conflicts() --
+## -- Conflicts ----------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -687,6 +687,13 @@ slice(aid, 1:5) # Velg rader basert på posisjon i datasettet
 aid %>% # datasettargument, R forstår at vi på de neste linjene referer til observasjoner og variabler fra "aid"
   select(country, periodstart, periodend, elraid, elrgdpg) %>% # binder sammen funksjoner fra dplyr med %>%
   filter(country == "KEN") # Dermed kan vi velge på både variabler og verdiene til observasjoner samtidig
+
+# Dersom du vil velge mange variabel-verdier samtidig, kan du bruke %in%:
+
+aid %>% # datasettargument, R forstår at vi på de neste linjene referer til observasjoner og variabler fra "aid"
+  select(country, periodstart, periodend, elraid, elrgdpg) %>% # binder sammen funksjoner fra dplyr med %>%
+  filter(country %in% c("KEN", "ETH", "MOZ", "AGO", "RWA"))
+  # %in%: velg alle observasjoner som har en av verdiene i denne vektoren.
 ```
 
 Funksjonene `select()`, `filter()` og `slice()` kommer fra pakken `dplyr`. Denne pakken er en del av tidyverse, og ble derfor lastet inn med `library(tidyverse)`. Det fungerer også med `library(dplyr)`.
@@ -869,7 +876,7 @@ La oss opprette x, y og z på nytt:
 
 
 ```r
-x <- 1:5  
+x <- 1:5
 y <- c(1,2,3,4,5)
 z <- c(1,2,"tre","fire",5)
 ```

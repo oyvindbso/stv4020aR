@@ -206,7 +206,7 @@ names(aid)
 
 Disse funksjonene er fine for å få en rask oversikt over data
 
-```{r}
+```{r, include = F}
 str(aid) # gir deg klasse for alle variabler samt noe informasjon om verdier
 class(aid) # klasse aid datasettet
 class(aid$elrgdpg) # gir deg klasse for en variabel
@@ -294,7 +294,7 @@ En annen type enkel omkoding består i å endre klassen til en variabel. Dette k
 
 For å endre klassen til en variabel, bruk en funksjon av typen `as.klassenavn(data$variabel)` - her er noen eksempler på hvordan disse funksjonene brukes:
 
-```{r}
+```{r, include = F}
 library(tidyverse)
 as_factor(aid$period)
 as.numeric(as_factor(aid$country)) # Denne fungerer bare hvis variabelen inneholder noe som kan leses som tall, legg merke til hva den gjør med faktor-variabler!
@@ -409,7 +409,7 @@ cor(, use = "pairwise.complete.obs")  # korrelasjonsmatrise basert på numeriske
 ```
 
 
-En av variablene i datasettet vårt, `aid$country`, er ikke kontinuerlig. Ved å ta `str(aid)`, ser vi at denne variabelen er kodet som en faktor. Dette innebærer at den vil behandles som en nominalnivå-variabel i statistisk analyse. For kategoriske variabler, er tabeller nyttig:
+To av variablene i datasettet vårt, `aid$country` og `code`, er ikke kontinuerlig. Ved å ta `str(aid)`, ser vi at denne variabelen er kodet som en faktor. Dette innebærer at den vil behandles som en nominalnivå-variabel i statistisk analyse. For kategoriske variabler, er tabeller nyttig:
 
 ```{r}
 table(aid$country)      # frekvenstabell
@@ -425,6 +425,9 @@ table(aid$elrgdpg>median(aid$elrgdpg,na.rm=T), aid$country)
 De fleste land har vekst både over og under medianen. Dersom det hadde vært svært lite variasjon i veksten til land, ville kontrollvariabler for land kunne ha fjernet effekten av de fleste variabler - vi ville ikke hatt veldig godt datagrunnlag for å si så mye om effekten av bistand i samspill med policy (jeg sier ikke dermed nødvendigvis at dataene er gode generelt).
 
 
+**Oppgave:** Lag et nytt datasett ved hjelp av `group_by` og `summarise()`, der du oppretter variabler som viser korrelasjon (Pearsons r) mellom `elraid`, og `elrgdpg`, `elraid` og `policy` og `elrgdpg` separat for hver region. Er det store forskjeller i korrelasjonene mellom regionene? Lag deretter to nye variabler, `good_policy` og `good_policy2`, slik at observasjoner som har positive verdier på henholdsvis variablene `policy` og `policy2` får verdien 1, mens andre observasjoner får verdien 0. Bruk disse nye variablene som grupperingsvariabler, og lag et nytt datasett der du inkluderer en variabel som beregner korrelasjon mellom `elraid` og `elrpolicy` for hver gruppe.
+
+
 ## Plotte-funksjonen `ggplot` <a name="ggplot"></a>
 
 
@@ -437,15 +440,26 @@ ggplot(data = my_data) +
 
 Vi starter med å fortelle ggplot hvilket datasett vi bruker. Deretter bruker vi en `geom_...()`-funksjon, her `geom_point()` (det er en lang rekke alternativer), for å fortelle hvordan vi vil plotte data. Her har vi valgt å plotte data som punkter, dvs. lage et scatterplot. Vi må også spesifisere hvilke variabler fra datasettet vi vil plotte, etter `aes()` for aesthetics. Vi må minst velge å plotte en akse, som regel vil vi plotte minst to akser. Vi kan også velge å legge til argumentet `col` for å visualisere enda en variabel. Dette argumentet gir ulike farger til observasjonen avhengig av verdien de har på variabelen vi spesifiserte. Det finnes også alternative måter å visualisere mer enn to variabler, som f.eks. `size = my.var3`, eller `shape = my.var3`.
 
-Vi legger til nye argumer til plottet vårt med `+`. Etter at vi har spesifisert datasett, geom og aesthetics må vi ikke legge til flere argumenter, men det er mulig å legge til flere elementer (som en regresjonslinje) eller finjustere plottet i det uendelige (f.eks. angi fargekoder for alle farger i plottet manuelt). Man får imidlertid som regel et godt resultat med et par linjer kode. Vi skal se raskt på 3 `geom()`
+Vi legger til nye argumer til plottet vårt med `+`. Etter at vi har spesifisert datasett, geom og aesthetics må vi ikke legge til flere argumenter, men det er mulig å legge til flere elementer (som en regresjonslinje) eller finjustere plottet i det uendelige (f.eks. angi fargekoder for alle farger i plottet manuelt). Man får imidlertid som regel et godt resultat med et par linjer kode. Vi skal se raskt på 4 `geom()`
 
 1. `geom_histogram` - histogram (et godt alternativ kan være å bruke `geom_bar()`)
 2. `geom_boxplot()` - box-whiskers plot
-3. `geom_point()`   - scatterplot
+3. `geom_line()`    - linje, fin for tidsserier
+4. `geom_point()`   - scatterplot
+
 
 ```{r eval=FALSE}
 library(ggplot2)
 ggplot(aid) + geom_histogram(aes(x = elrgdpg), bins = 50) # lager histogram
+```
+
+```{r include=FALSE}
+library(ggplot2)
+ggplot(aid) + geom_histogram(aes(x = elrgdpg), bins = 50) # lager histogram
+ggsave("../bilder/seminar1_1.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_1.png")
 ```
 
 Med et boxplot får du raskt oversikt over fordelingen til variabler innenfor ulike grupper.
@@ -454,16 +468,74 @@ Med et boxplot får du raskt oversikt over fordelingen til variabler innenfor ul
 ```{r, eval = F}
 ggplot(aid) + geom_boxplot(aes(x = as_factor(region), y = elraid))
 ```
-
+```{r include=FALSE}
+library(ggplot2)
+ggplot(aid) + geom_boxplot(aes(x = as_factor(region), y = elraid)) # lager histogram
+ggsave("../bilder/seminar1_2.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_2.png")
+```
 **Oppgave:** Lag boxplot som viser fordelingen til variablene `policy` og `elrgpdg` innenfor hver region.
 
-Her viser jeg fordelingen til vekst (`elrgdpg`) opp mot bistand (`elraid`) og makroøkonomisk politikk (`policy`) ved hjelp av et spredningsplot (scatterplot)
+
+Med `geom_line()` kan vi plotte tidsserier:
+
+```{r}
+ggplot(aid) + geom_line(aes(x = period, y = elrgdpg, col = country))
+```
+```{r include=FALSE}
+library(ggplot2)
+ggplot(aid) + geom_line(aes(x = period, y = elrgdpg, col = country)) # lager histogram
+ggsave("../bilder/seminar1_3.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_3.png")
+```
+
+Et problem med dette plottet, er at det blir vanskelig å se veksten til forskjellige land klart, det er for mye informasjon. Dersom vi har lyst til å sammenligne et par land om gangen, kan vi bruke `%in%` til å indeksere. Denne operatorene lar deg velge alt innholdet i en vektor - f.eks. variabelnavn eller ulike verdier på en variabel. Her viser jeg hvordan du kan kombinere `dplyr`, `%in%` og `ggplot()` for å sammenligne et par land om gangen:
+
+```{r, eval=F}
+# Hvilke land finnes i Sub-Saharan Africa? Velger land kun herfra:
+aid %>% filter(region == "Sub-Saharan Africa") %>%
+ggplot() + geom_line(aes(x = period, y = elrgdpg, col = country))
+
+# Fortsatt litt mye informasjon til å være enkelt å lese - La oss sammenligne 5 land med %in%
+```
+```{r include=FALSE}
+library(ggplot2)
+aid %>% filter(region == "Sub-Saharan Africa") %>%
+ggplot() + geom_line(aes(x = period, y = elrgdpg, col = country))# lager histogram
+ggsave("../bilder/seminar1_4.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_4.png")
+```
+
+```{r, eval = F}
+# Velger land med %in%, fint for mindre sammenligninger
+aid %>% filter(country %in% c("KEN", "ETH", "MOZ", "AGO", "RWA")) %>%
+ggplot() + geom_line(aes(x = period, y = elrgdpg, col = country))
+```
+
+```{r include=FALSE}
+library(ggplot2)
+aid %>% filter(country %in% c("KEN", "ETH", "MOZ", "AGO", "RWA")) %>%
+ggplot() + geom_line(aes(x = period, y = elrgdpg, col = country))
+ggsave("../bilder/seminar1_5.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_5.png")
+```
+
+I tillegg til indekseringsmetodene for datasett fra introduksjonsforelesningen, er det nyttig å lære seg `%in%`.
+
+
+Her viser jeg fordelingen til vekst (`elrgdpg`) opp mot bistand (`elraid`) og makroøkonomisk politikk (`policy`) ved hjelp av et spredningsplot (scatterplot). Sammenlign gjerne med korrelasjonsmatrisen du lagde mellom disse tre variablene.
 
 ```{r}
 ggplot(aid) + geom_point(aes(x = elraid, y = elrgdpg, col = policy))
 ```
-
-
 
 
 
@@ -472,7 +544,7 @@ Her er et overlesset eksempel på et scatterplot (poenget er å illustrere mulig
 ```{r, eval=FALSE}
 library(ggplot2)
 ggplot(aid) +
-  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(sub_saharan_africa))) +
+  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(region))) +
   geom_smooth(aes(x=aid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +
@@ -480,12 +552,24 @@ ggplot(aid) +
   theme_minimal()
 ```
 
-```{r echo = FALSE}
-knitr::include_graphics("../pics/sem1gg3.png")
+```{r include=FALSE}
+library(ggplot2)
+ggplot(aid) +
+  geom_point(aes(x=aid, y=elrgdpg, col=policy, shape=as_factor(region))) +
+  geom_smooth(aes(x=aid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
+  ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
+  xlab("aid") +
+  ylab("growth") +
+  theme_minimal()
+ggsave("../bilder/seminar1_6.png")
+```
+```{r, echo = F}
+knitr::include_graphics("../bilder/seminar1_6.png")
 ```
 
 
-**Oppgave:** Forsøk å legge til `facet_wrap(~sub_saharan_africa)`, hva gjør dette argumentet? Hvordan kan det være nyttig for å plotte samspill? Forsøk å fjerne ett og ett argument i plottet over for å se hva argumentene gjør.
+
+**Oppgave:** Forsøk å legge til `facet_wrap(~region)`, hva gjør dette argumentet? Hvordan kan det være nyttig for å plotte samspill? Forsøk å fjerne ett og ett argument i plottet over for å se hva argumentene gjør.
 
 Dersom du lager et plot du er fornøyd med, kan du lagre det med `ggsave()`, som lagrer ditt siste ggplot.
 ```{r, eval=FALSE}
