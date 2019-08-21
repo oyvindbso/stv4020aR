@@ -1,0 +1,336 @@
+---
+title: "Andre R-Seminar"
+author: "Erlend Langørgen"
+date: "15 august 2019"
+output:
+  html_document:
+    keep_md: TRUE
+    self_contained: no
+---
+
+
+## Introduksjon
+
+
+## Organisering - prosjekter og script <a name="Rscript"></a>
+
+### Kommentering
+Som dere kanskje har lagt merke til, kan vi bruke `#` til å kommentere kode i R.
+Bruk kommentarer flittig, det hjelper fremtids-deg og andre å lese og forstå koden din.
+
+I R-studio kan vi også lage seksjoner av kode, som man kan folde sammen. For å prøve dette, skriv `#### tekst ####` (flere `#` går også). På venstre side av tekstlinjen vil dere se en pil, skriv en setning kode under pilen og trykk på den.
+Sammen med meningsfulle overskrifter, et innebygget søkesystem og godt kommentert kode, hjelper dette folde-systemet deg til å finne rask frem i R-scriptet ditt.
+
+Jeg anbefaler at dere starter R script med en overskrift, samt en kort beskrivelse av R scriptet etter headingen deres ved hjelp av `#`.
+
+### Navngivning
+Man kan spare mye tid og krefter på å gi lure navn til objekter. Her er noen regler, for flere tips, se [Stilguide for R](https://google.github.io/styleguide/Rguide.xml):
+
+* R er sensitivt til store og små bokstaver (Forsøk å kjøre Y). Min anbefaling er derfor: bruk små bokstaver så langt det er mulig.
+* Ikke gi objekter det samme navnet som en funksjon. Hvordan kan du teste om et navn ikke er brukt på en funksjon?
+* Bruk meningsfulle, men ganske korte navn.
+* Følg et system for navngivning *slavisk*. Eksempel:
+     + Skill mellom ord i et objektnavn med `_`
+     + Skill mellom ord i et variabelnavn med `.`
+
+### Renske R.
+Dersom vi skal kjøre et nytt script, er det ofte ønskelig å fjerne objekter/arbeid fra andre script vi jobber med. Dette kan vi gjøre med `rm()`. Jeg pleier å benytte `rm(list=ls())`, som fjerner alle objekter vi har lagret i R.
+R-scriptet deres bør fungere etter denne kommandoen, dere bør ikke skrive i flere script, på en slik måte at scriptene må kjøres i en spesiell rekkefølge for å fungere (unntaket er dersom dere kjører andre R-script med `source()` fra R-scriptet dere jobber i - men da skal fortsatt scriptet ditt fungere etter `rm(list = ls())`).
+
+### Working directory
+
+Working directory er den mappen  R forventer å hente og lagre filer i (mappe som i `Mine dokumenter`). Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være vår working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er en demonstrasjon av `setwd()`, som fungerer litt ulikt på windows og mac/linux:
+```{r, eval=F}
+setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra") # For windows
+setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
+```
+
+For å slippe å knote med `working directory` og `setwd()` anbefaler jeg imidlertid at dere bruker prosjekter. Prosjekter kan åpnes via `File`-menyen øverst til venstre i Rstudio, og er knyttet til en bestemt mappe på datamaskinen din. Når du åpner et prosjekt vil dermed `working directory` bli satt til prosjekt-mappen automatisk. Dersom du lagrer alle filer til hjemmeoppgaven i en prosjektmappe, og alle filer til seminarene i en annen prosjektmappe, kan du også enkelt bytte mellom prosjektene via `File`. For å opprette et nytt prosjekt, trykk på `File` og deretter `New project` øverst til venstre i Rstudio. Velg deretter om du du vil opprette en ny mappe på datamaskinen din, eller om du vil knytte prosjektet til en eksisterende mappe. Prosjekter har også flere andre fordeler som dere kan utforske senere, men dere vil ha glede av prosjekter allerede nå pga. `working directory`. Jeg anbefaler derfor at dere alltid jobber fra R-prosjekt (det er ikke farlig å ha mange prosjekter), og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) i prosjektmappen.
+
+**Oppgave:** Lag et R-prosjekt som heter *R-seminar*, og lagre en fil - for eksempel et R-script - i prosjekt-mappen.
+
+Når vi har bestemt working directory, kan vi navigere til andre mapper med utgangspunkt i denne mappen. Vi kan for eksempel sjekke hvilke filer som finnes i mappen som er working directory, og i mappen på nivået under med:
+```{r, eval=F}
+list.files()      # Filer i mappen vi er i
+```
+
+
+
+### Pakker
+R er *open-source* software, som gjør det mulig for brukere å lage sine egne tilleggspakker til R. Det finnes over **10 000** slike pakker, mange av dem inneholder mange funksjoner som løser spesifikke oppgaver mer effektivt enn grunninstallasjonen av R. Vi installerer nye pakker med `install.packages("pakkenavn")`. For å bruke installerte pakker, må vi laste inn pakkene med `library(pakkenavn)`. Dersom dere skal dele kode, sett `#` foran `install.packages()`, slik at koden ikke kjøres, det er kjedelig å sette i gang et script som installerer 10 pakker man allerede har på nytt. Inkluder imidlertid `library`. Et godt tips er å skrive hvilken versjon av en pakke du bruker i en kommentar etter `library()`, da pakker noen ganger endres slik at koden din ikke fungerer. Det er mulig å laste inn historiske versjoner av pakker, dermed bidrar dette også til å sikre reproduserbarhet. I prosjekter kan du velge å bruke packrat, som sørger for at du bruker den samme versjonen av en pakke hver gang du jobber i et prosjekt Her er et eksempel på installasjon og innlasting av pakker:
+```{r, message=FALSE, warning=FALSE}
+#### Kjør denne koden dersom du ikke har installert pakkene:
+# install.packages(tidyverse)
+# install.packages(moments)
+# install.packages(stargazer)
+# install.packages(xtable)
+# install.packages(texreg)
+
+#### Laster inn pakker:
+library(tidyverse)
+library(moments)
+library(stargazer)
+library(xtable)
+library(texreg)
+```
+
+
+Vi installerer og laster inn alle pakker vi trenger etter `rm(list = ls())`. Etter at vi har lastet inn pakkene vi trenger, er vi ferdig med å skrive preamble til scriptet, resten av scriptet deler vi inn i seksjoner ved hjelp av `#### overskrift ####`. Dere bør nå ha en preamble som ser omtrent slik ut:
+```{r, eval=F}
+#################################
+#### R seminar 2           ######
+#################################
+
+## I dette seminaret skal vi gå gjennom:
+## 1. organisering av R-script
+## 2. Import av data
+## 3. Omkoding
+## 4. Merge, subset, aggregate
+## 5. Mer om funksjoner
+## 6. Mer regresjonsanalyse
+## 7. Output fra R
+
+## Disse temaene kan være særlig nyttig til arbeid med hjemmeoppgave med R
+
+## Fjerner objekter fra R:
+rm(list=ls())
+
+## Setter working directory - trengs ikke dersom du jobber fra et prosjekt
+#setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")
+
+## Installerer pakker (fjerne '#' og kjør dersom en pakke ikke er installert)
+# install.packages(ggplot2)
+# install.packages(dplyr)
+# install.packages(moments)
+
+## Laster inn pakker:
+library(ggplot2)
+library(dplyr)
+library(moments)
+#### Overskrift 1 #####
+## Kort om hva jeg skal gjøre/produsere i seksjonen
+2+2 # her starter jeg å kode
+```
+
+Denne organiseringen hjelper deg og andre med å finne frem i scriptet ditt, samt å oppdage feil.
+
+
+### Flere tips:
+1. Start en ny seksjon med en kommentar der du skriver hva du skal produsere i seksjonen, forsøk å bryte oppgaven ned i så mange små steg som du klarer. Dette gjør det ofte lettere å finne en fremgangsmåte som fungerer.
+2. Test at ny kode fungerer hele tiden, fjern den koden som ikke trengs til å løse oppgavene du vil løse med scriptet ditt (skriv gjerne i et eget R-script du bruker som kladdeark dersom du famler i blinde). Forsøk å kjøre gjennom større segmenter av koden en gang i blant.
+
+
+
+## Lineær regresjon (OLS) <a name="ols"></a>
+
+
+### Syntaks
+
+For å kjøre en lineær regresjon i R, bruker vi funksjonen `lm()`, som har følgende syntaks:
+```{r, eval = F}
+lm(avhengig.variabel ~ uavhengig.variabel, data=mitt_datasett)
+# på mac får du ~ med alt + k + space
+```
+
+La oss se på et eksempel med `aid` datasettet vi har brukt så langt:
+```{r}
+aid <- read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
+
+# Oppretter variablene policy og region på nytt, samme kode som i seminar 1:
+aid <- aid %>% # samme kode som over, men nå overskriver jeg data slik at variabelen legges til - gjør dette etter at du har testet at koden fungerte
+  mutate(policy = elrsacw + elrinfl + elrbb,
+         policy2 = elrsacw*elrinfl*elrbb,
+         region = ifelse(elrssa == 1, "Sub-Saharan Africa",
+                               ifelse(elrcentam == 1, "Central America",
+                               ifelse(elreasia == 1, "East Asia", "Other"))))
+
+
+
+m1 <- lm(elrgdpg ~ elraid, data = aid) # lagrer m1 om objekt
+summary(m1) # ser på resultatene med summary()
+class(m1) # Legg merke til at vi har et objekt av en ny klasse!
+str(m1) # Gir oss informasjon om hva objektet inneholder.
+```
+
+### Multivariat regresjon
+
+Vi legger inn flere uavhengige variabler med `+`.
+
+
+```{r}
+summary(m2 <- lm(elrgdpg ~ elraid + policy + region, data = aid))
+# Her kombinerer vi summary() og opprettelse av modellobjekt på samme linje
+```
+
+### Samspill
+
+Vi legger inn samspill ved å sett `*` mellom to variabler. De individuelle regresjonskoeffisientene til variablene vi spesifisere samspill mellom blir automatisk lagt til.
+
+
+```{r}
+summary(m3 <- lm(elrgdpg ~ elraid*policy + region, data = aid))
+```
+
+### Andregradsledd og andre omkodinger
+
+Vi kan legge inn andregradsledd eller andre omkodinger av variabler i regresjonsligningene våre.
+Andregradsledd legger vi inn med `I(uavh.var^2)`. Under har jeg lagt inn en `log()` omkoding, en `as.factor()` omkoding og et andregradsledd. Merk at dere må legge inn førstegradsleddet separat når dere legger inn andregradsledd. Dersom en variabeltransformasjon krever mer enn en enkel funksjon, er det fint å opprette en ny variabel i datasettet.
+
+
+
+
+```{r}
+summary(m4 <- lm(elrgdpg ~ log(elrgdpg) + elricrge + I(elricrge^2) + region + elraid*policy +  as_factor(period), data = aid, na.action = "na.exclude"))
+```
+
+
+**Oppgave:** hva blir den forventede effekten av bistand for medianverdien til bistand, og for maksimumsverdien til bistand, i henhold til regresjonen over?
+
+
+
+## Finne og kombinere data fra flere kilder
+
+Ofte vil ikke alle kontrollvariabler/variabler du er teoretisk interessert i være å finne i datasettet du starter å jobbe i, men være tilgjengelig i et annet datasett. Da kan du bruke en `join_` funksjon for å kombinere data (eller `merge()` fra base-R) fra flere forskjellige datasett. Dersom du behersker denne ferdigheten, åpner det seg mange flere muligheter i hjemmeoppgaven/dataanalysen din.
+
+For å være i stand til å anvende denne ferdigheten effektivt er det imidlertid også en stor fordel å ha kjennskap til mulige datasett på forhånd, samt trene seg til å lete etter nye datasett på egenhånd.
+
+Her er noen aktuelle datakilder:
+
+* [Harvard Dataverse](https://dataverse.harvard.edu/) - sjekk også den medfølgende [R-pakken](https://cran.r-project.org/web/packages/dataverse/dataverse.pdf)
+* [NSD](https://nsd.no/data-overview.html)
+* * [Oversikt på ISVs hjemmesider](https://www.sv.uio.no/isv/tjenester/kunnskap/datasett/) - disse kan det være verdt å sjekke ut
+* [V-Dem](https://www.v-dem.net/en/) - gode data om demokratiske institusjoner
+* [Åpne offentlige data fra Norge](https://data.norge.no/)
+* [Quality of government](https://qog.pol.gu.se/data)
+
+Denne listen er på ingen måte komplett - for å finne relevante data kan det være lurt å google - og å se hva slags data artikler som skriver om lignende tema/observasjoner har brukt.
+
+For å se om det er mulig å kombinere data fra ulike kilder, er det viktig å tenke gjennom hvilke(n) variabler du vil bruke som nøkkel for å knytte sammen informasjon fra de to datasettene. Dette er aller lettest dersom begge datasett inneholder en felles, spesialdesignet `nøkkel-variabel` - [her](http://www.correlatesofwar.org/data-sets/cow-country-codes) er et eksempel på en slik variabel du kan finne i konflikt-data. Deretter er det viktig å tenke gjennom datastruktur, og hvilke konsekvenser dette har for hvordan du kan kombinere informasjon fra de to datasettene dine.
+
+Når du har bestemt deg for nøkkelvariabler og tenkt gjennom datastruktur kan du benytte en `join` funksjon. Opprett et nytt datasett, da er det ikke så farlig om koden ikke fungerer. Her er syntaks for den vanligste `join` funksjonen, `left_join()`. For mer, se kap. 13 i **R for Data Science**.
+
+```{r, eval =F}
+nytt_datasett <- left_join(
+  gammelt_datasett, # alle observasjoner herfra beholdes
+  ekstra_datasett, # variabler fra dette datasettet legges til gammelt_datasett
+  by = c("nøkkelvar_gammelt_datasett", "nøkkelvar_ekstradatasett") # navn på nøkkelvariabler i de to datasettene
+)
+# Det letteste er å sørge for at du har nøkkelvariabler med samme navn i begge datasett, du kan opprette nye variabler i et av datasettene dine for å sørge for at navn matcher
+```
+I neste seksjon viser jeg et løsningsforslag til første del av oppgaven fra forrige seminar. Der får du se mer bruk av `left_join`, og jakt etter datasett.
+
+## Løsningsforslag oppgave til seminar 1
+
+> Finn et datasett som inneholder informasjon om borgerkrig. Inkluder deretter informasjon om borgerkriger i en variabel i `aid` datasettet. Tips: det kan hende du vil være tjent med å aggregere borgerkrigsdata med `group_by()` og `summarise()` før du kombinerer data med en `join_` funksjon. Tenk gjennom forskjellige måter du kan operasjonalisere informasjonen i borgerkrigsvariabelen  en variabel i datasettet ditt. Lag en tabell eller en figur som viser verdien til borgerkrigsvariabelen for hvert observasjon i datasettet ditt. Opprett deretter et spredningsplot som viser sammenhengen mellom bistand, økonomisk vekst og borgerkrig.
+
+
+Jeg fant datasettet Armed Conlift Dataset, version 19.1 hos [Uppsala Conflict data](https://ucdp.uu.se/downloads/) etter et google-søk på conflict data, her er [kodeboken](https://ucdp.uu.se/downloads/ucdpprio/ucdp-prio-acd-191.pdf). Disse dataene dekker stort sett hele verden etter andre verdenskrig.  Last ned disse dataene selv, og legg dem i prosjektmappen din. Jeg laster dataene inn under objektnavnet `conflict` - du må fikse filstien under, fordi jeg har en egen mappe i prosjektmappen min som heter `data`
+
+```{r}
+conflict <- read_csv("../data/ucdp-prio-acd-191.csv")
+conflict
+names(conflict) # Legg merke til start_date variablene
+```
+
+Jeg må først tenke gjennom hvordan jeg kan få en felles nøkkel som lar
+meg knytte sammen informasjon om observasjonene fra de to datasettene. Jeg ser fra kodeboken at det er en variabel som heter `location` som angir den staten som er involvert i  konflikt-hendelsen. Kanskje burde vi også hatt en variabel som sa noe om i hvilke land det foregikk konflikter? Variablene `start_date`, `start_date2`,  `ep_end` og `ep_end_date` inneholder informasjon om tidspunkt. Fordi observasjonene i `aid` kan skilles fra hverandre med utgangspunkt i land og tidsperiode, tenker jeg at denne informasjonen kan brukes som nøkkel til å knytte sammen informasjon om observasjoner - dessverre kan det være nødvendig å omarbeide denne informasjonen først. La oss sjekke:
+
+
+```{r}
+# Ser på variabler med geografiks informasjon:
+table(aid$country)
+table(conflict$location)
+# Ser at  aid$country har land-forkortelser, mens conflict$location har fulle landnavn
+
+# Ser på variabler med informasjon om tid:
+table(aid$periodstart)
+table(aid$periodend)
+table(conflict$start_date)
+table(conflict$year)
+# Ser at det bare er informasjon om årstall i aid, mens conflict har informasjon om fulle datoer og år. Kan bare bruke minste felles multiplum - årstall
+```
+
+I dette tilfellet, er det litt komplisert å kombinere informasjonen fra de to datasettene:
+
+* For informasjonen om tid må vi konvertere årstall (variabelen `year`) fra datasettet `conflict` til perioder. Dette kan vi gjøre ved å opprette en ny variabel gjennom omkoding.
+* For den geografiske informasjonen, må vi oversette fra forkortelser til fulle landnavn. Dette kan trolig enklest gjøres ved å bruke enda flere datasett.
+
+Årstall til perioder i `conflict`:
+
+```{r}
+# Oppretter periode-variabel i conflict datasettet, slik at jeg er klar til å merge. Verdiene til period-variabelen går fra 1-8, jeg vil gi de samme periodene. Her bruker jeg et en egenskap ved `as.numeric` på en faktor som ofte fører til feil i kode for å gjøre dette raskt:
+table(aid$periodstart, aid$period)
+table(aid$periodend, aid$period)
+# Dersom jeg bruker 1966, 1970, 1974, 1978, 1982, 1986, 1990 og 1994 som kuttpunkt,
+# bør jeg få de samme gruppene i conflict-datasettet som i aid
+
+periodcutpoints <-  unique(c(aid$periodstart)) # henter ut ovennevnt årtsall med unique()
+# Her buker jeg funksjonen cut(), jeg kunne også brukt ifelse(), men cut() er raskere her.
+conflict$period <- cut(conflict$year, periodcutpoints)
+table(conflict$year,conflict$period)
+# Tabell viser at jeg må justere periodcutpoints for å få rett
+periodcutpoints <- periodcutpoints - 1
+table(periodcutpoints)
+periodcutpoints <- c(periodcutpoints, 1997) # legger til et siste kuttpunkt for å få med periode 8
+
+# Forsøker på nytt:
+conflict$period <- cut(conflict$year, periodcutpoints)
+table(conflict$year,conflict$period)
+conflict$period <- as.numeric(as_factor(conflict$period))
+table(conflict$year,conflict$period)
+```
+
+Landnavn til land-forkortelser i `conflict`: Dette kan vi gjøre selv manuelt, men det vil nok kreve en god del arbeid. En annen fremgangsmåte er å finne et tredje datasett, som inneholder både landnavn og forkortelser - en del datasett har dette. Et tredje alternativ, er å søke på nett etter en r-pakke som kan gjøre jobben for oss. Ved å google `convert country names to abbreviations r package` fant jeg [countrycode pakken](https://cran.r-project.org/web/packages/countrycode/countrycode.pdf). La oss forsøke den først:
+```{r}
+# Tester pakken countrycode:
+#install.packages("countrycode")
+library(countrycode)
+
+?countrycode()
+# Argumentene origin og destination må spesifiseres
+?codelist # country.name og iso3c/iso.name.en ser lovende ut
+
+countrycode(conflict$location, origin = "country.name", destination = "iso3c")
+# ser at dette fører til en del missing - kan rettes manuelt
+?codelist
+# Ser imidlertid at jeg har en annen variabel, gwno_a som kan fungere bedre:
+countrycode(conflict$gwno_a, origin = "gwn", destination = "iso3c")
+# ser ut til å fungere bra! Oppretter ny variabel
+conflict$country <- countrycode(conflict$gwno_a, origin = "gwn", destination = "iso3c")
+table(is.na(conflict$country)) # kan se om det er mulig å fikse missing manuelt, men er ikke så mange observasjoner
+```
+
+Da har vi forhåpentligvis variabler som kan fungere som nøkler i begge datasettene. Neste steg er å endre på datastrukturen i datasettet `conflict`, slik at den blir lik som i `aid`. For å få til dette, må vi endre observasjonene i `conflict` til land-perioder. Dette kan vi gjøre med `group_by` og `summarise()`. På dette stadiet, må vi tenke datastruktur, og gjøre metodologiske valg om hvordan vi skal operasjonalisere informasjonen om konflikter. Under viser jeg to0 muligheter, i hjemmeoppgaven er dette et punkt der jeg vil anbefale at du tenker grundig gjennom de metodologiske implikasjonene av valgene du tar - tenk gjennom hva som er best og skriv koden din etterpå - ikke fall i fellen kode først, metode etterpå.
+
+```{r}
+agg_con <- conflict %>%
+  filter(is.na(period)==F) %>% # fjerner data som ikke finnes i aid
+  group_by(country, period) %>%
+  summarise(conflict_n = n(), # teller antall konflikter i perioden i ett land
+            conflict_years = length(unique(year))) # teller antall år landet var i konflikt i perioden
+
+# Her kunne jeg skilt mellom ulike typer konflikter (se kodebok), men lar det være.
+```
+
+Nå som data fra `conflict` er i samme format som i `aid`, er vi klare til å kombinere informasjonen med `left_join`:
+
+```{r}
+# husk: ?left_join for å forstå funksjonen
+aid2 <- left_join(aid, agg_con)
+# Sjekker missing:
+table(is.na(aid2$conflict_n))
+table(is.na(aid2$conflict_years))
+# Antar at missing har verdi 0 på disse variablene i følgende omkoding:
+aid2 <- aid2 %>%
+  mutate(c_years = ifelse(is.na(conflict_years)==T, 0 , conflict_years),
+         c_n = ifelse(is.na(conflict_n)==T, 0 , conflict_n))
+names(aid2)
+
+# Lager en korrelasjonsmatrise:
+aid2 %>%
+  select(c_years, c_n, elrgdpg, elraid, policy) %>%
+  cor(, use = "pairwise.complete.obs")
+
+```
+
+**Merk:** Dette er ment som en illustrasjon av prosessen beskrevet i seminar 1 - ikke en perfekt løsning. Jeg har tatt flere snarveier, som gjør at løsningen min ikke er ideell. Dersom du legger nok tid ned i å fingranske løsningsforslaget vil du nok finne noen av disse. Når du skriver din egen hjemmeoppgave, vær nøye med å forstå hva som skjer i hvert eneste steg i koden din. Les kodebok - skaff deg forståelse av verdier i datasett, og sjekk hva som skjer etter hvert steg i koden din.

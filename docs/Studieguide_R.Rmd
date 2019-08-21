@@ -22,8 +22,6 @@ Det finnes mange andre gode introduksjonsbøker til R, så hvorfor akkurat *R fo
 
 
 
-
-
 ## Hvordan bruke R for Data Science
 
 
@@ -58,8 +56,8 @@ For å sikre deg at du har forstått kapitlene du jobber med er det fint å løs
 I seminarene kommer vi til å dekke noen momenter fra **R or Data Science**, men vi kommer også til å bruke mye tid på ferdigheter du ikke finner i denne boken. Her er likevel en røff oversikt over  sammenhengen mellom undervisning og Kapitler i **R for Data Science**, slik at du kan ta en ekstra titt i **R for Data Science** før eller etter seminar for ekstra læringseffekt (denne oversikten kan komme til å endres):
 
 Introduksjonsforelesning: Kap. 1-4, litt kapittel 10-12 og litt kapittel 20 (siste del om variabeltyper)
-Seminar 1: Kap. 5 - dplyr, kap. 11 import av data og kap. 8 - organisering 
-Seminar 2: Kap. 13 (join), Kap. 3 + 7 - ggplot()
+Seminar 1: Kap. 5 - dplyr, kap. 11 import av data og Kap. 3 + 7 - ggplot()  
+Seminar 2: Kap. 13 (join) og kap. 8 - organisering
 Seminar 3: Kap. 12 (den delen som handler om missing) og en smakebit på kap. 16 (datoer) 
 Seminar 4: Smakebit på kap. 14-15 (tekst og faktor)
 Seminar 5: Noen momenter fra kap. 27-29 (lage fin output)
