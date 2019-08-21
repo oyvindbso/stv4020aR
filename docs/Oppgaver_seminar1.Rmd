@@ -1,0 +1,17 @@
+---
+title: "Oppgaver først R-Seminar"
+author: "Erlend Langørgen"
+date: "15 august 2019"
+output:
+  html_document:
+    keep_md: TRUE
+    self_contained: no
+---
+
+### Oppgave 1:
+
+Finn et datasett som inneholder informasjon om borgerkrig. Inkluder deretter informasjon om borgerkriger i en variabel i `aid` datasettet. Tips: det kan hende du vil være tjent med å aggregere borgerkrigsdata med `group_by()` og `summarise()` før du kombinerer data med en `join_` funksjon. Tenk gjennom forskjellige måter du kan operasjonalisere informasjonen i borgerkrigsvariabelen  en variabel i datasettet ditt. Lag en tabell eller en figur som viser verdien til borgerkrigsvariabelen for hvert observasjon i datasettet ditt. Opprett deretter et spredningsplot som viser sammenhengen mellom bistand, økonomisk vekst og borgerkrig. Lag til slutt en korrelasjonsmatrise mellom policy, bistand, borgerkrig og økonomisk vekst. Hva finner du?
+
+### Oppgave 2
+
+Finn data som lar deg utvide analysen til Burnside og Dollar i tid. Du kan velge å bruke datasett som viser bistand og vekst hvert år, i stedet for i perioder. Du kan også velge å se på andre variabler for å måle den makroøkonomiske politikken til et land. Hva er korrelasjonen mellom bistand, policy og vekst i dette datasettet?
