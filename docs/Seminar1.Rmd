@@ -3,10 +3,10 @@ title: "Første R-Seminar"
 author: "Erlend Langørgen"
 date: "15 august 2019"
 output:
+  pdf_document: default
   html_document:
-    keep_md: TRUE
+    keep_md: yes
     self_contained: no
-
 ---
 
 
@@ -128,7 +128,7 @@ Vi skal starte med å laste inn data som et objekt i R. Funksjoner for å laste 
 library(tidyverse) # read_funksjoner fra readr i tidyvsere
 datasett <- read_filtype("filnavn.filtype")
 read_csv("filnavn.csv") # for .csv, sjekk også read.table
-load("")
+load("") # For filer i R-format.
 
 aid <-  read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
 
