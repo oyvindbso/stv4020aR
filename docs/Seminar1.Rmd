@@ -296,8 +296,8 @@ For å endre klassen til en variabel, bruk en funksjon av typen `as.klassenavn(d
 
 ```{r, include = F}
 library(tidyverse)
-as.factor()(aid$period)
-as.numeric(as.factor()(aid$country)) # Denne fungerer bare hvis variabelen inneholder noe som kan leses som tall, legg merke til hva den gjør med faktor-variabler!
+as.factor(aid$period)
+as.numeric(as.factor(aid$country)) # Denne fungerer bare hvis variabelen inneholder noe som kan leses som tall, legg merke til hva den gjør med faktor-variabler!
 # Legg merke til . i as.numeric.
 as.character(aid$elrgdpg)
 ```
@@ -466,11 +466,11 @@ Med et boxplot får du raskt oversikt over fordelingen til variabler innenfor ul
 
 
 ```{r, eval = F}
-ggplot(aid) + geom_boxplot(aes(x = as.factor()(region), y = elraid))
+ggplot(aid) + geom_boxplot(aes(x = as.factor(region), y = elraid))
 ```
 ```{r include=FALSE}
 library(ggplot2)
-ggplot(aid) + geom_boxplot(aes(x = as.factor()(region), y = elraid)) # lager histogram
+ggplot(aid) + geom_boxplot(aes(x = as.factor(region), y = elraid)) # lager histogram
 ggsave("../bilder/seminar1_2.png")
 ```
 ```{r, echo = F}
@@ -544,7 +544,7 @@ Her er et overlesset eksempel på et scatterplot (poenget er å illustrere mulig
 ```{r, eval=FALSE}
 library(ggplot2)
 ggplot(aid) +
-  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as.factor()(region))) +
+  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as.factor(region))) +
   geom_smooth(aes(x=elraid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +
@@ -554,7 +554,7 @@ ggplot(aid) +
 
 ```{r include=FALSE}
 ggplot(aid) +
-  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as.factor()(region))) +
+  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as.factor(region))) +
   geom_smooth(aes(x=elraid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +

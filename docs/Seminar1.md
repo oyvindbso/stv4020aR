@@ -4,9 +4,8 @@ author: "Erlend Langørgen"
 date: "15 august 2019"
 output:
   html_document:
-    keep_md: TRUE
+    keep_md: yes
     self_contained: no
-
 ---
 
 
@@ -144,7 +143,7 @@ Vi skal starte med å laste inn data som et objekt i R. Funksjoner for å laste 
 library(tidyverse) # read_funksjoner fra readr i tidyvsere
 datasett <- read_filtype("filnavn.filtype")
 read_csv("filnavn.csv") # for .csv, sjekk også read.table
-load("")
+load("") # For filer i R-format.
 
 aid <-  read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
 
@@ -356,19 +355,19 @@ quantile(aid$elrgdpg, na.rm = T)
 ```r
 #install.packages("moments")
 library(moments)
-skewness(aid$elrgdpg) # skjevhet - fra moments
+skewness(aid$elrgdpg, na.rm = T) # skjevhet - fra moments
 ```
 
 ```
-## [1] NA
+## [1] 0.08339805
 ```
 
 ```r
-kurtosis(aid$elrgdpg) # kurtose - fra moments
+kurtosis(aid$elrgdpg, na.rm = T) # kurtose - fra moments
 ```
 
 ```
-## [1] NA
+## [1] 27.35215
 ```
 
 ```r
@@ -825,19 +824,19 @@ var(aid$elrgdpg, na.rm = T)     # varians
 ```r
 #install.packages("moments")
 library(moments)
-skewness(aid$elrgdpg) # skjevhet - fra moments
+skewness(aid$elrgdpg, na.rm = T) # skjevhet - fra moments
 ```
 
 ```
-## [1] NA
+## [1] 0.08339805
 ```
 
 ```r
-kurtosis(aid$elrgdpg) # kurtose - fra moments
+kurtosis(aid$elrgdpg, na.rm = T) # kurtose - fra moments
 ```
 
 ```
-## [1] NA
+## [1] 27.35215
 ```
 
 ```r
@@ -1274,7 +1273,7 @@ Med et boxplot får du raskt oversikt over fordelingen til variabler innenfor ul
 
 
 ```r
-ggplot(aid) + geom_boxplot(aes(x = as_factor(region), y = elraid))
+ggplot(aid) + geom_boxplot(aes(x = as.factor(region), y = elraid))
 ```
 
 ![](../bilder/seminar1_2.png)<!-- -->
@@ -1343,7 +1342,7 @@ Her er et overlesset eksempel på et scatterplot (poenget er å illustrere mulig
 ```r
 library(ggplot2)
 ggplot(aid) +
-  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as_factor(region))) +
+  geom_point(aes(x=elraid, y=elrgdpg, col=policy, shape=as.factor(region))) +
   geom_smooth(aes(x=elraid, y=elrgdpg), method="lm") +  # merk: geom_smooth gir bivariat regresjon
   ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
   xlab("aid") +
