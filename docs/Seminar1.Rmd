@@ -485,7 +485,8 @@ ggplot(aid) + geom_line(aes(x = period, y = elrgdpg, col = country))
 ```
 ```{r include=FALSE}
 library(ggplot2)
-ggplot(aid) + geom_line(aes(x = period, y = elrgdpg, col = country)) # lager histogram
+ggplot(aid) + geom_line(aes(x = period, y = elrgdpg, col = country)) +
+  theme(legend.title = element_blank())
 ggsave("../bilder/seminar1_3.png")
 ```
 ```{r, echo = F}
