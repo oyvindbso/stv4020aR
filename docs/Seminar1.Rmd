@@ -3,7 +3,6 @@ title: "Første R-Seminar"
 author: "Erlend Langørgen"
 date: "15 august 2019"
 output:
-  pdf_document: default
   html_document:
     keep_md: yes
     self_contained: no
