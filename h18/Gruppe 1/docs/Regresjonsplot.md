@@ -8,11 +8,11 @@ output:
 ---
 
 
-## En generell tilnærming til å plotte regresjon
+## Hvordan plotte effekter fra regresjonsanalyse med ggplot
 
 ### Innhold:
 1. [Introduksjon](#Introduksjon)
-2. [Den generelle tilnærmingen, trinn for trinn](#Trinn)
+2. [En generell tilnærming, trinn for trinn](#Trinn)
 3. [Lineær regresjon med en uavhengig variabel](#ols1)
 4. [Multippel lineær regresjon](#ols2)
 5. [Multippel lineær regresjon med include](#samspill)
@@ -21,7 +21,7 @@ output:
 
 ### Introduksjon <a name="Introduksjon"></a>
 
-Dette dokumentet gir en innføring i hvordan du kan plotte regresjonslinjer, ved hjelp av `ggplot()` og `predict()`. De grunnleggende ideene for metoden, inkludert `predict()` kan overføres til alle former for regresjonsanalyse, og kan også brukes sammen med `plot()` om du liker den funksjonen bedre enn `ggplot()`. Jeg demonstrerer hvordan du kan plotte enkel ols, multivariat ols, multivariat ols med samspill og logistisk regresjon. Med litt googling burde dere finne tilsvarende metoder for andre regresjonsmodeller også. Jeg bruker pakkene **ggplot2**, **ggthemes** og **wesanderson** (de to siste til pynting av plot). For å holde koden så enkel som mulig, gjemmer jeg all kode som brukes for å pynte plottene du ser. Plottene du får ved å copy-paste koden du ser vil gi plot med samme innhold, men litt annet utseende enn plottene du ser. Dersom du vil se nærmere på hvordan jeg pynter plottene, gå inn på .Rmd filen og klikk på raw. 
+Dette dokumentet gir en innføring i hvordan du kan plotte regresjonslinjer, ved hjelp av `ggplot()` og `predict()`. De grunnleggende ideene for metoden, inkludert `predict()` kan overføres til alle former for regresjonsanalyse (bortsett fra noen få tilfeller der `preidct()` ikke fungerer), og kan også brukes sammen med `plot()` om du liker den funksjonen bedre enn `ggplot()`. Jeg demonstrerer hvordan du kan plotte enkel ols, multivariat ols, multivariat ols med samspill og logistisk regresjon. Med litt googling burde dere finne tilsvarende metoder for andre regresjonsmodeller også. Jeg bruker pakkene **ggplot2**, **ggthemes** og **wesanderson** (de to siste til pynting av plot). For å holde koden så enkel som mulig, gjemmer jeg all kode som brukes for å pynte plottene du ser. Plottene du får ved å copy-paste koden du ser vil gi plot med samme innhold, men litt annet utseende enn plottene du ser. Dersom du vil se nærmere på hvordan jeg pynter plottene, gå inn på .Rmd filen og klikk på raw. 
 
 
 
@@ -46,7 +46,7 @@ Her illustrerer jeg den generelle tilnærmingen for å plotte regresjon med data
 ## Trinn 1: Kjører regresjonsmodell
 m1 <- lm(mpg ~ wt, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt
-data_for_prediction <- data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt), .1))
+data_for_prediction <- tibble(wt = seq(min(mtcars$wt), max(mtcars$wt), .1))
 # Ved veldig få observasjoner i dette datasettet kan plottet bli kornete
 
 ## Trinn 3: Lager nytt datasett med predikerte verdier for avhengig variabel, og standardfeil:
@@ -116,7 +116,7 @@ mtcars$cyl <- as.factor(mtcars$cyl)
 ## Trinn 1: Kjører regresjonsmodell
 m2 <- lm(mpg ~ wt + am + cyl + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Koden seq(min(mtcars$wt),        max(mtcars$wt), .1) lager en kontinuerlig sekvens av verdier fra minimums- til maksimums-verdien til wt. Jeg velger medianverdien til qsec, gjennomsnittet til hp, og setter faktoren am til 1.
-data_for_prediction <- data.frame(wt   = seq(min(mtcars$wt),
+data_for_prediction <- tibble(wt   = seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),
                                   qsec = median(mtcars$qsec),
                                   hp   = mean(mtcars$hp),
@@ -159,7 +159,7 @@ mtcars$cyl <- as.factor(mtcars$cyl)
 ## Trinn 1: Kjører regresjonsmodell
 m2 <- lm(mpg ~ wt + am + cyl + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg velger å også plotte effekten av dummy-variabelen am. For å få til dette må jeg inkludere verdiene jeg bruker til å plotte wt to ganger, en gang for am = 0, og en gang for am = 1.
-data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+data_for_prediction <- tibble(wt   = rep(seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),2),
                                   qsec = median(mtcars$qsec),
                                   hp   = mean(mtcars$hp),
@@ -198,7 +198,7 @@ Muligheten til å kontrollere verdiene til kontrollvariabler, lar oss sjekke eff
 ```
 
 ```r
-data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+data_for_prediction <- tibble(wt   = rep(seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),2),
                                   qsec = min(mtcars$qsec),
                                   hp   = min(mtcars$hp),
@@ -221,7 +221,7 @@ Neste steg er plotting av samspill. Jeg snikintroduserte den sentrale endringen 
 ## Trinn 1: kjører regresjon med samspill mellom am og wt.
 m3 <- lm(mpg ~ wt*as.factor(am) + as.factor(cyl) + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg repeterer sekvensen for wt to ganger, slik at jeg kan se på effekten av variabelen for både am = 0  og am = 1. Jeg velger medianverdien til qsec, gjennomsnittet til hp. 
-data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+data_for_prediction <- tibble(wt   = rep(seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),2),
                                   qsec = median(mtcars$qsec),
                                   hp   = mean(mtcars$hp),
@@ -268,7 +268,7 @@ Ved hjelp av funksjonen `facet_wrap()` kan vi faktisk også visualisere to samsp
 m4 <- lm(mpg ~ wt*as.factor(am) + wt*as.factor(cyl) + qsec + hp, data=mtcars)
 ## Trinn 2: Lager datasett med den uavh. var wt og kontrollvariablene am (dummy), qsec og hp. Jeg er interessert i effekten av wt, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec og gjennomsnittet til hp. Jeg lar verdiene til am og cyl variere.
 
-data_for_prediction <- data.frame(wt   = rep(seq(min(mtcars$wt),
+data_for_prediction <- tibble(wt   = rep(seq(min(mtcars$wt),
                                                  max(mtcars$wt), .1),6),
                                   qsec = median(mtcars$qsec),
                                   hp   = mean(mtcars$hp),
@@ -406,7 +406,7 @@ rm(mtcars)
 ## Trinn 1: Kjører  logistisk regresjonsmodell
 gm1 <- glm(as.factor(am) ~ hp + qsec, data = mtcars, family = binomial(link = "logit"))
 ## Trinn 2: Lager datasett med den uavh. var hp og kontrollvariabelen qsec. Jeg er interessert i effekten av hp, og lar denne variabelen variere i datasettet jeg lager. Jeg velger medianverdien til qsec.
-data_for_prediction <- data.frame(hp   = seq(min(mtcars$hp),
+data_for_prediction <- tibble(hp   = seq(min(mtcars$hp),
                                                  max(mtcars$hp), .1),
                                   qsec = median(mtcars$qsec))
 
