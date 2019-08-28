@@ -4,6 +4,9 @@
 
 #### Forberedelser ####:
 
+# For å laste ned script-filen til working directory:
+download.file("https://raw.githubusercontent.com/langoergen/stv4020aR/master/scripts/Seminar1.R", dest = "sem1.R")
+
 #install.packages("tidyverse")
 library(tidyverse)
 
