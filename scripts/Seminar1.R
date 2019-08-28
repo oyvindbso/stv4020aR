@@ -2,6 +2,11 @@
 ##### Første R Seminar : en første dataanalyse #####
 ####################################################
 
+#### Forberedelser ####:
+
+#install.packages("tidyverse")
+library(tidyverse)
+
 #### Fra introduksjonsforelesningen: Indeksering ####
 
 #### Indeksering #####
