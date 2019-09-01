@@ -60,11 +60,11 @@ list.files()      # Filer i mappen vi er i
 R er *open-source* software, som gjør det mulig for brukere å lage sine egne tilleggspakker til R. Det finnes over **10 000** slike pakker, mange av dem inneholder mange funksjoner som løser spesifikke oppgaver mer effektivt enn grunninstallasjonen av R. Vi installerer nye pakker med `install.packages("pakkenavn")`. For å bruke installerte pakker, må vi laste inn pakkene med `library(pakkenavn)`. Dersom dere skal dele kode, sett `#` foran `install.packages()`, slik at koden ikke kjøres, det er kjedelig å sette i gang et script som installerer 10 pakker man allerede har på nytt. Inkluder imidlertid `library`. Et godt tips er å skrive hvilken versjon av en pakke du bruker i en kommentar etter `library()`, da pakker noen ganger endres slik at koden din ikke fungerer. Det er mulig å laste inn historiske versjoner av pakker, dermed bidrar dette også til å sikre reproduserbarhet. I prosjekter kan du velge å bruke packrat, som sørger for at du bruker den samme versjonen av en pakke hver gang du jobber i et prosjekt Her er et eksempel på installasjon og innlasting av pakker:
 ```{r, message=FALSE, warning=FALSE}
 #### Kjør denne koden dersom du ikke har installert pakkene:
-# install.packages(tidyverse)
-# install.packages(moments)
-# install.packages(stargazer)
-# install.packages(xtable)
-# install.packages(texreg)
+# install.packages("tidyverse")
+# install.packages("moments")
+#install.packages("stargazer")
+#install.packages("xtable")
+#install.packages("texreg")
 
 #### Laster inn pakker:
 library(tidyverse)
@@ -84,13 +84,9 @@ Vi installerer og laster inn alle pakker vi trenger etter `rm(list = ls())`. Ett
 ## I dette seminaret skal vi gå gjennom:
 ## 1. organisering av R-script
 ## 2. Import av data
-## 3. Omkoding
-## 4. Merge, subset, aggregate
-## 5. Mer om funksjoner
-## 6. Mer regresjonsanalyse
-## 7. Output fra R
+## 3. regresjonsanalyse
 
-## Disse temaene kan være særlig nyttig til arbeid med hjemmeoppgave med R
+## Hovedfokus blir på arbeid med regresjon
 
 ## Fjerner objekter fra R:
 rm(list=ls())
@@ -99,14 +95,19 @@ rm(list=ls())
 #setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")
 
 ## Installerer pakker (fjerne '#' og kjør dersom en pakke ikke er installert)
-# install.packages(ggplot2)
-# install.packages(dplyr)
-# install.packages(moments)
 
-## Laster inn pakker:
-library(ggplot2)
-library(dplyr)
+# install.packages("tidyverse")
+# install.packages("moments")
+# install.packages("stargazer")
+# install.packages("xtable")
+# install.packages("texreg")
+
+#### Laster inn pakker:
+library(tidyverse)
 library(moments)
+library(stargazer)
+library(xtable)
+library(texreg)
 #### Overskrift 1 #####
 ## Kort om hva jeg skal gjøre/produsere i seksjonen
 2+2 # her starter jeg å kode

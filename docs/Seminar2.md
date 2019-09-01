@@ -63,11 +63,11 @@ R er *open-source* software, som gjør det mulig for brukere å lage sine egne t
 
 ```r
 #### Kjør denne koden dersom du ikke har installert pakkene:
-# install.packages(tidyverse)
-# install.packages(moments)
-# install.packages(stargazer)
-# install.packages(xtable)
-# install.packages(texreg)
+# install.packages("tidyverse")
+# install.packages("moments")
+#install.packages("stargazer")
+#install.packages("xtable")
+#install.packages("texreg")
 
 #### Laster inn pakker:
 library(tidyverse)
@@ -88,13 +88,9 @@ Vi installerer og laster inn alle pakker vi trenger etter `rm(list = ls())`. Ett
 ## I dette seminaret skal vi gå gjennom:
 ## 1. organisering av R-script
 ## 2. Import av data
-## 3. Omkoding
-## 4. Merge, subset, aggregate
-## 5. Mer om funksjoner
-## 6. Mer regresjonsanalyse
-## 7. Output fra R
+## 3. regresjonsanalyse
 
-## Disse temaene kan være særlig nyttig til arbeid med hjemmeoppgave med R
+## Hovedfokus blir på arbeid med regresjon
 
 ## Fjerner objekter fra R:
 rm(list=ls())
@@ -103,14 +99,19 @@ rm(list=ls())
 #setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")
 
 ## Installerer pakker (fjerne '#' og kjør dersom en pakke ikke er installert)
-# install.packages(ggplot2)
-# install.packages(dplyr)
-# install.packages(moments)
 
-## Laster inn pakker:
-library(ggplot2)
-library(dplyr)
+# install.packages("tidyverse")
+# install.packages("moments")
+# install.packages("stargazer")
+# install.packages("xtable")
+# install.packages("texreg")
+
+#### Laster inn pakker:
+library(tidyverse)
 library(moments)
+library(stargazer)
+library(xtable)
+library(texreg)
 #### Overskrift 1 #####
 ## Kort om hva jeg skal gjøre/produsere i seksjonen
 2+2 # her starter jeg å kode
@@ -1491,13 +1492,7 @@ Landnavn til land-forkortelser i `conflict`: Dette kan vi gjøre selv manuelt, m
 # Tester pakken countrycode:
 #install.packages("countrycode")
 library(countrycode)
-```
 
-```
-## Warning: package 'countrycode' was built under R version 3.5.3
-```
-
-```r
 ?countrycode()
 ```
 
