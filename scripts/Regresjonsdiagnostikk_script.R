@@ -20,37 +20,60 @@ library(tidyverse)
 library(lmtest)
 
 ## Data som brukes ligger i github-mappen for data.
-load("aidgrowth.RData")
+aid <- read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid.csv")
 
 str(aid)
 
 
+
+
+
+aid <- aid %>% # Forteller at vi skal jobbe med aid-datasettet
+  mutate(region = ifelse(elrssa == 1, "Sub-Saharan Africa",
+                         ifelse(elrcentam == 1, "Central America",
+                                ifelse(elreasia == 1, "East Asia", "Other"))))
+
+table(aid$country)
+
+table(complete.cases(aid)) 
+# sjekker hvor mange observasjoner som har missing på en eller flere variabler i mine_data, TRUE betyr at det ikke er missing 
+aid$policy <- aid$elrinfl + aid$elrsacw + aid$elrbb
+table(is.na(aid$policy)) 
+
+
+
 ## Lager datasett uten missing for policy
-aid <- subset(aid, is.na(policy)==F)
+aid <- filter(.data = aid, is.na(policy)==F)
 
 ## Burnside and Dollar reported regression:
-m5 <- lm(gdp_growth ~ gdp_pr_capita + ethnic_frac*assasinations + 
-               institutional_quality + m2_gdp_lagged +
-               sub_saharan_africa + fast_growing_east_asia + policy*aid,
-             data = aid)
+m5 <- lm(elrgdpg ~     # økonomisk vekst, prosent av BNP
+           elrgdp +    # BNP
+           elrethnf*   # Ethnic fractionalization index
+           elrassas +  # Political assasinations
+           elricrge +  # Institutional quality (political institutions)
+           elrm21 +    # Verdien av våpenimport, relativt til verdien av all annen import
+           region +    # region
+           policy*     # Makroøkonomisk politikk
+           elraid,     # Bistand, prosent av BNP
+           data = aid)
 summary(m5)
 
 
 
-## The actual regression they run, include period and log of gdp_pr_capita
-aid$gdp_pr_capita_log <- log(aid$gdp_pr_capita)
+## The actual regression they run, include period and log of elrgdp
+aid$elrgdp_log <- log(aid$elrgdp)
 
-m6 <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-           institutional_quality + m2_gdp_lagged +
-           sub_saharan_africa + fast_growing_east_asia + policy*aid + 
+m6 <- lm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+           elricrge + elrm21 +
+            region + policy*elraid + 
            as.factor(period),
          data = aid)
 summary(m6)
 
 ## Model without interaction for running ceresplot:
-m6b <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac + assasinations + 
-            institutional_quality + m2_gdp_lagged +
-            sub_saharan_africa + fast_growing_east_asia + policy + aid + 
+m6b <- lm(elrgdpg ~ elrgdp_log + elrethnf + elrassas + 
+            elricrge + elrm21 +
+             region + policy + elraid + 
             as.factor(period),
           data = aid)
 
@@ -60,9 +83,9 @@ ceresPlots(m6b, term = "aid") ## lineært
 
 ## Independent errors:
 ?plm
-m6_plm <- plm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-                  institutional_quality + m2_gdp_lagged +
-                  sub_saharan_africa + fast_growing_east_asia + policy*aid,
+m6_plm <- plm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+                  elricrge + elrm21 +
+                   region + policy*aid,
                   index = "period",
                  model = "within",
                 data = aid) # bytter ut lm med plm for å kunne kjøre pdwtest()
@@ -72,9 +95,9 @@ plm::pdwtest(m6_plm) # Ikke autokorrelasjon når vi har faste effekter på perio
 durbinWatsonTest(m6) ## Fungerer ikke på paneldata, bare tidsserier
 
 
-m6_plm_b <- plm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-                institutional_quality + m2_gdp_lagged +
-                sub_saharan_africa + fast_growing_east_asia + policy*aid,
+m6_plm_b <- plm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+                elricrge + elrm21 +
+                 region + policy*elraid,
               index = c("country", "period"),
               model = "pooling",
               data = aid)
@@ -90,7 +113,18 @@ ncvTest(m6) ## Formell test.
 
 ### Multikolinearitet:
 vif(m6) ## Ikke store problemer
-cor(aid[,3:10], use="pairwise.complete.obs") ## Kan også brukes til å se på korrelasjon
+names(aid)
+
+aid %>% 
+  select(elrgdpg, 
+           elraid, 
+           policy, 
+           elrgdp_log,   
+           elrethnf, 
+           elrassas,
+           elricrge,  
+           elrm21) %>%
+  cor(, use = "pairwise.complete.obs") ## Kan også brukes til å se på korrelasjon
 
 ### Inflytelsesrike observasjoner og uteliggere:
 influenceIndexPlot(m6, id.n=5)
@@ -101,45 +135,49 @@ influenceIndexPlot(m6, id.n=5)
 aid$obs_nr <- as.numeric(rownames(aid)) 
 
 
-aid[aid$obs_nr==403,]
-aid[aid$obs_nr==476,]
+slice(.data = aid, 403)
+slice(.data = aid, 476)
 
-aid2 <- aid[aid$obs_nr!=403,]
-summary(m6c <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-                    institutional_quality + m2_gdp_lagged +
-                    sub_saharan_africa + fast_growing_east_asia + policy*aid + 
+
+
+aid2 <- slice(aid, -403) # Ved å sette - foran 403, forteller vi slice at vi vil kaste ut observasjonen
+
+summary(m6c <- lm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+                    elricrge + elrm21 +
+                     region + policy*elraid + 
                     as.factor(period),
                   data = aid2))
-aid3 <- aid[aid$obs_nr!=476,]
-summary(m6d <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-                    institutional_quality + m2_gdp_lagged +
-                    sub_saharan_africa + fast_growing_east_asia + policy*aid + 
+
+aid3 <- slice(aid, -476)
+summary(m6d <- lm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+                    elricrge + elrm21 +
+                     region + policy*elraid + 
                     as.factor(period),
                   data = aid3))
 
-aid4 <- aid2[aid2$obs_nr!=476,]
-summary(m6e <- lm(gdp_growth ~ gdp_pr_capita_log + ethnic_frac*assasinations + 
-                    institutional_quality + m2_gdp_lagged +
-                    sub_saharan_africa + fast_growing_east_asia + policy*aid + 
+aid4 <- slice(aid2, -476)
+summary(m6e <- lm(elrgdpg ~ elrgdp_log + elrethnf*elrassas + 
+                    elricrge + elrm21 +
+                     region + policy*elraid + 
                     as.factor(period),
                   data = aid4))
 stargazer(m6, m6c, m6d, m6e, type="text")
 
 
 ## Lager variabel til multinomisk:
-summary(aid$gdp_growth)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth<0, 1, NA)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=0 & aid$gdp_growth< 1, 2, aid$gdp_g_categories)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=1 & aid$gdp_growth<3, 3, aid$gdp_g_categories)
-aid$gdp_g_categories <- ifelse(aid$gdp_growth>=3, 4, aid$gdp_g_categories)
+summary(aid$elrgdpg)
+aid$gdp_g_categories <- ifelse(aid$elrgdpg<0, 1, NA)
+aid$gdp_g_categories <- ifelse(aid$elrgdpg>=0 & aid$elrgdpg< 1, 2, aid$gdp_g_categories)
+aid$gdp_g_categories <- ifelse(aid$elrgdpg>=1 & aid$elrgdpg<3, 3, aid$gdp_g_categories)
+aid$gdp_g_categories <- ifelse(aid$elrgdpg>=3, 4, aid$gdp_g_categories)
 
 table(aid$gdp_g_categories) #test
 
 
 ## Kjører regresjon
-m7 <- multinom(gdp_g_categories ~ gdp_pr_capita_log + 
-           institutional_quality + m2_gdp_lagged +
-           sub_saharan_africa + fast_growing_east_asia + policy + aid, data= aid,
+m7 <- multinom(gdp_g_categories ~ elrgdp_log + 
+           elricrge + elrm21 +
+            region + policy + elraid, data= aid,
          Hess = T, na.action="na.exclude")
 stargazer(m7, type="text")
 summary(m7)

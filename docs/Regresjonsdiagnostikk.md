@@ -1,7 +1,7 @@
 ---
-title: "Seminar 3"
+title: "Regresjonsdiagnostikk"
 author: "Erlend Langørgen"
-date: "21 september 2017"
+date: "8 september 2019"
 output:
   html_document:
     keep_md: TRUE
@@ -118,26 +118,14 @@ library(tidyverse)
 ```
 
 ```
-## Warning: package 'tidyverse' was built under R version 3.5.3
-```
-
-```
 ## -- Attaching packages -------------------------------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
-## v ggplot2 3.1.0       v purrr   0.3.0  
-## v tibble  2.0.1       v dplyr   0.8.0.1
-## v tidyr   0.8.2       v stringr 1.4.0  
-## v readr   1.3.1       v forcats 0.4.0
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.5.3
-```
-
-```
-## Warning: package 'forcats' was built under R version 3.5.3
+## v ggplot2 3.2.0     v purrr   0.3.2
+## v tibble  2.1.3     v dplyr   0.8.3
+## v tidyr   0.8.3     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0
 ```
 
 ```
@@ -164,6 +152,11 @@ aid <- read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/d
 ```
 
 ```r
+aid <- aid %>% # Forteller at vi skal jobbe med aid-datasettet
+       mutate(region = ifelse(elrssa == 1, "Sub-Saharan Africa",
+                               ifelse(elrcentam == 1, "Central America",
+                               ifelse(elreasia == 1, "East Asia", "Other"))))
+
 table(aid$country) # ingen suspekte verdier
 ```
 
