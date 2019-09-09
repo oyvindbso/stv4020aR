@@ -397,7 +397,7 @@ exp(38.77277 + -0.04468*min(mtcars$hp) + -1.84289*median(mtcars$qsec))/(1 + exp(
 ## [1] 0.9783705
 ```
 
-Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette lar oss se hvordan sannsynlighet varierer over alle verdier av en uavhengig variabel. For å plotte logistisk regresjon er fremgangsmåten nesten helt lik fremgangsmåten som for ols. Det eneste vi må ta hensyn til, er å transformere prediksjonene våre til sannsynlighet, med argumentet `type = "response"` i `predict()`:
+Det blir imidlertid lettere å tolke sannsynligheten gjennom plot, fordi dette lar oss se hvordan sannsynlighet varierer over alle verdier av en uavhengig variabel. For å plotte logistisk regresjon er fremgangsmåten nesten helt lik fremgangsmåten som for ols. Det eneste vi må ta hensyn til, er å transformere prediksjonene våre til sannsynlighet. For å få resultater direkte i sannsynlighet, bruk `type = "response"` i `predict()`. I koden under bruker jeg imidlertid argumentet `type = "link"` i `predict()`, for å få korrekt utregning av standardfeil - i koden regner jeg ut sannsynlighetene selv - se om du klarer å gjenkjenne formelen for logit til sannsynlighet.
 
 
 ```r

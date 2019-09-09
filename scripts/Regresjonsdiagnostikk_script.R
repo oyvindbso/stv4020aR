@@ -1,5 +1,5 @@
 ########################################################
-########## Seminar 2: regresjonsdiagnostikk ############
+########## Seminar 3: regresjonsdiagnostikk ############
 ########################################################
 
 #### Forberedelser ####
@@ -42,8 +42,34 @@ table(is.na(aid$policy))
 
 
 
-## Lager datasett uten missing for policy
-aid <- filter(.data = aid, is.na(policy)==F)
+## Lager datasett uten missing på variabler som skal inngå i regresjon
+reg_data <- aid %>% 
+  drop_na(elrgdpg, elraid, policy, country, period,  elrethnf,   
+            elrassas, elricrge, elrm21)
+# Lager nytt datasett med observasjoner som faktisk brukes i regresjon. 
+# drop_na() fjerner alle observasjoner som har missing på en av variablene du skriver inn.
+
+
+
+
+table(complete.cases(aid)) 
+# sjekker hvor mange observasjoner som har missing på en eller flere variabler i mine_data, TRUE betyr at det ikke er missing 
+
+
+# sjekker hvor mange observasjoner som har missing på en variabel
+
+aid$reg_miss <- aid %>%
+  select(elrgdpg, elraid, policy) %>%
+  complete.cases()
+# Lager variabel som viser hvilke observasjoner som forsvinner i regresjon med de sentrale variablene
+# elrgdpg, elraid og policy - fin å bruke i plot for å få et inntrykk av hva slags informasjon du mister ved å legge til flere kontrollvariabler.
+table(aid$reg_miss) # Mange observasjoner har missing på en eller flere av de tre variablene
+
+
+
+
+
+
 
 ## Burnside and Dollar reported regression:
 m5 <- lm(elrgdpg ~     # økonomisk vekst, prosent av BNP

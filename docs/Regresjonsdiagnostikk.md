@@ -72,8 +72,7 @@ I tillegg til å teste antagelsene over (med unntak av antagelse 1), skal vi ogs
 
 ### Data - Burnside og Dollar 2000
 
-I dag skal vi se på en ekte artikkel, og gjøre regresjonsdiagnostikk på denne.
-Jeg har valgt en artikkel som tidligere var på pensum i fordypningsemnet i statistikk, 4020B. jeg har altså hatt replikasjon av denne artikkelen som hjemmeoppgave. I tillegg til diagnostikken som vi gjør i seminaret, er det fint å se på deskriptiv statistikk, effektplot, samt diskusjon av data. 
+I dag skal vi se på en ekte artikkel, og gjøre regresjonsdiagnostikk på denne - samme som vi har brukt tidligere i semesteret. Jeg har valgt en artikkel som tidligere var på pensum i fordypningsemnet i statistikk, 4020B. jeg har altså hatt replikasjon av denne artikkelen som hjemmeoppgave. I tillegg til diagnostikken som vi gjør i seminaret, er det fint å se på deskriptiv statistikk, effektplot, samt diskusjon av data. 
 
 ### Linearitet
 Vi kan bruke funksjonen `ceresPlot()` fra pakken `car` til å teste om sammenhengen mellom en uavhengig og en avhengig variabel er lineær. Denne funksjonen fungerer både for lineær regresjon, og for logistisk regresjon (`glm`). Denne funksjonen fungerer imidlertid ikke for regresjon med samspill, ta kontakt med meg dersom dere vil teste linearitet i en regresjon med samspill, så kan jeg vise en annen metode for det. 
@@ -89,7 +88,7 @@ Vi kan teste for normalfordelte residualer ved å plotte studentiserte residuale
 **Studentiserte residualer:** Alternativ måte å standardisere på, i beregning av varians for hver enkelt observasjon, fjerner man observasjonen. Formålet med dette er at vi får statistisk uavhengighe mellom teller og nevner, noe som lar oss bruke residualene til statistiske tester.
 
 ### Homoskedastiske restledd:
-Vi kan teste for heteroskedastisitet ved hjelp av plot av studentiserte residualer mot standardiserte predikerte verdier fra modellen. Dette kan gjøres med `spreadLevelPlot()`, dere kan også se på Martin sitt script fra seminar 3, der han bruker `ggplot()` i stedet.
+Vi kan teste for heteroskedastisitet ved hjelp av plot av studentiserte residualer mot standardiserte predikerte verdier fra modellen. Dette kan gjøres med `spreadLevelPlot()`. Dere kan også lage deres egen versjon med `ggplot()` i stedet, hent ut restledd fra modellobjektet med `min_model$residuals`, lag et datasett uten missing på variablene som inngår i regresjonen, og legg til `min_model$residuals` som en ny variabel i datasettet ditt. Så kan du plotte.
 
 ### Multikolinearitet:
 Vi kan teste for multikolinearitet ved hjelp av en vif-test. Funksjonen for dette er `vif()`. Med vif tester vi om det er en sterk lineær sammenheng mellom uavhengige variabler, dersom dette er tilfellet er det gjerne nødvendig med store mengder data for å skille effektene av ulike variabler fra hverandre/få presise estimater (små standardfeil), men bortsett fra å samle mer data er det ikke så mye vi gjøre dersom vi mener begge variablene må være med i modellen. 
