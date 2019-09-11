@@ -83,6 +83,32 @@ anova(gm0, gm1, test = "LRT") # Sjekk de forskjellige alternativene til test med
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+* Vi kan regne ut pseudo $R^2$ med `pR2` funksjonen fra pakken `pscl`:
+
+
+```r
+#install.packages("pscl")
+library(pscl)
+```
+
+```
+## Classes and Methods for R developed in the
+## Political Science Computational Laboratory
+## Department of Political Science
+## Stanford University
+## Simon Jackman
+## hurdle and zeroinfl functions by Achim Zeileis
+```
+
+```r
+pR2(gm1) # sjekk ?pR2 - under Value i hjelpefil er output forklart.
+```
+
+```
+##         llh     llhNull          G2    McFadden        r2ML        r2CU 
+## -13.3784781 -21.6148666  16.4727771   0.3810520   0.4023645   0.5430017
+```
+
 
 * Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken `ResourceSelection`
 
