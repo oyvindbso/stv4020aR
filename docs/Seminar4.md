@@ -24,7 +24,7 @@ I dette dokumentet får du en rask innføring i hvordan du kan gjøre logistisk 
 **Oppvarmings-oppgave i plenum:**
 Les hjelpefil, hva må vi spesifisere for å kjøre en logistisk regresjon? Forklar til sidemannen.
 
-Last inn datasettet `aid2.csv`, du finner data [her](https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid2.csv). Lagre i en mappe, sett working directory, og last inn datasettet i R med `read_csv()`. Merk at dette datasettet er det som vi lagde i oppgavene til seminar 1,
+Last inn datasettet `aid2.csv` under navnet `aid2`, du finner data [her](https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/aid2.csv). Lagre i en mappe, sett working directory, og last inn datasettet i R med `read_csv()`. Merk at dette datasettet er det som vi lagde i oppgavene til seminar 1,
 
 Opprett en ny variabel `elrgdpg_d`, slik at observasjoner vekst mindre eller lik 0, og andre observasjoner får verdien 1.
 
@@ -49,7 +49,7 @@ Jeg har satt opp noe dere kan copy-paste under til hjelp, men dere må sørge fo
 
 
 ```r
-exp(-4.046138 + -0.102802*(-3) + 1.654813*median(full$elrpolicy, na.rm =T) + 0.008147*median(full$elrpolicy, na.rm =T)*(-3) +  -0.770560*1 + 0.381205*median(full$elrlpop, na.rm =T) + -0.216738*median(full$elrassas, na.rm = T) + -0.449168*median(full$elrethnf, na.rm =T) + 0.490778*median(full$elrassas, na.rm = T)*median(full$elrethnf, na.rm =T))
+exp(-4.046138 + -0.102802*(-3) + 1.654813*median(aid2$elrpolicy, na.rm =T) + 0.008147*median(aid2$elrpolicy, na.rm =T)*(-3) +  -0.770560*1 + 0.381205*median(aid2$elrlpop, na.rm =T) + -0.216738*median(aid2$elrassas, na.rm = T) + -0.449168*median(aid2$elrethnf, na.rm =T) + 0.490778*median(aid2$elrassas, na.rm = T)*median(aid2$elrethnf, na.rm =T))
 ```
 
 *Er effekten av elraid substansiell?*
