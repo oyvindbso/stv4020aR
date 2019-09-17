@@ -32,7 +32,7 @@ Kjør deretter følgende logistiske regresjon:
 
 
 ```r
-m1 <- glm(elrgdpg_d ~ elraid*elrpolicy + as.factor(period) + elrlpop + elrassas*elrethnf, data = full, family = binomial(lin = "logit"))
+m1 <- glm(elrgdpg_d ~ elraid*elrpolicy + as.factor(period) + elrlpop + elrassas*elrethnf, data = full, family = binomial(link = "logit"))
 summary(m1)
 ```
 

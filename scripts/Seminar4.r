@@ -18,7 +18,7 @@ library(tidyverse)
 
 # Opprett en ny variabel elrgdpg_d, slik at observasjoner vekst mindre eller lik 0, og andre observasjoner får verdien 1.
 # Kjør deretter følgende logistiske regresjon:
-m1 <- glm(elrgdpg_d ~ elraid*policy + as.factor(period) + elrlpop + elrassas*elrethnf, data = aid2, family = binomial(lin = "logit"))
+m1 <- glm(elrgdpg_d ~ elraid*policy + as.factor(period) + elrlpop + elrassas*elrethnf, data = aid2, family = binomial(link = "logit"))
 summary(m1)
 
 # Diskuter raskt med sidemannen hva slags informasjon du får fra regresjons-output
