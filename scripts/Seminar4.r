@@ -51,7 +51,7 @@ aid2 <- read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/
 
 # Denne koden skal fungere dersom du lagret datasett i working directory: 
 
-full <- read_csv("aid2")
+full <- read_csv("aid2.csv")
 
 aid2$elrgdpg_d <- ifelse(aid2$elrgdpg <= 0, 0, 1)
 table(aid2$elrgdpg, aid2$elrgdpg_d)
