@@ -7,7 +7,7 @@ library(tidyverse)
 
 ## Oppgave 1
 
-beer <- read_csv("https://raw.githubusercontent.com/langoergen/stv1020R/master/data/beer.csv")
+beer <- read_csv("https://raw.githubusercontent.com/langoergen/stv4020aR/master/data/beer.csv")
 
 
 ## Oppgave 2
