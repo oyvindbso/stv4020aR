@@ -276,7 +276,7 @@ print.xtable(eksport_tabell, type = "latex", file = "min_desk_stat_tabell.tex") 
 
 ### Eksportere tabeller fra *Rmarkdown*
 
-Dersom du skriver i en *Rmarkdown* fil, kan du bruke funksjonen `kable` fra pakken `knitr`, og sette chunk-option `results` til "asis". Lengre forklaring [her](https://rmarkdown.rstudio.com/lesson-7.html). Deretter trykker du på `knit` fra menyen i Rstudio, og velger det formatet du måtte ønske (f.eks. word). Her viser jeg resultatet for html-format:
+Dersom du skriver i en *Rmarkdown* fil, kan du bruke funksjonen `kable` fra pakken `knitr`, og sette chunk-option `results` til "asis". Lengre forklaring [her](https://rmarkdown.rstudio.com/lesson-7.html). Deretter trykker du på `knit` fra menyen i Rstudio, og velger det formatet du måtte ønske (f.eks. word). 
 
 
 ```r
