@@ -2,7 +2,9 @@
 #### Flernivåanalyse - script ###
 #################################
 
-#### Forberedelser ####
+## For mer dokumentasjon/tutorials - sjekk (evt. kan du google):
+## https://cran.r-project.org/web/packages/lme4/index.html
+
 
 ### Pakker:
 #install.packages("lme4")
@@ -13,6 +15,7 @@ library(stargazer) # for regresjonstabeller
 
 #### Konstruksjon av data til dagens seminar ####
 ### Laster inn noe data fra European Social Survey - samme data som i faktoranalyse-scriptet
+### Last ned data fra data-mappen på github
 load("ess.rda")
 
 ### Jeg bruker dette som en anledning til å repetere aggregering

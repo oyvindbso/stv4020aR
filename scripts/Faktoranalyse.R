@@ -2,6 +2,10 @@
 ### Faktoranalyse   ####
 ########################
 
+
+## For mer dokumentasjon/tutorials - sjekk (evt. kan du google):
+#https://cran.r-project.org/web/packages/psych/index.html
+
 #install.packages("psych")
 library(psych)
 library(tidyverse)
