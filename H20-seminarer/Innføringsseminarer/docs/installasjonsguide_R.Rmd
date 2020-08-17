@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 R er et gratisprogram som er spesielt egnet for statistikk og dataanalyse. Rstudio er en IDE (integrated development environment), et gratisprogram  som gjør det lettere å bruke R. Derfor skal vi lære R med Rstudio i seminarene i STV 4020A.
 
-Første gang du åpner Rstudio er alt fremmed, du blir du møtt av en rekke vinduer, menyer og knapper. Dette dokumentet er ment gir deg en kort forklaring av det aller mest grunnleggende i R og Rstudio gjennom 10 bilder. Dersom du tar deg 5 minutter til å lese dokumentet, og forsøke koden, kommer det første seminar til å gå som en lek. Dersom første seminar ikke gikk som en lek, og du er usikker på hva som foregår i Rstudio, kan det også være nyttig å lese dette dokumentet.
+Første gang du åpner Rstudio er alt fremmed, du blir du møtt av en rekke vinduer, menyer og knapper. Dette dokumentet gir deg en kort forklaring av det aller mest grunnleggende i R og Rstudio gjennom 10 bilder. Dersom du tar deg 5 minutter til å lese dokumentet, og forsøke koden, kommer det første seminaret til å gå som en lek. Dersom første seminar ikke gikk som en lek, og du er usikker på hva som foregår i Rstudio, kan det også være nyttig å lese dette dokumentet.
 
 ## Installere R og Rstudio
 
-Før du går videre, ber jeg om at du installerer [R](https://cloud.r-project.org/) og [Rstudio](https://www.rstudio.com/products/rstudio/download/) (velg gratisversjonen for desktop). Følg lenkene, og kjør standardinstallasjonen for ditt operativsystem. Ta kontakt med meg på erlend.langorgen@stv.uio.no dersom installasjonen ikke virker. 
+Før du går videre, ber jeg om at du installerer [R](https://cloud.r-project.org/) og [Rstudio](https://www.rstudio.com/products/rstudio/download/) (velg gratisversjonen for desktop). Følg lenkene, og kjør standardinstallasjonen for ditt operativsystem. Ta kontakt med meg på erlend.langorgen@stv.uio.no **før** første seminar dersom installasjonen ikke virker. 
 
-Dersom du ikke vil installere R og Rstudio på pcen din, kan du finne en UiO-pc med Rstudio, eller kjøre Rstudio gjennom [kiosk](https://kiosk.uio.no/RDWeb/Pages/en-US/login.aspx?ReturnUrl=/RDWeb/Pages/en-US/Default.aspx/kontor).
+Dersom du ikke vil installere R og Rstudio på pcen din, kan du kjøre Rstudio gjennom [kiosk](https://kiosk.uio.no/RDWeb/Pages/en-US/login.aspx?ReturnUrl=/RDWeb/Pages/en-US/Default.aspx/kontor). I år vil det ikke bli mulig å bruke UiO sine PC-er på seminarene. 
 
 ##  Åpne Rstudio
 
