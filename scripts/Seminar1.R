@@ -537,4 +537,8 @@ ggplot(aid) +
 ggsave("testplot.png", width = 8, height = 5) # lagrer ditt siste ggplot i det formatet du vil på working directory
       
       ## Takk for i dag!
+
+
+
+## Vi gjør en liten endring
       
