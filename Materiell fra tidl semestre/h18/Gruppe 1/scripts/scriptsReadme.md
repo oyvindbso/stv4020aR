@@ -1,0 +1,1 @@
+I denne mappen finner dere script fra seminarene. Jeg kommer til å laste opp etter seminaret er ferdig. Dere vil også finne to .md og .rmd dokumenter, til henholdsvis første og andre seminar. Bruk heller .md enn .rmd filene.

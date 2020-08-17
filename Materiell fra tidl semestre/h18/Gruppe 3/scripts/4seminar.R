@@ -1,0 +1,313 @@
+#' ## Disposisjon
+#' 1. Laste inn data (.rda / .RData)
+#' 2. Omkoding #advanced
+#' 4. Multinomisk logistisk regresjon
+#' 5. Rangert logistisk regresjon
+#' 
+#' ## Laste inn data
+#' Denne gangen skal vi laste inn et datasett lagret i en R-fil. Dette er litt anerledes enn funksjonene vi har gjort tidligere (altså read.\*()-familien). Det finnes to typer filer som R-data kan lagres i: *.rda* og *.RData*. Disse er, såvidt jeg vet, helt identiske i format; de har bare forskjellig filtypenavn. Vi skal bruke European Social Survey, men bare med enhetene fra Norge (kommer tilbake med flere land når vi skal ta flernivåanalyse).
+#' 
+## ----lasterda------------------------------------------------------------
+
+# Encoding
+# defaults write org.R-project.R force.LANG en_US.UTF-8
+
+rm(list = ls())
+
+# load("./data/ess_norge.rda")
+
+load(file = url("https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/ess_norge.rda"))
+
+head(ess_nor, 3)
+
+#' 
+#' Her oppretter R objektet for oss (se "ess_nor" i environment). Analysen vi skal gjøre er å se om tillit til politikere påvirker hvilket parti man stemmer på. Avhengig variabel blir derfor variabelen **party_vote_short**. Kan dere gjette på hvilken type regresjon vi skal gjøre?
+#' 
+#' ## Variabler
+#' 
+#' Tabellen under viser en kort variabelbeskrivelse. Jeg har lagt inn labels i selve datasettet og det skal vi jobbe med i første del denne gangen.
+#' 
+#' | Variabel            | Målenivå        | Beskrivelse                                             |
+#' |---------------------|-----------------|---------------------------------------------------------|
+#' | idno                | Forholdstall    | ID indikator for hver enhet                             |
+#' | party_vote          | Nominal         | Parti stemt på forrige Stortingsvalg                    |
+#' | party_vote_short    | Nominal         | Forkortet navn på parti stemt på forrige Stortingsvalg  |
+#' | gender              | Dikotom         | Kjønn                                                   |
+#' | year_born           | Forholdstall    | År født                                                 |
+#' | income_feel         | Ordinal         | Hvordan føler du din økonomiske situasjon er for tiden? |
+#' | income_decile       | Ordinal         | Husholningens inntekt i desiler                         |
+#' | trust_parl          | Ordinal         | Hvor mye stoler du på det nasjonale parlamentet?        |
+#' | trust_legalsys      | Ordinal         | Hvor mye stoler du på rettsvesenet?                     |
+#' | trust_police        | Ordinal         | Hvor mye stoler du på politiet?                         |
+#' | trust_politicians   | Ordinal         | Hvor mye stoler du på politikere?                       |
+#' | trust_polparties    | Ordinal         | Hvor mye stoler du på politiske partier?                |
+#' | trust_eurparl       | Ordinal         | Hvor mye stoler du på det europeiske parlamentet?       |
+#' | trust_unitednations | Ordinal         | Hvor mye stoler du på FN?                               |
+#' 
+#' 
+#' ## Avhengig variabel
+#' La oss først kikke litt på vår avhengige variabel. Dette kan man gjøre med både tabeller og figurer, men jeg liker best figurer.
+#' 
+## ----deskAV--------------------------------------------------------------
+
+table(ess_nor$party_vote_short, useNA = "always")
+
+library(ggplot2)
+
+ggplot(ess_nor, aes(x = party_vote_short, fill = party_vote_short)) +
+  geom_bar()
+
+party_noNA <- ess_nor[which(is.na(ess_nor$party_vote_short) == FALSE), ]
+
+colors()
+
+ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) + 
+  geom_bar() +
+  scale_fill_manual(values = c("darkred", "darkblue", "blue", "yellow4", "seashell4",
+                               "forestgreen", "red1", "darkgreen", "red2", "green")) +
+  labs(x = "Partistemmer", y = "Frekvens", fill = "Parti") +
+  scale_y_continuous(breaks = seq(0, 300, 50)) +
+  theme_minimal() + 
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
+table(party_noNA$party_vote_short)
+
+party_noNA$party_vote_short <- factor(party_noNA$party_vote_short, 
+                                      levels = c("KYST", "RØDT", "SV", "A", "SP", "MDG", 
+                                                 "KRF", "V", "H", "FRP"))
+
+
+ggplot(party_noNA, aes(x = party_vote_short, fill = party_vote_short)) + 
+  geom_bar() +
+  scale_fill_manual(values = c("darkred", "darkblue", "blue", "yellow4", "seashell4",
+                               "forestgreen", "red1", "darkgreen", "red2", "green")) +
+  labs(x = "Partistemmer", y = "Frekvens", fill = "Parti") +
+  scale_y_continuous(breaks = seq(0, 300, 50)) +
+  theme_minimal() + 
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+
+
+#' 
+#' Her har jeg lagt inn et plot som viser antall enheter i data som stemte på de forskjellige partiene og et plot der jeg fikser litt på det estetiske. **ggplot** har en milliard måter å endre på plots på, så her er det bare å leke seg til perfeksjon.
+#' 
+#' For selve innholdet i plottet kan vi merke oss at vi har noen partier som er veldig små. Dette gjelder spesielt partiene *Rødt*, *MDG*, og *Kystpartiet*. 
+#' 
+#' ## Uavhengig variabel
+#' Variabelen vi skal fokusere på er **trust_politicians**. Derfor er det lurt å også kikke litt på denne. Fra tabellen ser vi at den går fra 0 til 10, men hva betyr egentlig det?
+#' 
+## ----deskUV--------------------------------------------------------------
+table(ess_nor$trust_politicians, useNA = "always")
+
+attributes(ess_nor$trust_politicians)
+
+attr(ess_nor$trust_politicians, "labels")
+attr(ess_nor$income_decile, "labels")
+
+
+
+#' 
+#' Da vet vi at 0 er ingen tillit og 10 er fulstendig tillit til politikere på denne variabelen. Kan den brukes som en forholdstallsvariabel? Eller burde vi holde oss til ordinalnivå?
+#' 
+#' ## Bivariat multinomisk logistisk regresjon
+#' La oss kjøre en bivariat regresjon, med partistemme som avhengig og tillit til politikere som uavhengig, for å se om det er noen problemer med data. Hvis vi ikke gjør noe med vår avhengig variabel, hvilket parti vil ende opp som referansekategori og er dette en rimelig referansekategori?
+#' 
+#' Multinomisk logistisk regresjon kan kjøres med noen forskjellige pakker i R (det ligger faktisk ikke inne i base-pakken). Vi kjøre med pakken **nnet** her, og funksjonen `multinom()`.
+#' 
+## ----bivarMultinom, tidy=FALSE-------------------------------------------
+# install.packages("nnet")
+library(nnet)
+
+party_reg <- multinom(party_vote_short ~ trust_politicians, 
+                      data = ess_nor,
+                      na.action = "na.exclude", Hess = TRUE)
+summary(party_reg)
+exp(coef(party_reg))
+
+# Regner litt på Arbeiderpartiet vs. Fremskrittspartiet
+exp(0.7870249) / (1 + exp(0.7870249))
+exp(-2.4546861) / (1 + exp(-2.4546861))
+
+exp(0.7870249 + (-0.34755333 * 10)) / (1 + exp(0.7870249 + (-0.34755333 * 10)))
+
+# En enkel måte å sjekke om effekten er signifikant på 5% nivå
+confint(party_reg)
+
+# Vi kan også se på hvordan modellen tenker med tanke på sannsynligheter
+test_set <- data.frame(trust_politicians = 0:10)
+
+cbind(test_set, predict(party_reg, newdata = test_set))
+cbind(test_set,predict(party_reg, newdata = test_set, type = "probs"))
+
+table(ess_nor$party_vote_short, ess_nor$trust_politicians)
+#' 
+#' Det er ganske åpenbart at modellen vår ikke er veldig god. Noen problemer:
+#' 1. Små partier er problematiske (liten N)
+#' 2. Vi mangler noen kontrollvariabler (kanskje man systematisk stemmer med venstre som ung f.eks, samtidig som alder påvirker hvor mye man stoler på politikere).
+#' 3. Kanskje AV er ordinal?
+#' 
+#' ## Eliminere små partier
+#' 
+#' Først oppretter vi et nytt datasett der vi fjerner enheter fra de små partiene. Legg merke til at SV, KRF, SP, og V også er veldig nær smertegrensen her; vi kan få problemer med disse også. 
+#' 
+## ----subsetLargParties---------------------------------------------------
+
+ess_nor$samle_parti <- ess_nor$party_vote_short
+ess_nor$samle_parti[which(ess_nor$party_vote_short == "RØDT" |
+                            ess_nor$party_vote_short == "KYST" | 
+                            ess_nor$party_vote_short == "MDG")] <- "Andre"
+
+table(ess_nor$samle_parti, ess_nor$party_vote_short, useNA = "always")
+
+
+larger_parties <- ess_nor[which(ess_nor$party_vote_short != "RØDT" &
+                                  ess_nor$party_vote_short != "KYST" & 
+                                  ess_nor$party_vote_short != "MDG" & 
+                                  is.na(ess_nor$party_vote_short) == FALSE), ]
+
+table(larger_parties$party_vote_short, useNA = "always")
+
+
+
+#' 
+#' ## Fikse kontrollvariabler
+#' 
+#' Vi skal kontrollere for fire ting: inntekt, hvor fornøyd respondenten er med økonomien sin, kjønn og alder. Tanken med alle er den samme: de er bakenforliggende variabler (for tillit til politikere), og de kan tenkes å påvirke både vår avhenige og uavhengige variabel (*backdoor path*).
+#' 
+#' 
+#' ### To inntektsvariabler
+#' 
+#' Når vi subsetter blir labels på variablene fjernet av en eller annen grunn...så vi må kopiere dem over til det nye datasettet med pakken **labelled** og funksjonen **copy_labels** først. Deretter kan vi sjekke hvilke verdier vi ikke vil ha med videre fra de forskjellige variablene.
+#' 
+## ----incomeCode----------------------------------------------------------
+table(larger_parties$income_feel)
+attributes(larger_parties$income_feel)
+
+attributes(ess_nor$income_feel)
+
+######
+# install.packages("labelled")
+library(labelled)
+
+larger_parties$income_feel <- copy_labels(ess_nor$income_feel, 
+                                          larger_parties$income_feel)
+
+attr(larger_parties$income_feel, "labels")
+######
+# & = OG, | = ELLER, ! = IKKE
+larger_parties$income_feel2 <- ifelse(larger_parties$income_feel > 4, NA, larger_parties$income_feel)
+
+table(larger_parties$income_feel2, larger_parties$income_feel, useNA = "always")
+
+#####
+larger_parties$income_decile <- copy_labels(ess_nor$income_decile,
+                                            larger_parties$income_decile)
+attr(larger_parties$income_decile, "labels")
+#####
+
+attributes(ess_nor$income_decile)
+
+larger_parties$income_decile2 <- ifelse(larger_parties$income_decile > 10, NA, larger_parties$income_decile)
+
+table(larger_parties$income_decile2, larger_parties$income_decile, useNA = "always")
+
+#' 
+#' ### Kjønn og alder
+#' Kjønn ser ut til å være kodet på en fornuftig måte, så her trenger vi ikke gjøre noe. Alder kan vi regne ut med å trekke fødselsår fra året surveyen ble utført (2014). Så sentrerer vi variabelen til median.
+#' 
+## ----genderageCode-------------------------------------------------------
+table(larger_parties$gender) # Ca like mange, så referansekategori er ikke viktig
+
+larger_parties$age <- 2014 - larger_parties$year_born
+summary(larger_parties$age)
+
+larger_parties$age <- larger_parties$age - median(larger_parties$age) # ingen har NA
+summary(larger_parties$age)
+
+#' 
+#' ## Multinomisk med kontroller
+#' Da er det bare å plugge inn variablene i en regresjon.
+#' 
+## ----multivariatMultinom-------------------------------------------------
+
+party_reg2 <- multinom(party_vote_short ~ trust_politicians + income_decile2 + 
+                         income_feel2 + age + gender,
+                       data = larger_parties, Hess = TRUE, na.action = "na.exclude")
+
+summary(party_reg2)
+
+confint(party_reg2)
+
+#' 
+#' Dette er ekstremt god trening for å tolke på egenhånd!
+#' 
+## ----predikerteSannsynligheter-------------------------------------------
+test_set2 <- data.frame(trust_politicians = 0:10,
+                        income_decile2 = median(larger_parties$income_decile2, na.rm = TRUE),
+                        income_feel2 = median(larger_parties$income_feel2, na.rm = TRUE),
+                        age = 0,
+                        gender = "female")
+
+
+predict(party_reg2, newdata = test_set2)
+plot_data <- cbind(test_set2, predict(party_reg2, newdata = test_set2, type = "probs"))
+
+library(ggplot2)
+
+ggplot(plot_data, aes(x = trust_politicians, y = A, group = 1)) + geom_point() + geom_line()
+
+
+ggplot(plot_data, aes(x = trust_politicians)) + 
+  geom_point(aes(y = A)) +
+  geom_point(aes(y = FRP)) +
+  geom_line(aes(y = A, group = 1)) +
+  geom_line(aes(y = FRP, group = 1))
+
+#' 
+#' ## Rangert logistisk (for spesielt interesserte)
+#' 
+#' Under viser jeg kode for rangert logistisk regresjon. Som Solveig nevnte i forelesning, er dette noe som kan dukke opp som en mulig modell i en evt semester- eller masteroppgave.
+#' 
+## ----rangLog-------------------------------------------------------------
+
+larger_parties$party_vote_short <- factor(larger_parties$party_vote_short,
+                                          levels = c("SV", "A", "SP", "KRF", "V", "H", "FRP"))
+
+library(MASS)
+rang_party <- polr(party_vote_short ~ trust_politicians + income_decile2 + income_feel2 + age + gender,
+                       data = larger_parties, Hess = TRUE, na.action = "na.exclude")
+summary(rang_party)
+
+#' 
+#' ## Stargazertabell
+## ----stargazer,results='asis',tidy=FALSE---------------------------------
+
+library(stargazer)
+stargazer(party_reg, font.size = "footnotesize",
+          star.cutoffs = c(.05, .01, .001),
+          column.sep.width = ".01cm",
+          no.space = FALSE,
+          covariate.labels = c("Politikertillit (0-10)"))
+
+stargazer(party_reg2, font.size = "footnotesize",
+          star.cutoffs = c(.05, .01, .001),
+          column.sep.width = ".01cm",
+          no.space = FALSE,
+          covariate.labels = c("Politikertillit (0-10)", "Inntekt (desil)", 
+                               "Øk. tilfredshet", "Alder", "Kjønn (mann)"))
+
+stargazer(rang_party, font.size = "footnotesize",
+          star.cutoffs = c(.05, .01, .001),
+          column.sep.width = ".01cm",
+          no.space = FALSE,
+          covariate.labels = c("Politikertillit (0-10)", "Inntekt (desil)", 
+                               "Øk. tilfredshet", "Alder", "Kjønn (mann)"))
+
+#' 
+## ----ikketenkpådenne, eval=FALSE, echo=FALSE-----------------------------
+## knitr::purl("./docs/seminar4.Rmd", output = "./scripts/4seminar.R", documentation = 2)
+## 
+

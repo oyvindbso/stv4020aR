@@ -1,0 +1,370 @@
+---
+title: "Første R-Seminar"
+author: "Erlend Langørgen"
+date: "28 august 2017"
+output:
+  html_document:
+    keep_md: TRUE
+    self_contained: no
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 90), tidy = TRUE)
+```
+
+# Velkommen!
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/welcome.jpg")
+```
+
+
+# Seminaropplegg
+
+## Seminarene
+
+De fleste seminarene vil bestå av 3 moduler:
+
+1. Før seminaret - en kort tutorial jeg vil at dere skal gjøre før seminaret, slik at det blir mulig å jobbe mer selvstendig og få mer individuell oppfølging i selve seminaret.
+2. Selve seminaret - Vil så langt det er mulig bestå av korte plenumsseksjoner etterfulgt av selvstendig oppgaveløsing.
+3. Oppgaver til etter seminaret - Lar dere teste om dere klarer å anvende ferdigheter fra seminaret selvstendig. Disse oppgavene velger dere selv om dere ønsker å prioritere.
+
+## Om å lære R:
+
+For å få bli gode i R som statsvitere, kan vi trene følgende ferdigheter:
+
+1. Forståelse av grunnleggende konvensjoner i R, og evnen til finne og forstå koden dere trenger for å kunne gjøre som dere vil i R.
+2. Forståelse av samfunnsvitenskapelig teori og metode
+3. Forståelse av statistikk
+4. Forståelse av programmering
+
+Det kan være vanskelig å lære seg R i begynnelsen, særlig hvis man lærer R uten særlig forkunnskaper i noen av ferdighetene over. Den første ferdigheten trente vi i innføringen til R, og innebærer forståelse av ting som *objekter*, *funksjoner*, *indeksering*, *working directory* og *hjelpefiler*. Det å få på plass denne basisen er den tyngste delen av å lære R for mange. Jeg forventer ikke at alle som er nye til R har en dyp forståelse av de grunnleggende tingene i R etter den korte innføringen dere fikk for to uker siden. 
+
+Gode ferdigheter i punkt 2.-4. setter deg i stand til å lage klare planer for hva som skal gjøres, og hva slags resultater du kan regne med å få, før du har skrevet en linje med kode. I en slik situasjon er det relativt lett å forstå problemer med kode. En vanskeligere, og mer frustrerende situasjon oppstår dersom du ikke forstår den statistiske modellen du jobber med, eller har klare begreper om hva du vil gjøre. Da blir det vanskelig å vite om koden din er rett selv om koden kjører. Seminarene er lagt opp slik at R seminarer for statistiske modeller holdes etter forelesningen for modellen. Jeg vil derfor oppfordre dere på det sterkeste til å forsøke å være ajour med pensum til de statistiske modellene vi skal jobbe med i seminarene.
+
+Seminarene i STV4020A kommer til å vektlegge anvendt statistisk analyse, med hovedvekt på ferdighet 1 og 3. For å lykkes med hjemmeoppgaven må dere imidlertid også ha en bred beherskelse av samfunnsvitenskapelig metode. Jeg kommer derfor også til å vise hvordan vi kan flette R sammen med bred metodeforståelse til en viss grad. Programmering ut over det som gjennomgås i seminarene kan dere lære gjennom oppgaver merket med **programmering** blant oppgavene som legges ut etter seminarene.  Dere trenger imidlertid ikke lære mer R enn det som gjennomgås i seminarene til R-prøven. 
+
+
+## Andre læringsressurser og nyttige R-lenker
+
+- [Gratis innføringsbok på nett](http://r4ds.had.co.nz/)
+- [Quick-R - et bra sted å søke etter ting, lett å forstå for nybegynnere](https://www.statmethods.net/)
+- [Interaktiv R-intro fra datacamp](https://www.datacamp.com/courses/free-introduction-to-r)
+- [Interaktiv tidyverse-intro fra datacamp](https://www.datacamp.com/courses/introduction-to-the-tidyverse)
+- [Stackoverflow - har svar på det R-problemet du sliter med](https://stackoverflow.com/questions/tagged/r)
+- [R-bloggers - har gode, kortfattede tutorials](https://www.r-bloggers.com/)
+- [Guide til ggplot2](http://docs.ggplot2.org/current/)
+- [Facebookgruppe for R for statsvitere](https://www.facebook.com/groups/427792970608618/)
+- [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
+- [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+- [Mappestruktureringsforslag](https://nicercode.github.io/blog/2013-04-05-projects/)
+
+
+
+Du kan også finne videoer, flere gratis bøker m.m. hvis du googler/søker på stackoverflow.
+Dersom dere ønsker å gjøre/lære mye databehandling med R, vil jeg anbefale at dere bruker tid på å jobbe gjennom *R for data science*. Det viktigste er nok imidlertid å lære seg å lese og forstå hjelpefiler i R og stackoverflow. For å bli god i R er det lurt å huske noen grunnbegreper, men ut over det bruker man hjelpefiler i R/stackoverflow som ordbøker hele tiden. 
+
+
+
+## Undervisningsopplegg
+
+Jeg vil at dere skal skrive mest mulig selvstendig kode i seminarene. Dette er den beste måten å trene dere til å løse hjemmeoppgaven, og den beste måten å sørge for at det ikke blir ubehagelige overraskelser på prøven. Det gir også meg muligheten til å gå rundt å gi individuell oppfølging til dere. For at dette skal fungere effektivt, må dere gjøre noe forberedelser. Derfor foreslår jeg følgende:
+
+1. **Før seminaret:** Alle bruker opp til en halvtime på tutorials før seminarene - dette vil gjøre at jeg slipper å prate så mye i seminaret.
+2. **I seminaret:**
+- Jeg lager oppgavesett, et script og et kort oversiktsdokument over dagens emner til hvert seminar
+- Når vi jobber med oppgaver, hjelp/spør hverandre om dere står fast og jeg hjelper noen andre. 
+- Spør/si i fra dersom noe er uklart, så skal jeg oppdatere undervisningsopplegget.
+3. **Etter seminaret:** Jeg legger ut noen oppgaver, og kommenterer hva slags ferdigheter oppgavene gir trening i. Dere velger selv hvor mye tid dere vil bruke på slike oppgaver. Dere har et travelt semester, og det er mange metoder å fordype seg i. Jeg forventer ikke at alle prioriterer å fordype seg i R.
+
+* Undervisningsmateriell blir lenket til på Canvas. Selve opplegget blir lastet opp på [github](https://github.com/martigso/stv4020aR). Der kan dere også se det Martin laster opp. For øyeblikket ligger fjorårets opplegg ute, jeg kommer til å oppdatere alle seminaren i løpet av semester, da jeg har endret seminarstrukturen en god del. 
+
+## Dagens seminar: En første dataanalyse med R.
+
+I dagens seminar skal jeg gjennomgå følgende:
+
+1. [Kort om funksjoner og hjelpefiler](#funksjoner)
+2. [Importere ulike datatyper i R.](#Importere)
+3. [Utforsking av data og deskriptiv statistikk.](#deskriptiv)
+4. [Plotte-funksjonen `ggplot`.](#ggplot)
+5. [Lineær regresjonsanalyse (OLS)](#ols)
+
+
+
+Dere vil få oppgaver som trener dere i disse ferdighetene, samt i grunnleggende forståelse av R som språk. Dersom dere sliter med å forstå indeksering, funksjoner, objekter e.l., kan dere kikke [her](https://github.com/martigso/stv4020aR/blob/master/Gruppe%201/scripts/Introduksjon.md), eller spørre meg.
+Vi kommer til å fortsette med å trene på basics også i neste seminar.
+
+
+
+## Kort om  funksjoner <a name="funksjoner"></a>
+
+En grunnleggende byggestein i R er funksjoner. En funksjon tar i mot verdi(er), gjerne lagret i form av et R-objekt, utfører operasjoner basert på input, og produserer nye verdier. En typisk R-funksjon har følgende *syntaks*:
+```{r, eval=F}
+aFunction(x = "R-objekt", arg = "alternativ for funksjonens oppførsel")
+## Merk: dette er ikke en faktisk funksjon i R. Funksjoner kan også ha andre syntakser.
+```
+Funksjoner som `c()`, `log()`, `summary()`, `str()` og `read.csv()` er eksempler på funksjoner.
+Dersom vi vil lære mer om en funksjon, kan vi spørre R om hjelp med `?`. Kjør `?c()` og `?log()`  
+
+Dersom vi er på jakt etter en funksjon til et spesielt formål, kan vi bruke `??` (eller google).
+Si at vi har lyst til å lage en sekvens av tall, som med `:` (som teller på heltall), men bare inkludere partall. La oss se om vi kan finne en funksjon til å gjøre dette med følgende kode: `??sequence`
+
+Søket med `??` viser at `seq` kan gjøre jobben:
+```{r}
+seq(from = 2, to = 20, by =2)
+seq(from = 20, to = 2, by = -2)
+```
+Dersom en funksjon produserer output av en type som fungerer som input i en annen funksjon, kan vi plassere funksjoner inne i andre funksjoner:
+```{r}
+c(seq(20 ,2 , -2), rep(1, 2), seq(2, 20, 2))
+```
+Som dere ser trenger vi ikke skrive argumentene, kjør `?rep` for å finne ut hva funksjonen i midten gjør. Fortsett å bruke `?` til å lære om nye funksjoner som introduseres resten av seminaret. Øv på å lese syntaks fra hjelpefilene, sammen med googling vil evnen til å lese syntaks sette dere i stand til å finne løsninger på alle slags problemer, med litt trening går dette stort sett ganske raskt.  
+
+Mange funksjoner er i eksterne pakker (det finnes over 10 000!) som må lastes ned fra nettet med `install.packages("pakkenavn")` og gjøres tilgjengelig i R-sesjonen din før du kan bruke dem med `library(pakkenavn)`.
+
+I dagens seminar skal dere innom pakkene `ggplot2`, `haven`, `moments` og kanskje `dplyr`.
+Under viser jeg koden for å installere `moments`. Skriv koden for å installere og laste inn de to andre pakkene selv i scriptet ditt!
+```{r}
+#install.packages("moments") # dersom pakken allerede er installert trenger du ikke kjøre denne, klikk på packages i viduet nede til høyre for å sjekke, eller se om neste linje med kode kjører uten problemer.
+library(moments)
+```
+
+### Noen omkodingsfunksjoner:
+
+Omkoding er ofte nødnvedig i dataanalyse. Dere skal få et godt råd: ikke gjør en omkoding som overskriver variabler som allerede finnes, opprett alltid nye variabler, ellers kan det bli veldig kjedelig å gjøre feil.
+
+Den funksjonen jeg bruker mest til omkoding, er `ifelse()`. Syntaksen til denne funksjonen kan forklares som følger:
+
+```{r, eval=FALSE}
+data$nyvar <- ifelse(test = my_data$my.variabel=="some logical condition",    
+       yes  = "what to return if 'some condition' is TRUE",
+       no   = "what to return if 'some condition' is FALSE")
+```
+
+Andre nyttige funksjoner til omkoding er matematiske transformasjoner som `log()`, `exp()` og `sqrt()`, og funksjoner for å "lagge" og "leade" variabler som `lag()` og `lead()` fra pakken `dplyr`. Det finnes et stort antall funksjoner som kan brukes til omkoding.
+
+
+## Importere ulike datatyper i R <a name="importere"></a>
+
+Dersom dere skal gjøre statistisk analyse, er som regel den første seksjonen import og forberedelse av data. En styrke ved R, er at det er mulig å importere alskens mulige filer, både fra en **mappe på pcen** din og fra en **url** på internett. Jeg går gjennom import av filer fra excel, stata, spss og R, men vit at det finnes mange andre muligheter. Vi skal bruke et datasett som ble brukt i artikkelen "Aid, policies, and growth." skrevet av Burnside og Dollar i år 2000). Vi kommer til å bruke dette datasettet gjennom hele seminaret.
+
+I introen til seminar 1 som jeg lenket til på canvas fikk dere i oppgave å laste inn datasett fra en url på nett. Nå skal vi se på import av data fra en mappe på pcen. R vil til enhver tid forvente at filnavn du refererer til befinner seg i **working directory**, som er en mappe på pcen din. For å sjekke hva nåværende **working directory** er, og hvilke filer som finnes seg i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):
+
+```{r, eval=FALSE}
+getwd() # lister opp ditt
+list.files()
+```
+
+For å endre **working directory**, bruker dere følgende kode: 
+
+```{r, eval=F}
+setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra") # For windows
+setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
+```
+
+Et annet alternativ er å starte et nytt prosjekt i **R**, ved å trykke på *File* og deretter *New Project* i menyen øverst til venstre i Rstudio. Da får du muligheten til å lage en ny mappe på pcen din som blir satt til **working directory**. Senere kan du sette denne mappen til working directory med *Open project* fra menyen (jeg anbefaler å bruke prosjekter, særlig til hjemmeoppgaven).
+
+**Oppgave:** Lag en ny mappe til R-seminarene, og sett den til **working directory**. Bruk enten `setwd()` eller prosjekter. Last deretter ned filene du finner bak disse lenkene, og lagre dem i ditt working directory:
+
+1. https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/aidgrowth/aidgrowth.RData 
+2. https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/aidgrowth/aidgrowth.dta
+3. https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/aidgrowth/aidgrowth.sav
+
+Sjekk til slutt at filene er i **working directory** med `list.files()`.
+
+Vi er nå klare til å laste inn data som et objekt i R. Funksjoner for å laste inn ulike datatyper har stort sett ganske lik syntaks (noen variasjoner og ulike tilleggalternativ)
+```{r, eval = F}
+datasett <- read_filtype("filnavn.filtype")
+read.csv("filnavn.csv") # for .csv, sjekk også read.table
+load("")
+# Fra haven-pakken 
+read_spss("filnavn.sav")  # for .sav-filer fra spss
+read_stata("filnavn.dta") # for .dta-filer fra stata
+
+```
+
+
+**Oppgave** Last inn en av de tre filene "aidgrowth.RData", "aidgrowth.sav" eller "aidgrowth.dta" som et objekt med navnet `aid`.
+
+```{r, echo=FALSE}
+aid <-  read.csv("https://raw.githubusercontent.com/martigso/stv1020R/master/data/aidgrowth.csv")
+```
+
+
+* Legg merke til: eksterne filer, som uinstallerte pakker og datasett som ikke er lastet inn som objekter, må alltid skrives i `" "` når vi refererer til dem. Informasjon som er lagret internt, som nedlastede pakker og opprettede objekter, refererer vi ikke til med `" "`
+
+## Utforsking av data og deskriptiv statistikk <a name="deskriptiv"></a>
+
+Det første vi vil gjøre etter at vi har åpnet et datasett i R, er som regel å sjekke hva det inneholder og hvordan det er strukturert. Funksjonene under er nyttige til dette formålet. I tillegg til disse funksjonene, er en kodebok helt uunværlig for å forstå hva som foregår i et datasett. Korte variabelbeskrivelser til datasettet `aid` finner dere [her](https://github.com/martigso/stv4020aR/tree/master/Gruppe%202/data/aidgrowth). Operasjonaliseringen er mer uutførlig beskrevet i artikkelen til Burnside og Dollar (2000).
+
+```{r}
+class(aid)    # Er dette faktisk en data.frame, eller et annet type objekt?
+colnames(aid) # denne funksjonen forteller deg kolonnenavn i datasettet.
+names(aid)    # denne funksjonen forteller deg kolonnenavn i datasettet, men fungerer også på andre objekttyper.
+head(aid, 5)  # denne funksjonen viser deg de første observasjonene i datasettet.
+tail(aid, 5)  # denne funksjonen viser deg de siste observasjonene i datasettet.
+str(aid)      # denne funksjonen beskriver strukturen til et objekt. Alt du trenger.
+```
+Dere kan også åpne datasettet i et egete vindu ved å dobbeltklikke på det, skriv evt. `View(aid)`, men ikke lagre denne kommandoen i scriptet ditt som en hovedregel.
+
+Etter at vi har forstått strukturen til datasettet kan vi begynne på en statistisk analyse. Før du kjører en regresjonsmodell, kan det ofte være nyttig å danne seg en forståelse av hvordan sentrale variabler vi er interessert i er fordelt. I dette seminaret skal vi undersøke hypotesen til Burnside og Dollar om at bistand har en positiv, akslererende effekt på vekst i land med "god økonomisk politikk":
+
+>We investigate a new hy pothesis about aid: that it does affect growth,  but that its impact is conditional on  the same  policies that affect growth. Poor countries with  sound economic policies benefit directly from
+ the policies, and in this environment aid accelerates growth. In highly distorted economies, however, aid is    dissipated in unproductive government expenditure.
+
+Denne hypotesen er fin å jobbe med, siden den lar oss se nærmere både på samspill ("conditional impact") og andregradsledd ("accelerates growth"). Variablene vi er interessert i, heter `gdp_growth`, `aid` og `policy`. Før vi undersøker hypotesen vil vi imidlertid gjerne vite hvordan variablene som inngår i hypotesen er fordelt, ellers blir det vanskelig å tolke effektene av variablene substansielt. Vi skal bruke noen funksjoner fra `moments` pakken i tillegg til funksjoner som ikke trenger å lastes inn via pakker.
+
+Disse funksjonene fungerer gir unviariat statistikk for kontinuerlige variabler:
+
+```{r}
+min(aid$gdp_growth, na.rm = TRUE)  # minimumsverdi, na.rm = T spesifiserer at missing skal droppes i beregning.
+max(aid$gdp_growth, na.rm = TRUE)  # maksimumsverdi
+mean(aid$gdp_growth, na.rm = TRUE) # gjennomsnitt
+median(aid$gdp_growth, na.rm =T )  # median
+sd(aid$gdp_growth, na.rm = T)      # standardavvik
+var(aid$gdp_growth, na.rm = T)     # varians
+
+#install.packages("moments")
+library(moments)
+skewness(aid$gdp_growth) # skjevhet - fra moments
+kurtosis(aid$gdp_growth) # kurtose - fra moments
+
+summary(aid$gdp_growth) # forskjellig deskriptiv statistikk for en variabel
+summary(aid)            # deskriptiv statistikk for alle variabler i datasettet
+```
+
+For bivariat eller multivariat deskriptiv statistikk, ser vi gjerne på korrelasjon (pearsons R). Med funksjonen `cor()` kan vi få bivariat korrelasjon mellom to variabler, eller lage bivariate korrelasjoner mellom alle numeriske variabler i datasettet vårt:
+
+```{r}
+cor(aid$gdp_growth, aid$aid, use = "pairwise.complete.obs") # argumentet use bestemmer missing-håndtering
+str(aid)         # sjekker hvilke variabler som er numeriske
+head(aid[,3:13]) # velger de substansielle numeriske variablene i datasettet
+cor(aid[,3:13], use = "pairwise.complete.obs")  # korrelasjonsmatrise basert på numeriske variabler
+```
+
+
+En av variablene i datasettet vårt, `aid$country`, er ikke kontinuerlig. Ved å ta `str(aid)`, ser vi at denne variabelen er kodet som en faktor. Dette innebærer at den vil behandles som en nominalnivå-variabel i statistisk analyse. For kategoriske variabler, er tabeller nyttig:
+
+```{r}
+table(aid$country)      # frekvenstabell
+prop.table(table(aid$country)) # prosentfordeling basert på frekvenstabell
+```
+
+Vi kan også lage tabeller med flere variabler. Under viser jeg hvordan du lager en tabell fordelingen av observasjoner som har høyere vekst enn medianveksten i utvalget, ved hjelp av en logisk test:
+```{r}
+table(aid$gdp_growth>median(aid$gdp_growt,na.rm=T))
+table(aid$gdp_growth>median(aid$gdp_growt,na.rm=T), aid$country)
+```
+
+De fleste land har vekst både over og under medianen. Dersom det ikke hadde vært tilfelle, ville kontrollvariabler for land kunne ha fjernet effekten av de fleste variabler - vi ville ikke hatt veldig godt datagrunnlag for å si så mye om effekten av bistand i samspill med policy (jeg sier ikke at dataene er gode generelt,...).
+
+
+
+## Plotte-funksjonen `ggplot` <a name="ggplot"></a>
+
+
+Hadley Wickham fra R studio skriver mange veldig gode tilleggspakker til R (i tillegg til gratis innføringsbøker på nett), blant annet pakken `ggplot2` (det kan være forvirrende at pakken heter `ggplot2`, mens funksjonen heter `ggplot()`). Jeg foretrekker å lage plot med `ggplot()` funksjonen fra ggplot2 over `plot()` fra *base* R. Grunnen til dette er først og fremst fordi jeg liker syntaksen bedre, og at jeg har brukt `ggplot()` mest, det er ingenting galt med `plot()`. Dersom jeg  bare vil ha et svært enkelt scatterplot bruker jeg ofte `plot()`. Med det sagt, her er de nødvendige elementene man må spesifisere i syntaksen til `ggplot()`:
+
+```{r, eval=F}
+ggplot(data = my_data) +  
+  geom_point(aes(x = x-axis_var_name, y = y-axis_var_name, col=my.var3)))  
+```
+
+Vi starter med å fortelle ggplot hvilket datasett vi bruker. Deretter bruker vi en `geom_...()`-funksjon, her `geom_point()` (det er en lang rekke alternativer), for å fortelle hvordan vi vil plotte data. Her har vi valgt å plotte data som punkter, dvs. lage et scatterplot. Vi må også spesifisere hvilke variabler fra datasettet vi vil plotte, etter `aes()` for aesthetics. Vi må minst velge å plotte en akse, som regel vil vi plotte minst to akser. Vi kan også velge å legge til argumentet `col` for å visualisere enda en variabel. Dette argumentet gir ulike farger til observasjonen avhengig av verdien de har på variabelen vi spesifiserte. Det finnes også alternative måter å visualisere mer enn to variabler, som f.eks. `size = my.var3`, eller `shape = my.var3`.   
+
+Vi legger til nye argumer til plottet vårt med `+`. Etter at vi har spesifisert datasett, geom og aesthetics må vi ikke legge til flere argumenter, men det er mulig å legge til flere elementer (som en regresjonslinje) eller finjustere plottet i det uendelige (f.eks. angi fargekoder for alle farger i plottet manuelt). Man får imidlertid som regel et godt resultat med et par linjer kode. Vi skal se raskt på 3 `geom()`
+
+1. `geom_histogram` - histogram (et godt alternativ kan være å bruke `geom_bar()`)
+2. `geom_boxplot()` - box-whiskers plot
+3. `geom_point()`   - scatterplot
+
+```{r eval=FALSE}
+library(ggplot2)
+ggplot(aid) + geom_histogram(aes(x = gdp_growth), bins = 50) # lager histogram
+```
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/sem1gg1.png")
+```
+
+
+```{r, eval = F}
+ggplot(aid) + geom_boxplot(aes(x = as.factor(sub_saharan_africa), y = aid))
+```
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/sem1gg2.png")
+```
+
+Her er et overlesset eksempel på et scatterplot (poenget er å illustrere muligheter, ikke å lage et pent plot):
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(aid) +
+  geom_point(aes(x=aid, y=gdp_growth, col=policy, shape=as.factor(sub_saharan_africa))) +
+  geom_smooth(aes(x=aid, y=gdp_growth), method="lm") +  # merk: geom_smooth gir bivariat regresjon
+  ggtitle("Visualization of relationship between aid and growth to showcase ggplot") +
+  xlab("aid") +
+  ylab("growth") +
+  theme_minimal()
+```
+
+```{r echo = FALSE}
+knitr::include_graphics("../pics/sem1gg3.png")
+```
+
+
+**Oppgave:** Forsøk å legge til `facet_wrap(~sub_saharan_africa)`, hva gjør dette argumentet? Hvordan kan det være nyttig for å plotte samspill? Forsøk å fjerne ett og ett argument i plottet over for å se hva argumentene gjør.
+
+Dersom du lager et plot du er fornøyd med, kan du lagre det med `ggsave()`, som lagrer ditt siste ggplot.
+```{r, eval=FALSE}
+ggsave("testplot.png", width = 8, height = 5) # lagrer ditt siste ggplot i det formatet du vil på working directory
+```
+Mulighetene er endeløse, jeg har bare vist dere noen få muligheter her. Ved hjelp av [cheatsheet til ggplot2](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) og [annen dokumentasjon](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/) som dere kan google dere frem til, burde dere finne metoder for å lage akkurat det plottet dere ønsker.
+
+
+## Lineær regresjon (OLS) <a name="ols"></a>
+Vi kan nå kjøre en regresjonsanalyse for å teste hypotesen, til dette bruker vi `lm()`, som har følgende syntaks:
+```{r, eval = F}
+lm(avhengig.variabel ~ uavhengig.variabel1 + uavh.var2, data=mitt_datasett)
+# på mac får du ~ med alt + k + space
+```
+
+La oss først se på en bivariat regresjon mellom `aid` og `gdp_growth`:
+
+```{r}
+m1 <- lm(gdp_growth ~ aid, data = aid) # gdp_growth avh. var, aid uavh. var
+summary(m1) # for å se resultatene
+```
+
+Legger inn flere kontrollvariabler med `+`. Med `as.factor()` sørger jeg for at `sub_saharan_africa` og `fast_growing_east_asia` behandles som dummyvariabler. Med `as.factor` inne i `lm()` blir det laget dummy-variabler for alle verdier på en variabel unntatt en refereanseverdi . 
+
+```{r}
+m2 <- lm(gdp_growth ~ aid + policy + assasinations + as.factor(sub_saharan_africa) + as.factor(fast_growing_east_asia), data = aid)
+summary(m2)
+```
+
+Legger inn samspill mellom `aid` og `policy` med `*`. Merk at de individuelle regresjonskoeffisientene for variabler i samspill blir automatisk inkludert (det er bra). Nå gjør vi vår første test av hypotesen til Burnside og Dollar
+
+```{r}
+m3 <- lm(gdp_growth ~ aid*policy + assasinations + sub_saharan_africa + fast_growing_east_asia, data = aid)
+summary(m3)
+```
+
+**Oppgave:** Bruk R til å regne ut effekten av en enhets økning i bistand for maksimums- og minimumsverdien til `aid$policy`. 
+
+For å legge inn andregradsledd, bruker vi `I(var^2)`. Vi kan nå se nærmere på om effekten av bistand er kurve-lineær ved å legge inn et andregradsledd: 
+
+```{r}
+m4 <- lm(gdp_growth ~ aid + I(aid^2) + policy + assasinations + sub_saharan_africa + fast_growing_east_asia, data = aid)
+summary(m4)
+```
+
+**Oppgave:** hva blir den forventede effekten av bistand for medianverdien til bistand, og for maksimumsverdien til bistand, i henhold til regresjonen over? 
+
+
+## Takk for i dag!
+
+

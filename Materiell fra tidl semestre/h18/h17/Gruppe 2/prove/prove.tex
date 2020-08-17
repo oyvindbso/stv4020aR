@@ -1,0 +1,162 @@
+\documentclass[12pt]{article}
+
+% Pretty much all of the ams maths packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+% Allows you to manipulate the page a bit
+\usepackage[a4paper]{geometry}
+
+% Norwegian letters
+\usepackage[utf8]{inputenc}
+\usepackage[norsk]{babel}
+
+% Pulls the page out a bit - makes it look better (in my opinion)
+\usepackage{a4wide}
+
+% Removes paragraph indentation (not needed most of the time now)
+\usepackage{parskip}
+
+% Allows inclusion of graphics easily and configurably
+\usepackage{graphicx}
+
+% Provides ways to make nice looking tables
+\usepackage{booktabs}
+
+% Allows you to rotate tables and figures
+\usepackage{rotating}
+
+% Allows shading of table cells
+\usepackage{colortbl}
+% Define a simple command to use at the start of a table row to make it have a shaded background
+\newcommand{\gray}{\rowcolor[gray]{.9}}
+
+\usepackage{textcomp}
+
+% Provides commands to make subfigures (figures with (a), (b) and (c))
+\usepackage{subfigure}
+
+% Typesets URLs sensibly - with tt font, clickable in PDFs, and not breaking across lines
+\usepackage{url}
+
+% Makes references hyperlinks in PDF output
+%\usepackage{hyperref}
+
+% Provides ways to include syntax-highlighted source code
+\usepackage{listings}
+\lstset{frame=single, basicstyle=\ttfamily}
+
+% Provides Harvard-style referencing
+\usepackage{natbib}
+\bibpunct{(}{)}{;}{a}{,}{,}
+
+% Provides good access to colours
+\usepackage{color}
+\usepackage{xcolor}
+
+% Simple command I defined to allow me to mark TODO items in red
+\newcommand{\todo}[1] {\textbf{\textcolor{red}{#1}}}
+
+% Allows fancy stuff in the page header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% Vastly improves the standard formatting of captions
+\usepackage[margin=10pt,font=small,labelfont=bf, labelsep=endash]{caption}
+
+%Double spacing
+%\usepackage{setspace}
+%\doublespacing
+
+% Standard title, author etc.
+\title{STV1020: Kvalifiseringsprøve i R}
+\author{}
+\date{}
+% Put text on the left-hand and right-hand side of the header
+\fancyhead{}
+\lhead{STV4020A}
+\rhead{Kvalifiseringsprøve i R}
+\chead{09.10.2017}
+\begin{document}
+
+
+\section*{Instruksjoner}
+\begin{itemize}
+\item Prøven skal besvares med et fungerende R-script som lastes opp i innleveringsmappen
+p{\aa} Fronter.
+
+\item Scriptet skal inneholde nødvendig kode for å besvare oppgavene samt kommentarer markert med \# som forklarer fremgangsmåten dere har valgt. Der oppgavene ber dere oppgi bestemte verdier eller tolkninger skal disse også oppgis som kommentarer i scriptet.
+
+\item Husk at riktig kode er det viktigste; pass på å ikke bruk for lang tid på tolkninger.
+
+\item Sørg for at koden er oversiktlig. For å skille oppgavene fra hverandre, anbefales overskrifter av typen: \\
+\#\#\# Oppgave 1 \#\#\#\# i scriptet \\
+\# Oppgave 1: \\ eller lignende.
+
+\item Lykke til!
+\end{itemize}
+
+\vfill
+
+\section*{Variabelforklaringer:}
+\begin{description}
+  \item[respondent{\_}id] Unik id for individuelle respondenter
+  \item[steak{\_}prep] Hvordan respondenten foretrekker biff stekt
+  \item[hhold\_income] Husholdningsinntekten til respondenten (i dollar)
+  \item[age] Respondentens alder
+  \item[smoke] Om respondenten r{\o}yker (1 = ja, 0 = nei)
+  \item[alcohol] Om respondenten drikker alkohol (1 = ja, 0 = nei)
+\end{description}
+
+\newpage
+
+
+\section*{Oppgaver}
+\begin{enumerate}
+
+\item Last inn data \textbf{steak{\_}survey.csv}. Enhetene i datasettet er respondenter i en survey. Du kan enten laste ned data fra fronter, linken: \\
+\url{http://folk.uio.no/martigso/encrypt/} \\
+eller direkte inn i R med: \\
+\url{http://folk.uio.no/martigso/encrypt/steak_survey.csv}
+
+\item Lag et stolpediagram av variabelen {\tt steak{\_}prep}. Kommenter hvilken verdi på variabelen som har høyest frekvens.
+
+\item Lag en \textbf{ny variabel} -- {\tt steak{\_}prep2} -- som tar verdiene: \\
+  \begin{itemize}
+    \item ``Rare'' når {\tt steak{\_}prep} er ``Rare'' \textbf{eller} ``Medium rare''
+    \item ``Medium'' når {\tt steak{\_}prep} er ``Medium''
+    \item ``Well'' når {\tt
+    steak{\_}prep} er ``Medium Well'' \textbf{eller} ``Well''
+  \end{itemize}
+Sjekk at variabelen ble kodet riktig med en tabell.
+
+\item Gjør om den nye {\tt steak{\_}prep2} variabelen til en faktor, og sett
+kategorien med flest enheter til referansekategori.
+
+\item Vis hvordan du finner korrelasjonen mellom variblene {\tt smoke} og {\tt alcohol}. Oppgi korrelasjonen i en kommentar.
+
+\item Lag et boxplot med {\tt steak{\_}prep2} på x-aksen og {\tt age} på y-aksen.
+Hvilken kategori på {\tt steak{\_}prep2} har lavest median?
+
+\item Estimer en multinomisk logistisk regresjon med {\tt steak{\_}prep2} som
+avhengig variabel og {\tt age}, {\tt hhold{\_}income}, {\tt smoke} og {\tt
+alcohol} som uavhengige variabler. Husk også å ta vare på informasjon om NA i
+regresjonen. Kommenter kort hva retningen for begge koeffisientene til {\tt
+smoke} betyr.
+
+\item Vis hvordan du sjekker konfidensintervallene på 5\% nivå for effektene i
+regresjonen fra oppgave 6. Er effekten av {\tt age} signifikant?
+
+\item Legg inn predikerte \textbf{kategorier} (ikke sannsynligheter) i datasettet
+fra regresjonen i oppgave 6. Lag en tabell over predikerte (forventede) og
+faktiske verdier på {\tt steak{\_}prep2}. Kommenter kort hva tabellen viser.
+
+\item Lag datasett (\emph{test set}) der alder går fra 18:90, {\tt
+hhold{\_}income} er satt til median, {\tt smoke} er satt til 0 og {\tt alcohol}
+er satt til 1. Legg så inn predikerte sannsynligheter (løs regresjonsligningen)
+fra regresjonen (oppgave 7) i dette datasettet. Lag deretter et plot som har de
+forventede sannsynlighetene til \emph{test settet} på y-aksen, alder på x-aksen
+og fargede linjer for hver av kategoriene på {\tt steak{\_}prep2}.
+
+\end{enumerate}
+
+\end{document}

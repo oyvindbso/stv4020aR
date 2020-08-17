@@ -1,0 +1,284 @@
+---
+title: "Introduksjon til 1. R-seminar"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Velkommen til R-seminar!
+
+Dette er en interaktiv R-tutorial, jeg håper du vil bruke 15-30 minutter på før 1. seminar. 
+Du kan skrive kode i boksene under, det kommer også en liten quiz. Dersom noe står skrevet på `denne måten`, er det kode eller en del av R-kode. Dersom du gjør siste seksjon også, kan du lære mye. Denne seksjonen tar imidlertid en del tid.
+
+I 1. seminar skal vi jobbe med lineær regresjon, samt bruk av deskriptiv statistikk og plot i R for å kritisk vurdere hvor troverdig resultater fra en regresjonsanalyse egentlig er. Vi skal også se nærmere på import og forberedelse av data til linære regresjon, og hjelpefilene i R. 
+
+Tema for denne introduksjonen er derfor:
+
+1. Importere data 
+2. Forberedelse av data
+3. Regresjonsanalyse
+4. Vurdering av regresjonsresultater med deskriptiv statistikk og plot
+
+
+## Importere data
+
+R lar deg laste inn datasett fra tekst, excel-filer, andre statistikkprogramm, internett og sikkert fra andre kilder også. Funksjoner for å laste inn datasett har stort sett alltid samme grunnleggende syntaks:
+
+```{r, eval = F}
+funksjonsnavn("Filsti på datamaskin eller en url.filtype")
+datasett <- funksjonsnavn("Filsti på datamaskin eller en url.filtype") # Vi vil oftest lagre data i et objekt
+```
+
+For ulike filtyper (e.g. `.csv`, `.txt` eller `.Rdata`), finnes det egne funksjoner. Under har jeg lagt inn noen eksempler der antas det at **working directory** er satt til mappen filen er lagret i. **Working directory** er den mappen R forventer å hente å lagre filer i. Dere må spesifisere en sti gjennom mappene deres dersom dere vil hente filer fra andre steder på pcen. Jeg anbefaler derfor at dere lager en ny mappe for hvert nye prosjekt med R, og at dere lagrer alle filer knyttet til prosjektet (data, bilder, script, figurer) her. For å finne ut hvilken mappe dere jobber fra for øyeblikket, kan vi bruke `getwd()`. For å bestemme at en mappe skal være våres working directory bruker vi `setwd()`. I script dere skal dele med andre, fjern innholdet fra `setwd()`. Her er syntaks for `setwd()`, som fungerer litt ulikt på windows og mac/linux:
+
+```{r, eval=F, echo = T}
+setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra") # For windows
+setwd("~/R/der/du/vil/jobbe/fra")             # For mac/linux
+```
+
+I denne koden lagres datasettet **"datasett"**, som er lagret som en fil på pcen din, som objektet `data` i R.
+De to siste linjene med kode under krever at du laster ned pakken `haven` med `install.packages("haven")` og deretter gjør den tilgjengelig i R-sesjonen din med `library(haven)`
+
+```{r, eval = F, echo = T}
+data <- load("datasett.Rdata") # .Rdata er R sitt eget filformat
+data <- read.csv("datasett.csv") # .csv er en filtype som brukes mye, og som stammer fra excel.
+data <- read.table("datasett.txt") # Beslektet med read.csv. Har argumenter for å angi strukturen til tabeller
+data <- read_spss("datasett.sav")  # Leser .sav og .por filer fra SPSS, funksjonen stammer fra pakken haven
+data <- read_stata("datasett.dat")  # Leser .dat filer fra STATA, funksjonen stammer fra pakken haven
+```
+
+**Din tur!** Oppgave: last inn filene du finner bak urlene under, ved å plugge urlene inn i riktig funksjon.
+Jeg har lagt et eksempel med en .csv fil på toppen av kodeboksen. Jeg har satt funksjonen `head()` rundt koden for å importere datasettene, med tallet 5 inne i funksjonen. Denne koden sørger for at bare de fem første linjene fra datasettet printes, og gjør derfor output mer oversiktlig. Skriv din egen kode inn boksen under. 
+
+1. `"https://raw.githubusercontent.com/langoergen/stv1020R/master/data/aidgrowth.csv"`
+2. `"https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/aidgrowth/aidgrowth.dta"`
+3. `"https://github.com/martigso/stv4020aR/raw/master/Gruppe%202/data/aidgrowth/aidgrowth.sav"`
+
+```{r laste-datasett, exercise=TRUE}
+head(read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv"),5)
+#install.packages("haven") Kjør i console ved behov.
+library(haven)
+
+## Fyll inn kode under
+head(`din kode for å importere data her`,5)
+head(`din kode for å importere data her`,5)
+head(`din kode for å importere data her`,5)
+```
+
+
+## Omkoding av variabler
+
+Ofte ønsker vi å gjøre endringer i et datasett før vi gjennomfører en dataanalyse. I mange tilfeller innebærer disse endringene omkoding av variabler. Mitt råd er at dere alltid oppretter en ny variabel i datasettet deres ved omkoding (i stedet for å skrive over en eksisterende variabel), da dette gir dere full angrerett dersom noe går galt. For å sikre etterprøvbarhet og full angrerett, bør dere også alltid beholde rådata-filen deres. 
+
+Syntaksen for å opprette en ny variabel i datasettet ditt, som er en omkodet versjon av en variabel du allerede har i datasettet burde vært gjenkjennelig:
+
+```{r omkoding, exercise = F, eval = F, echo=T, tidy=TRUE}
+datasett$omkodet_variabel <- en_funksjon(datasett$gammel_variabel)
+# Dette er syntaksen for å opprette en ny omkodet versjon av "gammel_variabel" 
+# i datasettet ditt. 'en_funksjon' kan være enkel, eller bestå av flere linjer kode.
+```
+
+Det finnes svært mange funksjoner for omkoding av variabler, dere skal få møte noen av de mest vanlige i neste seminar. Noen enkle funksjoner for omkoding er `log()`, `sqrt()` og `(data$myvar)^2`. Finn ut av hva disse funksjonene gjør med `mtcars$mpg` i boksen under (bruk også `?` foran funksjonene for å se på hjelpefilene):
+
+```{r enkel-omkoding, exercise=TRUE}
+summary(mtcars$mpg)
+```
+
+Den funksjonen jeg benytter mest til omkoding er trolig `ifelse()`, den har svært stor anvendelighet. Syntaksen til `ifelse()` er som følger:
+
+```{r ifelse-intro, exercise = F, eval = F, echo=T, tidy=TRUE}
+data$omkodet_variabel <- ifelse(logisk test med data$gammelvariabel, 
+                                handling hvis test == T,
+                                handling hvis test == F)
+# Alle slags logiske tester er mulig.
+# Det er ofte nyttig å kombinere ifelse med andre funksjoner
+# man kan for eksempel sette flere ifelse() inn i hverandre ved å sette inn ifelse() i handling hvis test == F
+```
+
+Forsøk å spesifisere en `ifelse()` funksjon som returnerer 0 for biler med lavere bensinforbruk enn 20 miles per gallon, og 1 for biler med høyere verdi. Du skal ikke opprette en ny variabel Fyll inn den nødvendige koden under:
+
+```{r ifelse-omkoding, exercise=TRUE}
+mtcars$mpg # denne lar deg sjekke at du har gjort riktig
+ifelse(mtcars$mpg, , )
+```
+
+
+## Regresjonsanalyse
+
+I neste seminar skal vi jobbe med regresjonsanalyse. Funksjonen for lineær regresjon i R er `lm()`, som har følgende syntaks:
+
+```{r regresjons-intro, exercise = F, eval = F, echo=T, tidy=TRUE}
+lm(avh.var ~ uavh.var1 + uavh.var2, data = datasett)
+```
+Du kan lagre en regresjonsanalyse som et objekt. Dette objektet er av en annen type enn objektene vi har sett på så langt, men generiske funksjoner som `summary()`, `names()`, `str()` og `plot()` fungerer også på regresjonsobjekter. 
+
+### Min første regresjonsanalyse
+
+Koden under demonstrerer en regresjonsanalyse med datasettet mtcars, kjør gjennom og tenk gjennom hva som skjer (variabelen `wt` står for vekt i tonn, `mpg` for miles per gallon, mens `hp` angir hestekrefter):
+
+```{r regresjon, exercise=TRUE, tidy = T}
+lm(mpg ~ wt + hp, data = mtcars)
+```
+
+Kjør også gjennom koden under, hva skjer her? Kommenter ved siden av etter `#`
+```{r regresjon2, exercise=TRUE, tidy = T}
+m1 <- lm(mpg ~ wt + hp, data = mtcars) #
+str(m1) #
+summary(m1) #
+str(summary(m1))
+m1results <- summary(m1) #
+```
+
+
+### Regresjonsquiz
+
+Test forståelsen din av koden over:
+
+```{r quiz}
+quiz(
+  question("Hva er de uavhengige variablene i regresjonen over?",
+    answer("mpg og wt"),
+    answer("mpg"),
+    answer("hp og wt", correct = TRUE),
+    answer("mpg og hp")
+  ),
+  question("Hvordan kan vi forvente at en vektøkning på 2 tonn endrer mpg med utgangspunkt i regresjonen over?",
+    answer("reduksjon med 7.76 miles per gallon", correct = TRUE),
+    answer("reduksjon med 3.88 miles per gallon"),
+    answer("økning med 0.63 miles per gallon"),
+    answer("økning med 5.85 miles per gallon")
+  ),
+  question("Hvilke utsagn om objektene lagret i koden over stemmer? (hint: sjekk med `class()`)",
+    answer("objektklassene er lm og summary.lm, begge er objektene er lister", correct = TRUE),
+    answer("objektklassene er lm og summary, begge er objektene er datasett"),
+    answer("objektene er datasett"),
+    answer("objektklassene er ols og summary, begge objektene er atomic.vector")  
+))
+```
+
+## Forstå din regresjonsmodell
+
+I seminar 2 skal vi lære formelle tester av hvor godt ulike trusler/forutsetninger for OLS holder. For å gjøre en god jobb med statistisk analyse i statsvitenskap er imidlertid ikke slike tester alene tilstrekkelig. Man må også reflektere rundt spørsmål som: Hva er egentlig hypotesen, og hvilke sammenligning (eller counter-factual) legges egentlig til grunn? Er denne sammenligningen god, eller glatter den over viktige forskjeller? Måler egentlig variablene konseptene vi er interessert i på en god måte? Hva er en substansielt meningsfull effekt i regresjonen? 
+
+Slike spørsmål må tildels vurderes utenfor R, men plotting og deskriptiv statistikk kan være til stor hjelp for å tenke på slike spørsmål, samt skape en forståelse av hva som ligger bak regresjonskoeffisientene som spyttes ut i console. Under følger en kort demonstrasjon, bare kjør koden i boksene. Installer forøvrig pakken `ggplot2()` om du ikke allerede har gjort dette med `install.packages("ggplot2")`. Vi skal bruke datasettet `beer`, som jeg også brukte i R-introduksjonen.
+
+```{r beer, exercise=TRUE, tidy = T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer)
+```
+
+Hypotesen vi skal undersøke, er at skatt på øl (variabel :`beer$beertax`, målt i dollar per gallon) fører til en reduksjon i dødsfall per 10 000 innbygger i amerikanske delstater i et gitt år (variabel: `beer$mrall`). 
+
+Det første vi skal gjøre, er å spesifisere en helt enkel regresjonsmodell uten kontrollvariabler, og vurdere hvorvidt effekten av `beer$beertax` er substansiell.
+```{r reg, exercise=TRUE, tidy = T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer) # hver kodeboks er som en ny r-versjon, må derfor laste inn data hver gang.
+
+b1 <- lm(mrall ~ beertax, data = beer)
+summary(b1)
+```
+
+Resultatene vi får gjennom `summary(b1)` viser oss at effekten av `beertax` er signifikant på `0.001` nivå (p-verdien er `1.08e-08`, som betyr *0.0000000108*). Her er vi imidlertid interessert i å forstå om denne effekten er substansiell. Først, legg merke til at effekten av `beertax` er positiv - det ser ut som skatt øker dødsraten i trafikken. Videre får vi beskjed om at den forventede økningen i dødsrate ved en enhets økning i skatt er `0.36461`. Mitt førsteinntrykk er at dette er en god del, og at effekten er substansiell (hvis vi kan forvente å redde et liv per 10 000 innbygger hvert tredje år ved å redusere alkoholskatt med 1 dollar, er det ganske bra). Hvis det er veldig små forskjeller i ølskatt, og store svingninger i dødsrate, vil imidlertid effekten være mindre substansiell enn hvis det motsatte er tilfellet. La oss undersøke med deskriptiv statistikk og plot:
+
+```{r substansiell, exercise=TRUE, tidy = T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer)
+b1 <- lm(mrall ~ beertax, data = beer)
+
+
+summary(beer$beertax) # gir min, maks, median og 1. og 3. kvartil.
+# Ser at skatten varierer mellom et par cent og nesten 3 dollar.
+sd(beer$beertax) # standardavvik ølskatt, ser at typisk avsnitt fra gjennomsnitt er ca. en halv dollar.
+
+summary(beer$mrall) # Ser at dødsrate per 10 000 innbyger varierer mellom 0.82 og 4.2, gjennmosnitt er 1.62
+
+coef(b1) # funksjon for å hente ut regresjonskoeffisienter
+coef(b1)[[2]] # indekserer tall for regresjonskoeffisient til ølskatt
+
+sd(beer$beertax)*coef(b1)[[2]] # typisk forventet effekt av ølskatt i utvalget
+(max(beer$beertax) - min(beer$beertax))*coef(b1)[[2]] # maksimal forventet effekt av ølskatt i utvalget
+
+# install.packages("ggplot2")
+library(ggplot2)
+
+# plot som viser alle punktene i datasett, samt den linære regresjonen vi har kjørt.
+ggplot(beer, aes(x = beertax, y = mrall)) + geom_point() + geom_smooth(method = "lm")
+# legger merke til at det er relativt få observasjoner (delstat-år) med ølskatt mye over 1, og at det er stor variasjon i dødsrate blant observasjoner med skatt under 1 dollar. Ølskatt er skjevfordelt.
+
+#install.packages("moments")
+library(moments)
+skewness(beer$beertax) # skjevhet - viser at variabelen er temmelig høyreskjev, slik scatterplottet over indikerte
+kurtosis(beer$beertax) # kurtose - høy kurtose inidikerer tykke haler på fordelingen
+```
+
+Denne deskriptive statistikken hjelper oss med å med å forstå hvor sterk den estimerte effekten av ølskatt på dødsrate egentlig er. Nå som vi har fått en bedre forståelse av hva data forteller oss, kan vi tenke grundigere gjennom hva som foregår. Her er det grunn til å være skeptisk, siden resultatet er såpass kontraintuitivt.
+
+Her er en liste over spørsmål det kan være verdt å undersøke (ikke uttømmende):
+
+1. Basert på plottet over kan vi spørre oss om hvor avhengig resultatene er av observasjonene med høy ølskatt
+2. Plottet gjør det også verdt å spørre om effekten er kurve-lineær
+3. Hva slags sammenligning gjør vi regresjonsanalysen vår?
+4. Har vi utelatt viktige variabler? Sagt på en annen måte: er det systematiske forskjeller i dødsrate mellom delstater som har høy og lav skatt på øl?
+5. Er variablene våre valide?
+
+Vi skal anta at variablene er valide, og gå raskt gjennom spørsmål 1-4.
+
+Det to første spørsmålene kan vi teste, ved å kjøre nye regresjonsmodeller: 
+
+```{r altmod, exercise=TRUE, tidy = T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer)
+
+summary(lm(mrall ~ beertax, data = subset(beer, beertax<1))) 
+# effekten vi får ved å se på observasjoner med skatt under 1 er nesten lik som før
+summary(lm(mrall ~ beertax + I(beertax^2), data = beer)) # I(varnavn^2) gir andregradsledd
+# en viss støtte for en kurvelineær effekt, men rokker ikke ved konklusjonen om at svært lav ølskatt er estimert til å gi færrest dødsfall.
+```
+
+De to neste spørsmålene kan vi vurdere ved å tenke gjennom hypotesen en gang til, og lage noen plot.
+Sammenligningen vi gjør i regresjonsmodellene over tar ikke hensyn til at det er ulike delstater i utvalget, noe hypotesen spesifiserer at vi skal gjøre. I stedet ser regresjonene over på om det er en generell sammenheng mellom ølskatt og dødsrate i trafikken. La oss se på et plot for å se nærmere på trendene i ølskatt og dødsfall over tid i noen delstater.
+
+```{r delstater, exercise=TRUE, tidy = T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer)
+
+library(ggplot2)
+ggplot(beer, aes(x = year, y = mrall, col = beertax)) + geom_line() + facet_wrap(~state) # trender i dødsrate
+ggplot(beer, aes(x = year, y = beertax, col = mrall)) + geom_line() + facet_wrap(~state) # trender i ølskatt
+# sammenheng mellom skatt og dødsfall på delstatsnivå:
+ggplot(beer, aes(y = mrall, x = beertax, col = as.factor(year))) + geom_point() + facet_wrap(~state)
+```
+
+Ved å zoome inn på plottet, får jeg ikke inntrykk av at ølskatt gir økt dødsrate, snarere tvert i mot. Derfor kan vi tenke oss at delstat er en utelatt variabel i regresjonen. Når vi først er i gang med å se etter utelatte variabler, kan vi også se på en korrelasjonsmatrise for å undersøke om det er variabler som både korrelerer med uavhengig og avhengig variabel:
+
+```{r utelatt, exercise = TRUE, tidy =T}
+beer <- read.csv("https://raw.githubusercontent.com/martigso/stv4020aR/master/Gruppe%201/data/beer.csv")
+str(beer) 
+# alle var må være numeriske i en korrelasjonsmatrise, omkoder derfor jaild og comserd
+beer$comserd <- as.numeric(beer$comserd)
+beer$jaild <- as.numeric(beer$jaild)
+cor(beer) # korrelasjonsmatrise
+# Ser at alle variabler kan være relevante, perinc utmerker seg med sterke korrelasjoner med mrall og beertax. La oss se på effekten av å inkludere denne variabelen først:
+summary(lm(mrall ~ beertax + perinc, data = beer))
+# Fortsatt forventet positiv effekt av beertax
+
+## Full regresjon uten state:
+summary(lm(mrall ~ beertax + perinc + vmiles+ as.factor(comserd) + mlda + as.factor(jaild) + unrate, 
+           data = beer))
+
+## Den forventede effekten er svakt signifikant, og mye svakere enn før
+
+## Med dummyvariabler for stater (en stat blir satt som referanse, og får ikke egen dummy):
+summary(lm(mrall ~ beertax + perinc + vmiles+ as.factor(comserd) + mlda + as.factor(jaild) + unrate + as.factor(state), 
+           data = beer))
+## Nå blir effekten negativ og signifikant. Hva skjedde? Vi la til fixed effect, mer i forelesning om paneldata.
+## Forventet reduksjon på -0.41 dødsfall per 10.000 innbygger som resultat av en dollar økning i ølskatt.
+```
+
+Ved å kontrollere for stater, sammenligner vi variasjon innad i stater over tid, i stedet for å slenge dem alle sammen i en stor gruppe. Da får vi også et resultat som støtter hypotesen. Det er ikke dermed sagt at regresjonen over er perfekt. Man bør teste for ulike funksjonsformer, og se nærmere på forutsetninger, m.m.
+Tenk kritisk.

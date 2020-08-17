@@ -1,0 +1,39 @@
+---
+title: "Ekstraoppgaver 3"
+author: "Martin Søyland"
+date: "September 18, 2017"
+output:
+  pdf_document: default
+  html_document: html_notebook
+header-includes: \usepackage{setspace}\onehalfspacing
+urlcolor: cyan
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Oppgaver
+1. Last inn datasettet storting.sav. Datasettet er Stortingsrepresentanter per sesjon.
+2. Lag et stolpediagram (bar plot) med *party_id* på x-aksen. Hvilket parti har flest representanter?
+3. Vis antall enheter for hvert kjønn (*gender*), omkod variabelen til ordinalt målenivå, og sett referansekategori til kategorien med flest enheter.
+4. Lag en ny variabel *age*, som viser alderen til representanten ved å trekke *birth* fra *session*.
+5. Lag en ny variabel som er en sentrert versjon av *age*. 
+6. Omkod variabelen *language* til å være på ordinalt målenivå.
+7. Lag en binomisk logistisk regresjon med *language* som avhengig variabel, og *gender* og sentrert alder som uavhengige variabler. Er koeffisienten for kjønn signifikant? Forklar.
+8. Lag samme binomisk logistisk regresjon som oppgaven over, men kontroller også for partitilhørighet. Tolk koeffisienten for å tilhøre Senterpartiet (Sp) substansielt.
+9. Legg in predikerte verdier for den siste modellen i datasettet.
+10. Opprett en variabel som tar veriden "nynorsk" hvis predikerte sannsynligheter til en enhet er høyere enn 0.5 og "bokmål" ellers. Lag en tabell mellom denne og variabelen *language*. Kommenter hva tabellen viser.
+
+
+## Variabelforklaringer:
+
+| **Variabel**          | **Beskrivelse**                                                   |
+|-----------------------|-------------------------------------------------------------------|
+| *session*             | Indikator for Stortingssesjon                                     |
+| *rep id*              | Unik id for hver Stortingsrepresentant                            |
+| *language*            | Transkriberes representanten til nynorsk/bokmål i debatter?       |
+| *ant_taler*           | Antall taler representanten holdt i sesjonen                      |
+| *gender*              | Representantens kjønn                                             |
+| *party_id*            | Representatntens partitilhørighet                                 |
+| *birth*               | Representantens fødselsår                                         |

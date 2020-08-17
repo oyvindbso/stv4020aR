@@ -1,0 +1,42 @@
+---
+title: "Ekstraoppgaver 2"
+author: "Martin Søyland"
+date: "September 18, 2017"
+output:
+  pdf_document: default
+  html_document: html_notebook
+header-includes: \usepackage{setspace}\onehalfspacing
+urlcolor: cyan
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Oppgaver
+1. Last inn datasettet **talk-of-norway.csv**. Enhetene i datasettet Stortingsrepresentanter (per sesjon). 
+2. Lag et box-plot med *talers_rolle* på x-aksen og *ant_taler* på y-aksen. Kommenter kort hva plotet viser.
+3. Vis hvordan du finner median- og gjennomsnittalder (*alder*). Lag en ny variabel i datasettet som sentrerer alder til den mest egnede av disse (gjennomsnitt eller median), og kontroller at variabelen ble riktig opprettet.
+4. Lag et spredningsplot med *liste_nummer_valg* på x-aksen og *ant_taler* på y-aksen. Legg også til en bivariat regresjonslinje i plotet, og kommenter sammenhengen.
+5. Estimer en OLS-modell med *ant_taler* som avhengig variabel og *gj_ant_ord*, *liste_nummer_valg*), *kjonn* og alder (sentrert) som uavhengige variabler. Tolk effekten av en valgfri uavhengig variabel substansielt.
+6. Estimer samme OLS-modell som over, men nå også med *talers_rolle* som uavhengig variabel. Tolk konstantleddet substansielt.
+7. Lag to nye variabel i datasettet som viser a) restleddene (residualene) og b) forventet (predikert) verdi til hver enhet fra den siste modellen (oppgave 6).
+8. Lag et spredningsplot med forventede verdier på x-aksen og restledd på y-aksen (begge fra oppgave 7), og tegn en bivariat regresjonslinje mellom disse. Er forutsetningen om ikke-korrelerte restledd og forventede verdier oppfylt?
+
+## Variabelforklaringer:
+
+| **Variabel**          | **Beskrivelse**                                                   |
+|-----------------------|-------------------------------------------------------------------|
+| *rep id*              | Unik id for hver Stortingsrepresentant                            |
+| *sesjon*              | Indikator for Stortingssesjon                                     |
+| *parti id*            | Representantens partitilhørighet                                  |
+| *ant taler*           | Antall taler representanten holdt i sesjonen                      |
+| *gj_ant_ord*          | Gjennomsnittlig antall ord i talene til representanten            |
+| *alder*               | Representantens alder                                             |
+| *kjonn*               | Representantens kjønn                                             |
+| *talers_rolle*        | Indikator for om taler var medlem av Stortinget eller regjeringen |
+| *liste__nummer_valg*  | Representantens plassering på partiets valgliste ved forrige valg |
+
+
+
+
