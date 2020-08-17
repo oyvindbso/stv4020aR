@@ -1,0 +1,37 @@
+---
+title: "Ekstraoppgaver 1"
+author: "Martin Søyland"
+date: "September 18, 2017"
+output:
+  pdf_document: default
+  html_document: html_notebook
+header-includes: \usepackage{setspace}\onehalfspacing
+urlcolor: cyan
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Oppgaver
+1. Last inn datasettet **trust.rda** Enhetene i datasettet er personer i en spørreundersøkelse.
+2. Finn gjennomsnitt, median og standardavvik for variabelen *Trust_politicians*. Oppgi standardavviket i en kommentar.
+3. Hvilken av variablene *Trust_politicians* og *house_income* har flest missingverdier?
+4. Lag en korrelasjonsmatrise mellom *Trust_politicians*, *house_income* og *happy* med listwise deletion av missingverdier. Oppgi korrelasjonen mellom *Trust_politicians* og *house_income*
+5. Er korrelasjonen mellom *Trust_politicians* og *happy* lavere eller høyere hvis du bruker pairwise deletion?
+6. Plot et spredningsdiagram med *house_income* på X-aksen og *Trust_politicians* på Y-aksen. Tegn en regresjonslinje i figuren med *Trust_politicians* som AV og house income som UV.
+7. Opprett variabelen *house_income2* som tar verdien 0 når *house_income* har verdien 5 eller lavere, og som tar verdien 1 når *house_income* er større enn 5.
+8. Opprett en variabel *vote2* hvor alle respondentene med verdien "Not eligible to vote" på variabelen *vote* er endret til **NA**.
+9. Estimer en OLS-modell med *Trust_politicians* som avhengig variabel, og *house_income2*, *vote2* som uavhengige variabler. Oppgi koeffisienten til *vote2*.
+10. Lag et histogram av residualene fra OLS-modellen i oppgave 9.
+
+
+## Variabelforklaringer:
+
+| **Variabel**        | **Beskrivelse**                       | **Verdier**                         |
+|---------------------|---------------------------------------|-------------------------------------|
+| *Trust politicians* | Tillit til politikere                 | 1=Lav 10=Høy.                       |
+| *vote*              | Stemte respondenten ved forrige valg  | "Yes"/"No"/"Not eligible to vote"   |
+| *happy*             | Hvor lykkelig er respondenten?        | 1=Lav 10=Høy                        |
+| *gender*            | Kjønn |                               | "Male"/"Female"                     |
+| *house_income*      | Husholdningsinntekt                   | 1=Lav (1. desil) 10=Høy (10. desil) |

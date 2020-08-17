@@ -1,0 +1,57 @@
+# Seminar 5
+Erlend Langørgen  
+September 23, 2018  
+
+
+
+## Plan for i dag:
+
+Vi gjennomgår faktoranalyse, multinomisk logistisk regresjon og flernivåanalyse i plenum, og snakker om tolkning. Deretter skal dere få jobbe med prøven jeg lagde i fjor. Etter seminaret (ila. helgen) legger jeg ut flere oppgaver til hver av analysemetodene + noen ekstrating som de av dere som skal bruke de ulike metodene i hjemmeoppgaven kan få bruk for.
+
+
+## Multinomisk logistisk regresjon:
+Her skal jeg bare kort demonstrere hvordan man gjør multinomisk logistisk regresjon. Det finnes mange pakker for å gjøre dette i R, her bruker jeg funksjonen `multinom()` fra pakken `nnet`. Vi skal lage ny avhengig variabel med utgangspunkt i det originale datasettet til Burnside og Dollar ("aidgrowth.Rdata"). Vi skiller mellom land som har negativ vekst, land som har lav vekst (under 1), land som har middels vekst (fra 1 til 3) og land som har høy vekst. Variabelen heter `gdp_growth`. Hvordan kan man gjøre denne omkodingen ved hjelp av `ifelse()`?
+
+
+Under ser dere koden for å kjøre en logistisk regresjon, og for å gjøre en LR-test av en modell. Kjør koden, og forklar hvordan modellen kan tolkes til sidemannen. Regn ut predikert sannsynlighet for høy vekst for en observasjon som har gjennomsnittlig verdi på aid og policy, verdien 1 på andre kontinuerlig uavhengige variabler, og verdien 0 på dummy-variabler 
+(slå raskt opp i seksjonen for å beregne predikert sannsynlighet hos Hegre dersom dere er usikre på hvordan man gjør dette).
+
+
+
+
+```r
+load("aidgrowth.Rdata")
+
+# Omkod slik at du får riktig avhengig variabel! Gjør i tillegg følgende omkoding:
+aid$gdp_pr_capita_log <- log(aid$gdp_pr_capita)
+
+library(nnet)
+library(stargazer)
+## Kjører regresjon
+m7 <- multinom(gdp_g_categories ~ gdp_pr_capita_log + 
+           institutional_quality + m2_gdp_lagged +
+           sub_saharan_africa + fast_growing_east_asia + policy + aid, data= aid,
+         Hess = T, na.action="na.exclude")
+stargazer(m7, type="text")
+summary(m7)
+
+# Vi kan sammenligne nøstede modeller med anova (LR-test).
+m8 <- multinom(gdp_g_categories ~ gdp_pr_capita_log + 
+           institutional_quality + m2_gdp_lagged +
+           policy + aid, data= aid,
+         Hess = T, na.action="na.exclude")
+anova(m7,m8) # modellen med region-dummyer er bedre
+```
+
+
+### Flernivåanalyse
+
+Kjør modellene fra script, diskuter tolkning av output med sidemannen din.
+
+### Faktoranalyse
+
+Kjør modellene fra script, og diskuter tolkning av output med sidemannen din.
+Se deretter nærmere på de ulike metodene du kan bruke i `factor.scores()`, snakk med sidemannen din om hvordan du kan tolke hjelpefilen til denne funksjonen.
+
+
+
