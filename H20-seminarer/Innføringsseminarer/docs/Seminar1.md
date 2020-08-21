@@ -10,10 +10,7 @@ output:
 ---
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-```
+
 
 # Seminaropplegget
 De fleste seminarer vil bestå av to deler: 
@@ -71,31 +68,56 @@ Først litt helt grunnleggende om R og Rstudio. I Rstudio skriver vi kode i scri
 # Objekter
 For å bli kjent med R så skal vi bruke informasjonen fra bli-kjent-runden til å lage et lite datasett. Det første vi gjør er å lage objekter av en type som heter vektor. Vektorene skal inneholder informasjon om navn, alder og hvor dere tok bachelorgraden deres. I R kan en vektor defineres som en ordnet lise av verdier, dvs. at man lagrer verdier en bestemt rekkefølge. Når verdiene er i en bestemt rekkefølge så kan vi slå vektorene sammen for å lage et datasett. I dette kurset kan dere for det meste tenke på vektorer som variabler fra et datasett. Vi lager objekter ved hjelp av assignment operatoren ´<-´.  
 
-```{r}
+
+```r
 # Her ser dere et eksempel på R-kode
 # Jeg bruker # for å skrive inn en kommentar som ikke skal evalueres av R
 
 # Her lager vi vektoren Thea, Ole, Mari
 # Vi bruker ctrl/cmd + enter for å kjøre koden
 c("Thea", "Ole", "Mari")
+```
 
+```
+## [1] "Thea" "Ole"  "Mari"
+```
+
+```r
 # Her lagrer vi vektoren Thea, Ole, Mari som et objekt vi kaller navn:  
 navn <- c("Thea", "Ole", "Mari")
 ```
 
 Når vi lagrer objekter, returnerer ikke R en verdi i Console. I stedet dukker objektet opp i vinduet Environment (til høyre for scriptet). 
 
-```{r}
 
+```r
 alder <- c(23, 20, 25)
 alder
+```
 
+```
+## [1] 23 20 25
+```
+
+```r
 bachelor <- c("UIO", "UIB", "UIS")
 bachelor
+```
 
+```
+## [1] "UIO" "UIB" "UIS"
+```
+
+```r
 data <- data.frame(navn, alder, bachelor) # Her slår vi de tre vektorene sammen for å lage et datasett
 data
+```
 
+```
+##   navn alder bachelor
+## 1 Thea    23      UIO
+## 2  Ole    20      UIB
+## 3 Mari    25      UIS
 ```
 Kan du finne din rad? 
 
@@ -105,65 +127,219 @@ Det finnes flere typer objekter i R. Vektor og datasett er de to typene vi skal 
 
 I R skriver vi kode i script. Du åpner et nytt script ved å trykke på den hvite firkanten med en grønn sirkel og et plusstegn oppe til venstre i Rstudio. Etter at vi har skrevet kode i scriptet, sender vi koden til console for evaluering med ctrl/cmd + enter. Dersom output fra koden ikke er et objekt eller plot, vises resultatet i console (vinduet under script). La oss forsøke med koden `"Hello World!"`
 
-```{r}
+
+```r
 "Hello world!"
 ```
+
+```
+## [1] "Hello world!"
+```
 R Kan også brukes som en kalkulator: 
-```{r}
+
+```r
 1 + 1  # addisjon
+```
+
+```
+## [1] 2
+```
+
+```r
 2 - 3  # subtraksjon
+```
+
+```
+## [1] -1
+```
+
+```r
 4/2    # divisjon
+```
+
+```
+## [1] 2
+```
+
+```r
 2 * 2  # multiplikasjon
+```
+
+```
+## [1] 4
+```
+
+```r
 2^3    # potens
+```
+
+```
+## [1] 8
+```
+
+```r
 exp(2) # eksponentiering
+```
+
+```
+## [1] 7.389056
+```
+
+```r
 log(2) # logaritme (default er naturlig logaritme)
+```
+
+```
+## [1] 0.6931472
+```
+
+```r
 2 * (4-2)/(4-2) # Parentesregler fungerer som i vanlig algebra: den innerste parentesen regnes ut først
+```
+
+```
+## [1] 2
 ```
 
 # Logiske tester
 
 R kan evaluere logiske utsdagn og bedømme om de er ´TRUE´ eller ´FALSE´.   
-```{r}
+
+```r
 1 == 2                                # tester om 1 er lik 2
+```
+
+```
+## [1] FALSE
+```
+
+```r
 2 == 2                                # tester om 2 er lik 2
+```
+
+```
+## [1] TRUE
+```
+
+```r
 "Statsvitenskap" == "statsvitenskap"  # Logiske tester kan også brukes på tekst
+```
+
+```
+## [1] FALSE
+```
+
+```r
 "statsvitenskap" == "statsvitenskap"  # R er imidlertid sensitivt til store og små bokstaver
+```
+
+```
+## [1] TRUE
+```
+
+```r
 1 <= 2                                # Tester om 1 er mindre enn eller lik 2
+```
+
+```
+## [1] TRUE
+```
+
+```r
 1 >= 2                                # Tester om 1 er større enn eller lik 2
+```
+
+```
+## [1] FALSE
+```
+
+```r
 1 != 2                                # Tester om 1 er ulik 2
+```
+
+```
+## [1] TRUE
+```
+
+```r
 1 == 2 | 1 == 1                       # Tester om en av de to påstandene 1 er lik 2 eller 1 er lik 1 er sanne
+```
+
+```
+## [1] TRUE
+```
+
+```r
 1 == 2 & 1 == 1                       # Tester om begge de to påstandene 1 er lik 2 og 1 er lik 1 er sanne
 ```
 
+```
+## [1] FALSE
+```
+
 ### Oversikt over logiske operatorer
-```{r, echo = FALSE, message=FALSE}
-Operator <- c("`==`", "<", ">", "<=", ">=", "`!=`", "`!x`", "`|`", "&")
-Betydning <- c("er lik", "mindre enn", "større enn", "mindre eller lik", 
-                 "større eller lik", "ikke lik", "ikke x", "eller", "og")
-tabell <- tibble(Operator, Betydning) 
 
-```
 
-```{r, echo = FALSE}
-knitr::kable(tabell, 
-             format = "html",
-             align = "lc") %>% 
-  kableExtra::kable_styling("striped",
-                            full_width = F,
-                            position = "left")
-```
+<table class="table table-striped" style="width: auto !important; ">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Operator </th>
+   <th style="text-align:center;"> Betydning </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> `==` </td>
+   <td style="text-align:center;"> er lik </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &lt; </td>
+   <td style="text-align:center;"> mindre enn </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &gt; </td>
+   <td style="text-align:center;"> større enn </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &lt;= </td>
+   <td style="text-align:center;"> mindre eller lik </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &gt;= </td>
+   <td style="text-align:center;"> større eller lik </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `!=` </td>
+   <td style="text-align:center;"> ikke lik </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `!x` </td>
+   <td style="text-align:center;"> ikke x </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> `|` </td>
+   <td style="text-align:center;"> eller </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &amp; </td>
+   <td style="text-align:center;"> og </td>
+  </tr>
+</tbody>
+</table>
 Vi kommer til å bruke disse opearterne mye, spesielt når vi gjør endringer i datasett som å lage nye variabler.  Det er derfor viktig at dere forstår hvordan disse fungerer. Den beste måten å få denne foreståelse på er å øve. 
 
 # Pakker 
 R er open source og mange flinke utviklere bidrar til å gjøre R bedre. Disse utviklerne deler kode (i hovedsak funksjoner) gjennom pakker. For å kunne kode fra en pakke må vi kjøre følgende kodelinjer:
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 install.packages("pakkenavn") # Laster ned filene pakken består av fra nett til PC - må bare gjøres en gang
 library(pakkenavn)            # Tilgjengeliggjør pakken i R-sesjonen, må gjøres hver gang du vil bruke pakken i en ny sesjon
 ```
 
 Vi skal for det meste bruke kode som kommer fra pakker i [tidyverse](https://www.tidyverse.org/learn/). La oss installere disse pakkene:
 
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 install.packages("tidyverse") # Fjern hashtag på starten av denne og neste linje!
 install.packages("haven") # legg merke til at vi bruker "" i install.packages(), men ikke i library()
 library(tidyverse)
@@ -173,69 +349,156 @@ library(tidyverse)
 Nå skal vi tilbake til datasettet vi lagde basert på bli-kjent-runden. Dersom vi ønsker å hente ut informasjon om en person så kan vi bruke indeksering. Indeksering lar oss spesifisere et eller flere elementer i et objekt. Det er flere måter å indeksere på og dette er nøye beskrevet i kapittel 1 i **Lær deg R** som er anbefalt pensum. 
 
 Dersom vi for eksempel er interessert i å hente ut all informasjonen om Thea så kan det gjøres på mange måter: 
-```{r, echo = FALSE, message=FALSE}
-library(dplyr)
-```
 
-```{r}
+
+
+```r
 # Vi kan bruke base R (som beskrevet i Lær deg R)
 data[navn == "Thea", ]      # vi ønsker alle kolonner/variabler for observasjone/radene med verdien "Thea" 
-data[data$navn == "Thea", ] # vi ønsker alle kolonner/variabler for observasjone/radene med verdien "Thea"
-data[1, ]                   # Thea er den første raden (observasjonen) i datasettet
+```
 
+```
+##   navn alder bachelor
+## 1 Thea    23      UIO
+```
+
+```r
+data[data$navn == "Thea", ] # vi ønsker alle kolonner/variabler for observasjone/radene med verdien "Thea"
+```
+
+```
+##   navn alder bachelor
+## 1 Thea    23      UIO
+```
+
+```r
+data[1, ]                   # Thea er den første raden (observasjonen) i datasettet
+```
+
+```
+##   navn alder bachelor
+## 1 Thea    23      UIO
+```
+
+```r
 # Vi kan også bruke tidyverse-pakken dplyr:
 data %>%                    
   filter(navn == "Thea") 
+```
 
-
+```
+##   navn alder bachelor
+## 1 Thea    23      UIO
 ```
 
 Vi kan også hente ut informasjon i en variabel/kolonne: 
 
-```{r}
+
+```r
 # Ved hjelp av base R
 data$alder                  
-data[, "alder"]
-data[, 2]                    # Alder er kolonne nr to fra venstre
+```
 
+```
+## [1] 23 20 25
+```
+
+```r
+data[, "alder"]
+```
+
+```
+## [1] 23 20 25
+```
+
+```r
+data[, 2]                    # Alder er kolonne nr to fra venstre
+```
+
+```
+## [1] 23 20 25
+```
+
+```r
 # Ved hjelp av dplyr 
 data %>% 
   select(alder)
+```
 
-
+```
+##   alder
+## 1    23
+## 2    20
+## 3    25
 ```
 
 Til slutt så kan vi hente ut informasjon om en variabel for en observasjon: 
-```{r}
+
+```r
 # Ved hjelp av base R
 data[navn == "Thea", "alder"]
+```
 
+```
+## [1] 23
+```
+
+```r
 data[data$navn == "Thea", "alder"]
+```
 
+```
+## [1] 23
+```
+
+```r
 # Ved hjelp av dplyr
 data %>% 
   filter(navn == "Thea") %>% 
   select(alder)
+```
 
+```
+##   alder
+## 1    23
 ```
 
 
 # Ulike typer vektorer i R
 Det finnes flere ulike objekter i R. Til nå har vi blitt introdusert for to av dem: datasett og vektorer. Hva slags objekt det er har noe å si for hva du kan gjøre med det. I tillegg finnes det ulike typer, eller klasser som vi kaller det, av vektorer. I tabellen under finner dere en grov inndeling av ulike typer vektorer i R (se også s. 42-47 i Lær deg R):
 
-```{r, echo = FALSE, message=FALSE}
-"Atomic vector" <- c("numeric", "integer", "character", "factor", "logical")
-"List" <- c("blanding", "", "", "", "")
-tabell <- cbind(`Atomic vector`, List)
 
-```
 
-```{r, echo = FALSE}
-knitr::kable(tabell, format = "html") %>% 
-  kableExtra::kable_styling("striped",
-                            full_width = F,
-                            position = "left")
-```
+<table class="table table-striped" style="width: auto !important; ">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Atomic vector </th>
+   <th style="text-align:left;"> List </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> numeric </td>
+   <td style="text-align:left;"> blanding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> integer </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> character </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> factor </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> logical </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
 
 
 En hyppig årsak til at en funksjon ikke fungerer, er at en vektor/variabel ikke er i det formatet vi forventet. Tabellen gir en oversikt over variabeltypene vi skal jobbe med. Atomic vector har kun verdier av en type, mens lister kan ha flere typer verdier, samt bestå av flere variabler. 
@@ -243,14 +506,34 @@ En hyppig årsak til at en funksjon ikke fungerer, er at en vektor/variabel ikke
 Hvilket format tror du navn, alder og bachelor har? 
 
 Det kan vi sjekke med funksjonen `class()`.
-```{r}
+
+```r
 class(data$navn)
+```
+
+```
+## [1] "character"
+```
+
+```r
 class(data$alder)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
 class(data$bachelor)
+```
+
+```
+## [1] "character"
 ```
 Som dere ser er alder numeric, mens navn og bachelor er character. Her er det hva objektet er lagret som som teller, ikke hvordan det ser ut i datasettet. Selv om noe ser ut som tall i datasettet så er det ikke sikkert det er registrert som tall av R. Heldigvis kan dette ofte løses ved hjelp av en funksjoner som `as.numeric()`, `as.character()` og `as.factor()`.   
 
-```{r}
+
+```r
 # Her lager vi en ny variabel alder2 der ver ber R lagre alder som character
 data$alder2 <- as.character(data$alder)
 ```
@@ -258,7 +541,8 @@ Om vi ser på datasettet etter at vi har laget den nye variabelen så ser vi at 
 
 # Funksjoner i R
 Dersom vi ønsker å gjøre noe i R, får vi som regel en funksjon til å gjøre jobben for oss. En funksjon tar i mot verdi(er), gjerne lagret i form av et R-objekt, utfører operasjoner basert på input, og produserer nye verdier. En typisk R-funksjon har følgende syntaks:
-```{r, eval = FALSE}
+
+```r
 aFunction(x = "R-objekt", arg = "alternativ for figurens oppførsel")
 ## Merk: dette er ikke en faktisk funksjon i R. Funksjoner kan også ha andre syntakser. 
 ```
@@ -270,46 +554,129 @@ En funksjon er en kodesnutt der vi spesiferer en input. Funksjonen utfører oper
 Noen funksjoner er base R og vi trenger ikke gjøre noe for å bruke dem. Andre må vi laste ned og installere pakker for å bruke som med `select()` og `filter()` fra `tidyverse`. 
 
 Vi skal nå bruke noen funksjoner til å finne ut mer informasjon fra datasettet vårt:
-```{r}
+
+```r
 summary(data)
+```
+
+```
+##      navn               alder         bachelor            alder2         
+##  Length:3           Min.   :20.00   Length:3           Length:3          
+##  Class :character   1st Qu.:21.50   Class :character   Class :character  
+##  Mode  :character   Median :23.00   Mode  :character   Mode  :character  
+##                     Mean   :22.67                                        
+##                     3rd Qu.:24.00                                        
+##                     Max.   :25.00
+```
+
+```r
 # Finner minimumsverdi (den laveste alderen)
 min(data$alder, na.rm = TRUE) # na.rm = TRUE sier at missing skal droppes i beregningen
+```
 
+```
+## [1] 20
+```
+
+```r
 # Finner maksimumsveriden (den høyeste alderen)
 max(data$alder, na.rm = TRUE)
+```
 
+```
+## [1] 25
+```
+
+```r
 # Finner gjennomsnittalder
 mean(data$alder, na.rm = TRUE)
+```
 
+```
+## [1] 22.66667
+```
+
+```r
 # Finner medianalderen
 median(data$alder, na.rm = TRUE)
+```
 
+```
+## [1] 23
+```
+
+```r
 # Finner standardavviker
 sd(data$alder, na.rm = TRUE)
+```
 
+```
+## [1] 2.516611
+```
+
+```r
 # Finner varians
 var(data$alder, na.rm = TRUE)
+```
 
+```
+## [1] 6.333333
+```
+
+```r
 # Finner kvantilverdiene
 quantile(data$alder, na.rm = TRUE)
+```
 
+```
+##   0%  25%  50%  75% 100% 
+## 20.0 21.5 23.0 24.0 25.0
+```
+
+```r
 # Finner forskjellig deskriptiv statistikk for en variabel
 summary(data$alder)
+```
 
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   20.00   21.50   23.00   22.67   24.00   25.00
+```
+
+```r
 # Finner forskjellig deskriptiv statiskk for alle variabler i datasettet
 summary(data)
+```
 
+```
+##      navn               alder         bachelor            alder2         
+##  Length:3           Min.   :20.00   Length:3           Length:3          
+##  Class :character   1st Qu.:21.50   Class :character   Class :character  
+##  Mode  :character   Median :23.00   Mode  :character   Mode  :character  
+##                     Mean   :22.67                                        
+##                     3rd Qu.:24.00                                        
+##                     Max.   :25.00
+```
+
+```r
 # install.packages("moments")
 library(moments)
 
 # Finner skjevhet ved hjelp av moments-pakken
 skewness(data$alder, na.rm = TRUE) 
+```
 
+```
+## [1] -0.2390631
+```
+
+```r
 # Finner kurtose ved hjelp av moments-pakken
 kurtosis(data$alder, na.rm = TRUE)
+```
 
-
-
+```
+## [1] 1.5
 ```
 
 
@@ -318,13 +685,15 @@ Til slutt så skal vi laste inn dataene dere skal bruke i oppgavene i etterpå. 
 
 R vil til enhver tid forvente at filnavn du refererer til befinner seg i **working directory**, som er en mappe på pcen din. For å sjekke hva nåværende **working directory** er, og hvilke filer som finnes seg i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):
 
-```{r, eval = FALSE}
+
+```r
 getwd()
 list.files()
 ```
 
 For å endre **working directory**, bruker dere følgende kode:
-```{r, eval = FALSE}
+
+```r
 setwd("C:/Users/Navn/R/der/du/vil/jobbe/fra")   # For windows
 setwd("~/R/der/du/vil/jobbe/fra")               # For mac/linux
 # Merk at R bruker / for å skille mellom mappenivåer, mens filutforsker i Windows bruker \ 
