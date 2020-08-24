@@ -25,3 +25,5 @@ library(tidyverse)
 
 
 # Vi sjekker hva slags vektorer vi har med å gjøre
+
+install.packages("haven")

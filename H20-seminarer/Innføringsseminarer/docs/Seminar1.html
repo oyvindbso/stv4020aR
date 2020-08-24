@@ -588,11 +588,16 @@ skewness(data$alder, na.rm = TRUE) </code></pre>
 <pre class="r"><code># Finner kurtose ved hjelp av moments-pakken
 kurtosis(data$alder, na.rm = TRUE)</code></pre>
 <pre><code>## [1] 1.5</code></pre>
+<pre class="r"><code># Får en tabell med de ulike studiestedene
+table(data$bachelor, useNA = &quot;always&quot;) # useNA = &quot;always&quot; betyr at vi også vil ha med antall &quot;missing&quot; </code></pre>
+<pre><code>## 
+##  UIB  UIO  UIS &lt;NA&gt; 
+##    1    1    1    0</code></pre>
 </div>
 <div id="laste-inn-data" class="section level1">
 <h1>Laste inn data</h1>
 <p>Til slutt så skal vi laste inn dataene dere skal bruke i oppgavene i etterpå. Dersom dere skal gjøre statistisk analyse, er som regel den første seksjonen import og forberedelse av data. En styrke ved R, er at det er mulig å importere mange ulike filtyper, både fra en mappe på pcen din og fra en url på internett. Jeg går gjennom import av filer fra excel, stata, spss og R, men vit at det finnes mange andre muligheter.</p>
-<p>R vil til enhver tid forvente at filnavn du refererer til befinner seg i <strong>working directory</strong>, som er en mappe på pcen din. For å sjekke hva nåværende <strong>working directory</strong> er, og hvilke filer som finnes seg i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):</p>
+<p>Når du skal laste inn eller lagre noe lokalt på pc-en så vil R til enhver tid forvente at filnavn du refererer til befinner seg i <strong>working directory</strong>, som er en mappe på pcen din. For å sjekke hva nåværende <strong>working directory</strong> er, og hvilke filer som finnes i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):</p>
 <pre class="r"><code>getwd()
 list.files()</code></pre>
 <p>For å endre <strong>working directory</strong>, bruker dere følgende kode:</p>
@@ -601,6 +606,16 @@ setwd(&quot;~/R/der/du/vil/jobbe/fra&quot;)               # For mac/linux
 # Merk at R bruker / for å skille mellom mappenivåer, mens filutforsker i Windows bruker \ 
 # Kopierer du mappebanen fra filutforsker må du derfor huske å snu skråstrekene i R</code></pre>
 <p>Et annet alternativ er å starte et nytt prosjekt i R, ved å trykke på <em>File</em> og deretter <em>New Project</em> i menyen øverst til venstre i Rstudio. Da får du muligheten til å lage en ny mappe på pcen din som blir satt til working directory. Senere kan du sette denne mappen til working directory med Open project fra menyen (jeg anbefaler å bruke prosjekter, særlig til hjemmeoppgaven).</p>
+<p>Datasett kommer i mange ulike filformater. Noen vanlige formater er csv, dta (Stata-datasett), sav (SPSS-datasett) og Rdata. Hvilket format dataene dine har bestemmer hvilken funksjon du må bruke for å laste inn datasettet. Her er eksempler på noen funksjoner for å laste inn data:</p>
+<pre class="r"><code>library(tidyverse) # read_funksjoner fra readr i tidyvsere
+datasett &lt;- read_filtype(&quot;filnavn.filtype&quot;) # Laster inn og lagrer datasettet som et objekt
+read_csv(&quot;filnavn.csv&quot;) # for .csv, sjekk også read.table
+load(&quot;&quot;) # For filer i R-format.
+
+library(haven) # Fra haven-pakken - dette skal vi se på i senere seminar
+read_spss(&quot;filnavn.sav&quot;)  # for .sav-filer fra spss
+read_dta(&quot;filnavn.dta&quot;) # for .dta-filer fra stata</code></pre>
+<p>Nå skal vi laste inn datasettet vi skal bruke til å løse oppgaver i neste time.</p>
 </div>
 
 

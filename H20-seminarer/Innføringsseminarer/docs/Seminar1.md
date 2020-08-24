@@ -679,11 +679,22 @@ kurtosis(data$alder, na.rm = TRUE)
 ## [1] 1.5
 ```
 
+```r
+# Får en tabell med de ulike studiestedene
+table(data$bachelor, useNA = "always") # useNA = "always" betyr at vi også vil ha med antall "missing" 
+```
+
+```
+## 
+##  UIB  UIO  UIS <NA> 
+##    1    1    1    0
+```
+
 
 # Laste inn data
 Til slutt så skal vi laste inn dataene dere skal bruke i oppgavene i etterpå. Dersom dere skal gjøre statistisk analyse, er som regel den første seksjonen import og forberedelse av data. En styrke ved R, er at det er mulig å importere mange ulike filtyper, både fra en mappe på pcen din og fra en url på internett. Jeg går gjennom import av filer fra excel, stata, spss og R, men vit at det finnes mange andre muligheter.
 
-R vil til enhver tid forvente at filnavn du refererer til befinner seg i **working directory**, som er en mappe på pcen din. For å sjekke hva nåværende **working directory** er, og hvilke filer som finnes seg i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):
+Når du skal laste inn eller lagre noe lokalt på pc-en så vil R til enhver tid forvente at filnavn du refererer til befinner seg i **working directory**, som er en mappe på pcen din. For å sjekke hva nåværende **working directory** er, og hvilke filer som finnes i den mappen, kan du skrive følgende kode (jeg har gjemt egen output):
 
 
 ```r
@@ -703,4 +714,19 @@ setwd("~/R/der/du/vil/jobbe/fra")               # For mac/linux
 Et annet alternativ er å starte et nytt prosjekt i R, ved å trykke på *File* og deretter *New Project* i menyen øverst til venstre i Rstudio. Da får du muligheten til å lage en ny mappe på pcen din som blir satt til working directory. Senere kan du sette denne mappen til working directory med Open project fra menyen (jeg anbefaler å bruke prosjekter, særlig til hjemmeoppgaven).
 
 
+Datasett kommer i mange ulike filformater. Noen vanlige formater er csv, dta (Stata-datasett), sav (SPSS-datasett) og Rdata. Hvilket format dataene dine har bestemmer hvilken funksjon du må bruke for å laste inn datasettet. Her er eksempler på noen funksjoner for å laste inn data: 
+
+
+```r
+library(tidyverse) # read_funksjoner fra readr i tidyvsere
+datasett <- read_filtype("filnavn.filtype") # Laster inn og lagrer datasettet som et objekt
+read_csv("filnavn.csv") # for .csv, sjekk også read.table
+load("") # For filer i R-format.
+
+library(haven) # Fra haven-pakken - dette skal vi se på i senere seminar
+read_spss("filnavn.sav")  # for .sav-filer fra spss
+read_dta("filnavn.dta") # for .dta-filer fra stata
+```
+
+Nå skal vi laste inn datasettet vi skal bruke til å løse oppgaver i neste time. 
 
