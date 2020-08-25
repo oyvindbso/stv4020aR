@@ -1,6 +1,0 @@
----
-title: "Seminar 2"
-output: github_document
----
-
-## Dagens opplegg 
