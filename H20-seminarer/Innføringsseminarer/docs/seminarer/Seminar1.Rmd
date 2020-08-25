@@ -147,8 +147,7 @@ tabell <- tibble(Operator, Betydning)
 #knitr::kable(tabell, 
 #             format = "html",
 #             align = "lc") %>% 
-#  kableExtra::kable_styling("striped",
-#                            full_width = F,
+#  kableExtra::kable_styling(full_width = F,
 #                            position = "left")
 ```
 **Oversikt over logiske operatorer:**
