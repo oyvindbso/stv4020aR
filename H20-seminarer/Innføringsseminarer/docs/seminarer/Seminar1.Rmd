@@ -2,8 +2,7 @@
 title: "Seminar 1"
 author: "Lise Rødland"
 date: "2020-08-20"
-lang: norwegian
-output: 
+output:
   html_document:
     keep_md: yes
     self_contained: no
@@ -11,7 +10,7 @@ output:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
@@ -145,13 +144,28 @@ tabell <- tibble(Operator, Betydning)
 ```
 
 ```{r, echo = FALSE}
-knitr::kable(tabell, 
-             format = "html",
-             align = "lc") %>% 
-  kableExtra::kable_styling("striped",
-                            full_width = F,
-                            position = "left")
+#knitr::kable(tabell, 
+#             format = "html",
+#             align = "lc") %>% 
+#  kableExtra::kable_styling("striped",
+#                            full_width = F,
+#                            position = "left")
 ```
+**Oversikt over logiske operatorer:**
+
+| Operator      | Betydning     |
+| ------------- |:-------------:|
+| `==` | er lik                 |
+| `<`  | mindre enn             |
+| `>`  | større enn             |
+| `<=` | mindre eller lik       |
+| `>=` | større eller lik       |
+| `!=` | ikke lik               |
+| `!x` | ikke x                 |
+| `|`  | eller                 |
+| `&`  | og                     |
+
+
 Vi kommer til å bruke disse opearterne mye, spesielt når vi gjør endringer i datasett som å lage nye variabler.  Det er derfor viktig at dere forstår hvordan disse fungerer. Den beste måten å få denne foreståelse på er å øve. 
 
 # Pakker 
@@ -231,12 +245,20 @@ tabell <- cbind(`Atomic vector`, List)
 ```
 
 ```{r, echo = FALSE}
-knitr::kable(tabell, format = "html") %>% 
-  kableExtra::kable_styling("striped",
-                            full_width = F,
-                            position = "left")
+# knitr::kable(tabell, format = "html") %>% 
+#  kableExtra::kable_styling("striped",
+#                            full_width = F,
+#                            position = "left")
 ```
 
+
+Atomic vector | List
+------------- | -------------
+numeric       | blanding
+integer       |
+character     |
+factor        |
+logical       |
 
 En hyppig årsak til at en funksjon ikke fungerer, er at en vektor/variabel ikke er i det formatet vi forventet. Tabellen gir en oversikt over variabeltypene vi skal jobbe med. Atomic vector har kun verdier av en type, mens lister kan ha flere typer verdier, samt bestå av flere variabler. 
 

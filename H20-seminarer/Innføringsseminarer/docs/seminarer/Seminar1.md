@@ -2,8 +2,7 @@
 title: "Seminar 1"
 author: "Lise Rødland"
 date: "2020-08-20"
-lang: norwegian
-output: 
+output:
   html_document:
     keep_md: yes
     self_contained: no
@@ -280,52 +279,22 @@ R kan evaluere logiske utsdagn og bedømme om de er ´TRUE´ eller ´FALSE´.
 ### Oversikt over logiske operatorer
 
 
-<table class="table table-striped" style="width: auto !important; ">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Operator </th>
-   <th style="text-align:center;"> Betydning </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `==` </td>
-   <td style="text-align:center;"> er lik </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> &lt; </td>
-   <td style="text-align:center;"> mindre enn </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> &gt; </td>
-   <td style="text-align:center;"> større enn </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> &lt;= </td>
-   <td style="text-align:center;"> mindre eller lik </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> &gt;= </td>
-   <td style="text-align:center;"> større eller lik </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `!=` </td>
-   <td style="text-align:center;"> ikke lik </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `!x` </td>
-   <td style="text-align:center;"> ikke x </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `|` </td>
-   <td style="text-align:center;"> eller </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> &amp; </td>
-   <td style="text-align:center;"> og </td>
-  </tr>
-</tbody>
-</table>
+
+**Oversikt over logiske operatorer:**
+
+| Operator      | Betydning     |
+| ------------- |:-------------:|
+| `==` | er lik                 |
+| `<`  | mindre enn             |
+| `>`  | større enn             |
+| `<=` | mindre eller lik       |
+| `>=` | større eller lik       |
+| `!=` | ikke lik               |
+| `!x` | ikke x                 |
+| `|`  | eller                 |
+| `&`  | og                     |
+
+
 Vi kommer til å bruke disse opearterne mye, spesielt når vi gjør endringer i datasett som å lage nye variabler.  Det er derfor viktig at dere forstår hvordan disse fungerer. Den beste måten å få denne foreståelse på er å øve. 
 
 # Pakker 
@@ -469,37 +438,16 @@ Det finnes flere ulike objekter i R. Til nå har vi blitt introdusert for to av 
 
 
 
-<table class="table table-striped" style="width: auto !important; ">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Atomic vector </th>
-   <th style="text-align:left;"> List </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> numeric </td>
-   <td style="text-align:left;"> blanding </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> integer </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> character </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> factor </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> logical </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
 
+
+
+Atomic vector | List
+------------- | -------------
+numeric       | blanding
+integer       |
+character     |
+factor        |
+logical       |
 
 En hyppig årsak til at en funksjon ikke fungerer, er at en vektor/variabel ikke er i det formatet vi forventet. Tabellen gir en oversikt over variabeltypene vi skal jobbe med. Atomic vector har kun verdier av en type, mens lister kan ha flere typer verdier, samt bestå av flere variabler. 
 
