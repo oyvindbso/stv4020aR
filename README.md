@@ -6,6 +6,7 @@ Repo for R-undervisning i STV4020A
 ## **Linker**
 - [Last ned R](http://cran.uib.no/)
 - [Last ned Rstudio](https://www.rstudio.com/products/rstudio/download/#download)
+- [Facebookgruppen R for statsvitenskap ved UiO](https://www.facebook.com/groups/427792970608618)
 - [R cheat sheet](https://s3.amazonaws.com/quandl-static-content/Documents/Quandl+-+R+Cheat+Sheet.pdf)
 - [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
 - [Mappestruktureringsforslag](https://nicercode.github.io/blog/2013-04-05-projects/)
