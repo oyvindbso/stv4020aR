@@ -1,6 +1,6 @@
 En installasjonsguide og forklaring av Rstudio i 10 bilder
 ================
-Erlend Langørgen
+Erlend Langørgen (oppdatert av Lise Rødland for 2020)
 February 14, 2018
 
 ## Hva er R og Rstudio?
@@ -24,14 +24,15 @@ Før du går videre, ber jeg om at du installerer
 [R](https://cloud.r-project.org/) og
 [Rstudio](https://www.rstudio.com/products/rstudio/download/) (velg
 gratisversjonen for desktop). Følg lenkene, og kjør
-standardinstallasjonen for ditt operativsystem. Ta kontakt med meg på
-<erlend.langorgen@stv.uio.no> **før** første seminar dersom
-installasjonen ikke virker.
+standardinstallasjonen for ditt operativsystem. Du kan også se på denne
+[installasjonsguiden](https://github.com/louisabo/STV4020A/blob/master/Nedlastningsguide.pdf).
+Ta kontakt med meg på <lise.rodland@stv.uio.no> **senest** torsdag før
+første seminar dersom installasjonen ikke virker.
 
 Dersom du ikke vil installere R og Rstudio på pcen din, kan du kjøre
 Rstudio gjennom
 [kiosk](https://kiosk.uio.no/RDWeb/Pages/en-US/login.aspx?ReturnUrl=/RDWeb/Pages/en-US/Default.aspx/kontor).
-I år vil det ikke bli mulig å bruke UiO sine PC-er på seminarene.
+I år vil det ikke være mulig å bruke UiO sine PC-er på seminarene.
 
 ## Åpne Rstudio
 
