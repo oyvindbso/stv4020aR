@@ -6,6 +6,7 @@ output:
   html_document:
     keep_md: yes
     self_contained: no
+    keep_html: no
 ---
 
 
@@ -17,9 +18,9 @@ De fleste seminarer vil bestå av to deler:
 1. En introduksjon om dagens emner. 
 2. Oppgaver relatert til dagens emner. For å lære seg R så er det *helt* nødvendig å anvende kunnskapen.  
 
-I år har vi fire introduksjonsseminarer som vil bli etterfulgt av en digital prøve mandag 14. august. På introduksjonsseminarene skal vi lære alt fra å laste inn datasett til å kjøre egne analyser for så å plotte resultatene. Vi skal lære ting som vil være anvendbare langt utover statistisk analyse.
+I år har vi fire introduksjonsseminarer som vil bli etterfulgt av en digital prøve mandag 14. august. Prøven er fra kl 9 til 15, men det bør ikke ta så mye mer enn to timer å løse den. Vi gir dere god tid så vi kan ta høyde for tekniske problemer e.l. På introduksjonsseminarene skal vi lære alt fra å laste inn datasett til å kjøre egne analyser for så å plotte resultatene. Vi skal lære ting som vil være anvendbare langt utover statistisk analyse. 
 
-Neste uke tilbyr vi fordypningsseminarer for de av dere som vil jobbe videre med R. Disse anbefales spesielt til dere som skal skrive en statistisk oppgave, men det er selvfølgelig ikke et krav for å delta. På fordypningsseminarene vil vi gå nærmere inn på R-kode for flernivå-analyse, faktoranalyse og faste effekter. Vi håper så klart å se mange av dere der også. Det blir ikke noen prøve om innholdet i fordypningsseminarene.
+Neste uke tilbyr vi fordypningsseminarer for de av dere som vil jobbe videre med R. Disse anbefales spesielt til dere som skal skrive en statistisk oppgave, men det er selvfølgelig ikke et krav for å delta. På fordypningsseminarene vil vi gå nærmere inn på R-kode for flernivå-analyse, faktoranalyse og paneldata. Vi håper så klart å se mange av dere der også. Det blir ikke noen prøve om innholdet i fordypningsseminarene.
 
 # Hjemmeoppgaven
 Om du ikke allerede har bestemt deg så begyn å tenk på hjemmeoppgaven nå. Om du skal skrive en statistisk oppgave så er det fint å ha hjemmeoppgaven i bakhodet når vi går gjennom ting på seminar. Ta gjerne en titt på [Harvard dataverse](https://dataverse.harvard.edu/dataverse/harvard). Mange forskere bruker Harvard dataverse til å publisere replikasjonsdata når de skriver artikler. Du kan søke på temaer du synes er interessante eller en spesiell artikkel du syns er spennende. 
@@ -29,15 +30,33 @@ Om du har sett deg ut en artikkel du ikke finner på Harvard dataverse så kan d
 # Om å lære R
 Det er noen ting som er kjekt å vite om R: 
 
-1. Øvelse gjør mester. 
-2. Mye kan gjøres på flere måter. 
-3. Samarbeid gjør det hele mye enklere (og morsommere). 
+1. Øvelse gjør mester.
+2. Å lære R er en prosess der eksponering er det beste læringsverktøyet. 
+3. Mye kan gjøres på flere måter. 
+4. Samarbeid gjør det hele mye enklere (og morsommere). 
 
-Det betyr at for å få mest mulig ut av seminarene så må dere jobbe med oppgavene vi legger ut mellom seminarene - gjerne sammen med noen andre. I begynnelsen kan det være vanskelig å vite hvorfor en kode ikke vil kjøre, men det å søke opp løsninger på nett og i R sine hjelpefiler er en viktig del av å lære seg R. Noen av svarene dere finner er kanskje ikke prikk like på det vi har gjennomgått i seminar, men det betyr ikke at det ikke er en fin måte å løse det på. 
+Det betyr at for å få mest mulig ut av seminarene så må dere jobbe med oppgavene vi legger ut mellom seminarene - gjerne sammen med noen andre. I begynnelsen kan det være vanskelig å vite hvorfor en kode ikke vil kjøre, men det å søke opp løsninger på nett og i R sine hjelpefiler er en viktig del av å lære seg R. Noen av svarene dere finner er kanskje ikke prikk like på det vi har gjennomgått i seminar, men det betyr ikke at det ikke er en fin måte å løse det på. På prøven leverer dere et script for å vise at dere har brukt R for å finne svarene, men det finnes ikke noen **riktig** eller **feil** kode om svaret du kommer frem til er riktig. 
 
 I tillegg oppfordrer vi til å stille masse spørsmål - både til medstudenter og oss seminarledere. Bruk medstudenter, nettressurser og R sine hjelpefiler aktivt, samarbeid og hjelp hverandre når dere løser oppgaver så vil prøven gå veldig fint.
 
 Jeg vil lenke til undervisningsmateriell på Canvas. Selve opplegget blir lastet opp på github. Der finner dere også opplegget for tidligere år, men det er mappen H20-seminarer som gjelder. Opplegget i år er en del annerledes enn tidligere år selv om vi skal gjennom mye av det samme. 
+
+## Læringsressurser og nyttige R-lenker
+
+- [Gratis innføringsbok på nett - R for Data Science](http://r4ds.had.co.nz/)
+- **Hjelpefilene i R:** Det krever litt trening å lære seg å forstå hjelpefiler, men det er en av de beste investeringene du kan gjøre - finn all informasjonen du trenger ved hjelp av `?` og `??` i R
+- [R-ladies Oslo](https://www.meetup.com/rladies-oslo/) og [Oslo UseR! group](https://www.meetup.com/Oslo-useR-Group)  inviterer til spennende R-temamøter
+- [Guide til ggplot2](http://docs.ggplot2.org/current/)
+- [Facebookgruppe for R for statsvitere på UiO - bruk denne!](https://www.facebook.com/groups/427792970608618/)
+- [Stilguide for R](https://google.github.io/styleguide/Rguide.xml)
+- [Bruke prosjekter i R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+- [Quick-R - et bra sted å søke etter ting, lett å forstå for nybegynnere](https://www.statmethods.net/)
+- [Interaktiv R-intro fra datacamp](https://www.datacamp.com/courses/free-introduction-to-r)
+- [Interaktiv tidyverse-intro fra datacamp](https://www.datacamp.com/courses/introduction-to-the-tidyverse)
+- [Stackoverflow - har svar på det R-problemet du sliter med](https://stackoverflow.com/questions/tagged/r)
+- [R-bloggers - har gode, kortfattede tutorials](https://www.r-bloggers.com/)
+
+Du kan også finne videoer, flere gratis bøker m.m. hvis du googler/søker på stackoverflow/søker på youtube. Noe av det aller viktigste er nok imidlertid å lære seg å lese og forstå hjelpefiler i R og stackoverflow. For å bli god i R er det lurt å huske noen grunnbegreper (dvs. en god del av det som du lærer i seminarene og **R for Data Science**), men ut over det bruker man hjelpefiler i R/stackoverflow som ordbøker hele tiden.
 
 # Første seminaropplegg
 #### Mål for i dag: 
@@ -482,10 +501,15 @@ Som dere ser er alder numeric, mens navn og bachelor er character. Her er det hv
 
 
 ```r
-# Her lager vi en ny variabel alder2 der ver ber R lagre alder som character
-data$alder2 <- as.character(data$alder)
+# Her lager vi en ny variabel alder2 der vi ber R lagre alder som character
+data$alder_ch <- as.character(data$alder)
 ```
 Om vi ser på datasettet etter at vi har laget den nye variabelen så ser vi at alder og alder2 ser helt like ut. Begge fremstår som tall vi kan gjøre regneoperasjoner på, men bare en av dem er det. Prøv gjerne selv å kjøre funksjonen `mean()` som regner ut gjennomsnittet på alder2. 
+
+**Hva skjer om du først omkoder alder til en faktor ved hjelp av `as.factor()` og så omkoder faktorvariabelen til en numerisk variabel med `as.numeric()`?**
+
+
+
 
 # Funksjoner i R
 Dersom vi ønsker å gjøre noe i R, får vi som regel en funksjon til å gjøre jobben for oss. En funksjon tar i mot verdi(er), gjerne lagret i form av et R-objekt, utfører operasjoner basert på input, og produserer nye verdier. En typisk R-funksjon har følgende syntaks:
@@ -508,7 +532,7 @@ summary(data)
 ```
 
 ```
-##      navn               alder         bachelor            alder2         
+##      navn               alder         bachelor           alder_ch        
 ##  Length:3           Min.   :20.00   Length:3           Length:3          
 ##  Class :character   1st Qu.:21.50   Class :character   Class :character  
 ##  Mode  :character   Median :23.00   Mode  :character   Mode  :character  
@@ -597,7 +621,7 @@ summary(data)
 ```
 
 ```
-##      navn               alder         bachelor            alder2         
+##      navn               alder         bachelor           alder_ch        
 ##  Length:3           Min.   :20.00   Length:3           Length:3          
 ##  Class :character   1st Qu.:21.50   Class :character   Class :character  
 ##  Mode  :character   Median :23.00   Mode  :character   Mode  :character  
