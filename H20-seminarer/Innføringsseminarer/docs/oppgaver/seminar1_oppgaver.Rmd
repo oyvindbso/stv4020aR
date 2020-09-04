@@ -3,7 +3,8 @@ title: "Oppgaver seminar 1"
 output: github_document
 ---
 ### Oppgaver fra dagens tema:
-1. Last ned og inn Titanic-datasett (evnt. last inn data som siste del av felles gjennomgang). 
+Bruk datasettet vi lastet ned i slutten av av forrige seminar. Datasettet inneholder informasjon om passasjerer på Titanic. 
+
 2. Hvilke variabler finnes i datasettet?
 3. Hvilken klasse er variablene? 
 4. Hvor mange observasjoner er det i datasettet? 
@@ -18,4 +19,6 @@ output: github_document
 ### Oppgaver om morgendagens tema: 
 11. Lag en ny variabel som har verdien 1 dersom passasjeren er eldre enn gjennomsnittet og 0 ellers. Lagre den i Titanic datasettet. 
 12. Lag en ny variabel som er Age opphøyd i annen. 
-13. Noe om OLS? 
+13. Kjør en OLS-regresjon med Survived som avhengig variabel og Pclass, Sex og Age som uavhengige variabler. 
+
+

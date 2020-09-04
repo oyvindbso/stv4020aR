@@ -3,8 +3,9 @@ Oppgaver seminar 1
 
 ### Oppgaver fra dagens tema:
 
-1.  Last ned og inn Titanic-datasett (evnt. last inn data som siste del
-    av felles gjennomgang).
+Bruk datasettet vi lastet ned i slutten av av forrige seminar.
+Datasettet inneholder informasjon om passasjerer på Titanic.
+
 2.  Hvilke variabler finnes i datasettet?
 3.  Hvilken klasse er variablene?
 4.  Hvor mange observasjoner er det i datasettet?
