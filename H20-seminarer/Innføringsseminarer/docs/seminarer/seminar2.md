@@ -1210,6 +1210,7 @@ stargazer(m2, m3,
 
 ``` r
 # Om du skriver i word så kan du bruke type="html", lagre i en mappe og åpne i word.
+# obs. bruk .htm og ikke .html
 stargazer(m2, m4,
           type = "html",
           out = "../../bilder/regresjonstabell.htm") 
