@@ -164,7 +164,7 @@ Vi kan bruke `ggplot()` til å undersøke om sammenhengen mellom en avhengig og 
 ```{r}
 ggplot(aid) + 
   geom_point(aes(y = gdp_growth, x = policy)) +
-  geom_smooth(aes(y = gdp_growth, x = policy), # Legger til en regresjonslinje
+  geom_smooth(aes(y = gdp_growth, x = policy), 
               se = FALSE) +
   theme_bw()
 
@@ -224,7 +224,7 @@ Det er flere måter å gjøre dette på. Først kan vi plotte fordelingene til r
 ```{r}
 ggplot() +
   geom_histogram(aes(x = rstandard(m5),
-                     y = ..density..)) + # Plotter fordelingen til standardavvikene
+                     y = ..density..)) + 
   stat_function(fun = dnorm, 
                 color = "goldenrod2") # Plotter inn en normalfordeling
 ```

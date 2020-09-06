@@ -526,7 +526,7 @@ vi kjører modellen.
 ``` r
 ggplot(aid) + 
   geom_point(aes(y = gdp_growth, x = policy)) +
-  geom_smooth(aes(y = gdp_growth, x = policy), # Legger til en regresjonslinje
+  geom_smooth(aes(y = gdp_growth, x = policy), 
               se = FALSE) +
   theme_bw()
 ```
@@ -591,7 +591,7 @@ car::durbinWatsonTest(m5b)
 ```
 
     ##  lag Autocorrelation D-W Statistic p-value
-    ##    1      0.02981496      1.939984   0.388
+    ##    1      0.02981496      1.939984   0.364
     ##  Alternative hypothesis: rho != 0
 
 For model 5 er Durbin-Watson testen ikke signifikant på konvensjonelle
@@ -613,7 +613,7 @@ til residualene våre og sammenligne med en normalfordeling ved hjelp av
 ``` r
 ggplot() +
   geom_histogram(aes(x = rstandard(m5),
-                     y = ..density..)) + # Plotter fordelingen til standardavvikene
+                     y = ..density..)) + 
   stat_function(fun = dnorm, 
                 color = "goldenrod2") # Plotter inn en normalfordeling
 ```

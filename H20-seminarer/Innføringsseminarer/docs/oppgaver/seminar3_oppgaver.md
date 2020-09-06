@@ -24,8 +24,8 @@ oppgitt som uavhengige variabler.
     inneholder samspill og/eller høyeregradspolynomer/matematiske
     transformasjoner. Du står også fritt til å forsøke forskjellige
     omkodinger.
-  - For hver regresjon, plot resultatene med konfidensintervaller.
   - For hver regresjon, sjekk to valgfrie forutsetninger for OLS.
+  - For hver regresjon, plot resultatene med konfidensintervaller.
 
 Tips: I tillegg til argumentet `col =` i `ggplot()` , kan du bruke
 `shape =`, `alpha =`, m.m. Du kan også bruke `facet_wrap()` med en eller

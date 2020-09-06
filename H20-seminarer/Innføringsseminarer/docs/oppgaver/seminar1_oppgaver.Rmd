@@ -5,9 +5,9 @@ output: github_document
 ### Oppgaver fra dagens tema:
 Bruk datasettet vi lastet ned i slutten av av forrige seminar. Datasettet inneholder informasjon om passasjerer på Titanic. 
 
-2. Hvilke variabler finnes i datasettet?
-3. Hvilken klasse er variablene? 
-4. Hvor mange observasjoner er det i datasettet? 
+1. Hvilke variabler finnes i datasettet?
+2. Hvilken klasse er variablene? 
+3. Hvor mange observasjoner er det i datasettet? 
 4. Var det flest menn eller kvinner på Titanic?
 5. Hva er gjenomsnittsalderen for menn som var på Titanic? (Tips: kombiner mean() med det vi har lært om indeksering)
 6. Lag en logisk test for om den eldeste mannen på Titanic var yngre enn den eldste kvinnen.
