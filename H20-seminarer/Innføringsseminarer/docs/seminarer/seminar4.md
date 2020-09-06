@@ -640,7 +640,7 @@ pR2(gm1)
     ##          llh      llhNull           G2     McFadden         r2ML         r2CU 
     ## -143.2780270 -186.5597970   86.5635399    0.2319994    0.2627301    0.3593117
 
-Pseudo \(R^2\) aldri kan tolkes som andel forklart varians.
+Husk at Pseudo \(R^2\) aldri kan tolkes som andel forklart varians.
 
 **Husk:** I tillegg til formell diagnostikk, må du aldri glemme
 generelle validitets/metode-vurderinger.

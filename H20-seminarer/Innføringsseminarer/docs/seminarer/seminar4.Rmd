@@ -343,7 +343,7 @@ pR2(gm1)
 
 ```
 
-Pseudo $R^2$ aldri kan tolkes som andel forklart varians. 
+Husk at Pseudo $R^2$ aldri kan tolkes som andel forklart varians. 
 
 **Husk:** I tillegg til formell diagnostikk, må du aldri glemme generelle validitets/metode-vurderinger.
 
