@@ -288,7 +288,7 @@ Tomme celler vil føre til at modellen ikke lar seg estimere, eller at du ikke f
 kan forsøke å løse det ved å forenkle modellen (f.eks. slå sammen kategorier) eller samle inn mer data.
 
 
-*Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
+* Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
 
 ```{r}
 # Lager et datasett med variablene vi trenger og uten NA
@@ -310,7 +310,7 @@ anova(gm0, gm1, test = "LRT") # Sjekk de forskjellige alternativene til test med
 
 Likelihood-ratio testen går ut på å signifikansteste forskjellen i -2LL for den fullstendige modellen og en redusert modell. For å kunne gjøre en LR-test så må modellene være nøstede. Positiv og signifikant LR-test betyr at den fullstendige modellen er signifikant bedre tilpasset datamateriale enn den reduserte. 
 
-*Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken `ResourceSelection`
+* Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken `ResourceSelection`
 
 ```{r}
 #install.packages("ResourceSelection")

@@ -516,7 +516,9 @@ brukes til å undersøke dette nærmere. En kan forsøke å løse det ved å
 forenkle modellen (f.eks. slå sammen kategorier) eller samle inn mer
 data.
 
-\*Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
+  - Vi kan gjøre nøstede likelihood-ratio tester med `anova()`.
+
+<!-- end list -->
 
 ``` r
 # Lager et datasett med variablene vi trenger og uten NA
@@ -552,8 +554,10 @@ en LR-test så må modellene være nøstede. Positiv og signifikant LR-test
 betyr at den fullstendige modellen er signifikant bedre tilpasset
 datamateriale enn den reduserte.
 
-\*Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken
-`ResourceSelection`
+  - Vi kan gjøre hosmer-lemeshow med `hoslem.test()` fra pakken
+    `ResourceSelection`
+
+<!-- end list -->
 
 ``` r
 #install.packages("ResourceSelection")
