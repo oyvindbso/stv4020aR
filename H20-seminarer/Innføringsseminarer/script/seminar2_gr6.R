@@ -87,26 +87,35 @@ aid_region <- aid %>%
 
 
 # Bivariat korrelasjon
-
+cor(aid$gdp_growth, aid$aid, use = "pairwise")
 
 # Korrelasjonsmatrise (6:13)
 
 # Tabell
 
 # Prosenttabell
+prop.table(table(aid$region))
+
 
 # Tabell med logisk test (gdp_growth og region)
 
 # ggplot2
 # installere pakken
-
 # laste inn pakken
+library(ggplot2)
 
 # Histogram
+ggplot(aid) +
+  geom_histogram(aes(x = gdp_growth))
 
 # Boxplot
-
+ggplot(aid) +
+  geom_boxplot(aes(x = region, y = aid))
+  
 # Linje (med col = country)
+ggplot(aid) + 
+  geom_line(aes(x = period, y = aid, col = country)) +
+  theme_bw()
 
 # Linje med SSA
 
@@ -116,13 +125,41 @@ aid_region <- aid %>%
 
 
 ## OLS (m1: aid og gdp_growth)
+m1 <- lm(data = aid,
+         gdp_growth ~ aid, 
+         na.action = "na.exclude")
+
+summary(m1)
 
 # m2: multivariat
+m2 <- lm(data = aid,
+         gdp_growth ~ aid + policy + region, 
+         na.action = "na.exclude")
+
+summary(m2)
 
 # m3: samspill
+m3 <- lm(data = aid,
+         gdp_growth ~ aid*policy + region, 
+         na.action = "na.exclude")
+
+summary(m3)
+
 
 # m4: andregradsledd (I(^2))
+m4 <- lm(data = aid, 
+         gdp_growth ~ aid + I(aid^2), 
+         na.action = "na.exclude")
+summary(m4)
 
 # Pene tabeller
-# install.packages("stargazer)
+# install.packages("stargazer")
 library(stargazer)
+stargazer(m1,m2,m3, type = "text")
+
+
+
+
+mean(aid$gdp_growth, na.rm = TRUE)
+# Gjennomsnittet er 1.04 
+
