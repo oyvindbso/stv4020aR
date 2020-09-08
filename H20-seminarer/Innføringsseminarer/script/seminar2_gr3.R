@@ -62,6 +62,7 @@ mean(aid$gdp_growth_ch, na.rm = TRUE)
 
 # Oppretter region-variabel
 names(aid)
+
 aid$region <- ifelse(aid$sub_saharan_africa == 1, "Sub Saharan Africa", 
                      ifelse(aid$central_america == 1, "Central America", 
                             ifelse(aid$fast_growing_east_asia == 1, "East Asia", "Other")))
@@ -71,7 +72,8 @@ table(aid$region, aid$fast_growing_east_asia, useNA = "always")
 # Group by region og summarise
 aid <- aid %>% 
   group_by(region) %>% 
-  mutate(growth_mean = mean(gdp_growth, na.rm = TRUE))
+  mutate(growth_mean = mean(gdp_growth, na.rm = TRUE)) %>% 
+  ungroup()
 
 table(aid$region, aid$growth_mean)
 
@@ -81,26 +83,41 @@ aid_agg <- aid %>%
 
 
 # Bivariat korrelasjon
-
+aid %>% 
+  select(6:8) %>% 
+  cor(, use = "complete.obs")
 
 # Korrelasjonsmatrise (6:13)
 
 # Tabell
 
 # Prosenttabell
+prop.table(table(aid$region))
+
 
 # Tabell med logisk test (gdp_growth og region)
 
 # ggplot2
 # installere pakken
+library(ggplot2)
 
 # laste inn pakken
 
 # Histogram
 
+ggplot(aid) +
+  geom_histogram(aes(x = gdp_growth))
+
 # Boxplot
+ggplot(aid) +
+  geom_boxplot(aes(x = region, y = aid))
+
 
 # Linje (med col = country)
+ggplot(aid) +
+  geom_line(aes(x = period, y = gdp_growth, col = country)) + 
+  theme_bw()
+
 
 # Linje med SSA
 
@@ -110,13 +127,37 @@ aid_agg <- aid %>%
 
 
 ## OLS (m1: aid og gdp_growth)
+m1 <- lm(data = aid,
+         gdp_growth ~ aid, 
+         na.action = "na.exclude")
+
+summary(m1)
 
 # m2: multivariat
+m2 <- lm(data = aid,
+         gdp_growth ~ aid + region, 
+         na.action = "na.exclude")
+
+summary(m2)
 
 # m3: samspill
+m3 <- lm(data = aid,
+         gdp_growth ~ aid*policy + region, 
+         na.action = "na.exclude")
+
+summary(m3)
+
 
 # m4: andregradsledd (I(^2))
+m4 <- lm(data = aid,
+         gdp_growth ~ aid + I(aid^2) + region, 
+         na.action = "na.exclude")
+
+summary(m4)
 
 # Pene tabeller
-# install.packages("stargazer)
+install.packages("stargazer")
 library(stargazer)
+
+stargazer(m1, m2, m3, m4, type = "text")
+
