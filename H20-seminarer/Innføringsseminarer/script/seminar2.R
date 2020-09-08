@@ -2,6 +2,20 @@
 ##### SEMINAR 2 #####
 #####################
 
+# Rydder environment (dvs. gjerner alt som er i environment)
+# rm(list = ls()) # Fjern # foran om du vil kjøre denne
+
+# Til dere som sleit med å laste inn direkte fra github, prøv dette (uten #):
+# install.packages("RCurl")
+# library(RCurl)
+# dataurl <- getURL("https://raw.githubusercontent.com/liserodland/stv4020aR/master/H20-seminarer/Innf%C3%B8ringsseminarer/data/aid.csv")
+# aid <- read.csv(text = dataurl,
+#                 stringsAsFactors = FALSE)
+
+
+
+# litt om set.wd()
+
 # Laster inn pakker 
 library(tidyverse)
 library(haven)
@@ -26,16 +40,18 @@ table(is.na())
 # Oppretter alternativ policy-variabel
 # Base R
 
+
 # Tidyverse (vanlig + sentrert)
 
 
-# Omkoderklasser (country + gdp_growth)
+# Omkoder klasser (country + gdp_growth)
 
 
 # Ifelse med periode for å lage tiårsvariabel
 
 
 ## Aggregering
+
 
 # Oppretter region-variabel
 

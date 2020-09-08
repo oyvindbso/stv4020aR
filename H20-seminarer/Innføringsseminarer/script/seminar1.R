@@ -29,3 +29,4 @@ library(tidyverse)
 
 # Vi laster inn data vi skal bruke i de neste oppgavene 
 titanic <- read_csv("https://raw.githubusercontent.com/liserodland/stv4020aR/master/H20-seminarer/Innf%C3%B8ringsseminarer/data/titanic.csv")
+
