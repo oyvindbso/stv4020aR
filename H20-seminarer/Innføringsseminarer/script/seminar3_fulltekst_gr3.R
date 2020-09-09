@@ -37,6 +37,13 @@
 # Oppgavene i dag: litt friere og ikke like tydelig fasit. Bruk gjerne muligheten
 # til å prøve deg på omkodinger, plotting osv. 
 
+ggplot(aid) + 
+  geom_point(aes(x = aid, y = gdp_growth, shape = as.factor(economic_open),
+                 col = as.factor(budget_balance), 
+                 alpha = as.factor(inflation))) +
+  theme_minimal()
+
+
 # Laster inn pakker jeg skal bruke
 # Husk å kjør install.packages("pakkenavn") først om ikke du har gjort det allerede 
 library(tidyverse)
