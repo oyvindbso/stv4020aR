@@ -22,7 +22,7 @@ BONUS:
 * For hver regresjon, plot resultatene med konfidensintervaller. 
 
 
-Tips: I tillegg til argumentet `col =` i `ggplot()` , kan du bruke `shape = `, `alpha =`, m.m. Du kan også bruke `facet_wrap()` med en eller flere variabler (velg variabler med et begrenset antall verdier - dersom du vil bruke denne strategien når du bare har kontinuerlige variabler, bruk `cut()` til å lage en ny variabel som deler en kontinuerlig var. i kategorier)
+Tips: I tillegg til argumentet `col =` i `ggplot()` , kan du bruke `shape = `, `alpha =`, m.m. Du kan også bruke `facet_wrap()` med en eller flere variabler (velg variabler med et begrenset antall verdier - dersom du vil bruke denne strategien når du bare har kontinuerlige variabler, bruk `cut()` til å lage en ny variabel som deler en kontinuerlig var. i kategorier). Du kan også se på oppsummeringen fra [seminar 2](https://github.com/liserodland/stv4020aR/blob/master/H20-seminarer/Innf%C3%B8ringsseminarer/docs/seminarer/seminar2.md for tips). 
 
 ## Oppgaver:
 
