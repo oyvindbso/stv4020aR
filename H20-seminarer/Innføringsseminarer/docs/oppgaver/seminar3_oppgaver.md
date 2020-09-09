@@ -13,7 +13,7 @@ Last inn `aid`-datasettet.
 
 I oppgavene under får du oppgitt sett av variabler. I hver regresjon, bruker du `aid$gdp_growth` som avhengig variabel, og variablene du får oppgitt som uavhengige variabler.
 
--   For hver oppgave med 4 variabler eller mindre, lag et spredningsplot der du visualiserer alle variablene som nevnes, samt `aid$gdp_growth` som du setter på y-aksen. Dersom det er mer enn 4 variabler, lag en korrelasjonsmatrise mellom variablene i oppgaven samt `aid$gdp_growth`.
+-   For hver oppgave med totalt 4 variabler eller mindre, lag et spredningsplot der du visualiserer alle variablene som nevnes, samt `aid$gdp_growth` som du setter på y-aksen. Dersom det er mer enn 4 variabler, lag en korrelasjonsmatrise mellom variablene i oppgaven samt `aid$gdp_growth`.
 -   For hver oppgave, kjør minst to forskjellige regresjonsspesifikasjoner, der den ene er lineær, mens den andre inneholder samspill og/eller høyeregradspolynomer/matematiske transformasjoner eller andre omkodinger av variabler. Du står også fritt til å forsøke forskjellige omkodinger.
 -   For hver regresjon, sjekk to valgfrie forutsetninger for OLS.
 
