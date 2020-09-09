@@ -20,6 +20,7 @@ m1 <- lm(data = aid,
 m2 <- lm(data = aid, 
          gdp_growth ~ aid + I(aid^2) + policy + as.factor(period), na.action = "na.exclude")
 
+# Presenterer resultatet i en tabell
 stargazer::stargazer(m1, m2, type = "text")
 
 # Sjekker linearitet: 

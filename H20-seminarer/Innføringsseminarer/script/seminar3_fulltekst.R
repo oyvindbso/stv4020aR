@@ -1,6 +1,44 @@
-# Laster inn pakker jeg skal bruke
-# Husk å kjør install.packages("pakkenavn") om ikke du har gjort det allerede 
+#####################
+##### SEMINAR 3 #####
+#####################
 
+# Hva bør dere vite hvor dere finner informasjon om nå?
+# 1. Laste inn data (funksjon er avhengig av datatypen - se suffiks på fil (.dta, .csv, . Rdata, .sav))
+# data <- read_csv("filbane/filnavn.csv" eller "lenke til data på github") (fra tidyversen-pakken)
+# data <- read_dta("filbane/filnavn.dta") (fra haven-pakken)
+# data <- read_sav("filbane/filnavn.dta") (fra haven-pakken)
+# load("filbane/filnavn.Rdata")
+# Lagre script og sette working directory
+# Er du usikker her så anbefaler jeg å lese kapittel 4 i Lær deg R
+
+# 2. Lage nye datasett med underutvalg av observasjoner eller variabler 
+# Her er det nyttig med indeksering eller filter() og select() fra tidyverse
+
+# 3. Gjøre regneoperasjoner og hente ut deskriptiv informasjon
+# Se oppsummering seminar 1 for oversikt over funksjoner og regneoperasjoner
+# F.eks. mean(), se() o.l. 
+# HUSK na.rm = TRUE dersom variabelen har missing-verdier
+
+# 4. Omkode variabler ved hjelp av regneoperasjoner og ifelse
+# Se seminar 1 og 2
+# HUSK:
+# datasett$nyvariabel <- funksjon/regneoperasjon e.l. 
+# eller
+# datasett <- datasett %>% 
+# mutate(nyvariabel1 = funksjon/regneoperasjon e.l., 
+#        nyvariabel2 = funksjon/regneoperasjon e.l.)
+
+# 5. Hvordan plotte deskriptiv informasjon 
+# Se seminar 2 og ggplot 
+
+# 6. Hvordan kjøre en OLS-modell 
+# Se seminar 2 og 3
+
+# Oppgavene i dag: litt friere og ikke like tydelig fasit. Bruk gjerne muligheten
+# til å prøve deg på omkodinger, plotting osv. 
+
+# Laster inn pakker jeg skal bruke
+# Husk å kjør install.packages("pakkenavn") først om ikke du har gjort det allerede 
 library(tidyverse)
 library(stargazer)
 # install.packages("car")
@@ -31,8 +69,11 @@ stargazer::stargazer(m5, type = "text")
 
 
 ### PLOTTER EFFEKTER ###
+# Steg 1: Kjør modellen
+
+
 # En variabel
-# Lager datasettet
+# Steg 2: Lag et fiktivt datasett datasettet
 snitt_data <- data.frame(log_gdp_pr_capita = mean(aid$log_gdp_pr_capita, na.rm = TRUE),
                          ethnic_frac = mean(aid$ethnic_frac, na.rm = TRUE),
                          assasinations = mean(aid$assasinations, na.rm = TRUE),
@@ -44,12 +85,21 @@ snitt_data <- data.frame(log_gdp_pr_capita = mean(aid$log_gdp_pr_capita, na.rm =
                          aid = mean(aid$aid, na.rm = TRUE),
                          period_fac = "4")
 
+# Steg 3: legg predikerte verdier til i det fiktive datasettet
 # Bruker predict
-predict(m5, newdata = snitt_data, se = TRUE)
+predict <- predict(m5, newdata = snitt_data, se.fit = TRUE, interval = c("confidence"))
 
-# Legger predikerte verdier inn i snitt_data
-snitt_data <- cbind(snitt_data, predict(m5, newdata = snitt_data, se = TRUE, interval = "confidence"))
+
+
+# Steg 4 + 5: Legger predikerte verdier og konfidensintervaller inn i snitt_data
+snitt_data <- snitt_data %>% 
+  mutate(fit.fit = predict$fit,             # Henter ut predikterte verdier
+         se = predict$se.fit,               # Henter ut standardfeil
+         fit.lwr = fit.fit - 1.96*se,       # Beregner nedre grense for KI
+         fit.upr = fit.fit + 1.96*se)       # Beregner øvre grense for KI  
 snitt_data
+
+# (Steg 6: Plotter)
 
 ggplot(snitt_data, aes(x = institutional_quality, y = fit.fit)) + # Setter institusjonell kvalitet på x-aksen og predikert verdi på y-aksen
   geom_line() +                                                   # Sier at jeg vil ha et linjediagram
@@ -71,11 +121,13 @@ snitt_data_sam <- data.frame(log_gdp_pr_capita = mean(aid$log_gdp_pr_capita, na.
                              period_fac = "4")
 
 # Predikerer verdier (løser likningen for modellen)
-predict(m5, newdata = snitt_data_sam, se = TRUE)
+predict <- predict(m5, newdata = snitt_data_sam, se = TRUE)
 
-# Lagrer predikerte verdier i plot datasettet
-snitt_data_sam <- cbind(snitt_data_sam, predict(m5, newdata = snitt_data_sam, se = TRUE, interval = "confidence"))
-snitt_data_sam
+snitt_data_sam <- snitt_data_sam  %>% 
+  mutate(fit.fit = predict$fit,             # Henter ut predikterte verdier
+         se = predict$se.fit,               # Henter ut standardfeil
+         fit.lwr = fit.fit - 1.96*se,       # Beregner nedre grense for KI
+         fit.upr = fit.fit + 1.96*se)       # Beregner øvre grense for KI 
 
 # Plotter
 ggplot(snitt_data_sam, aes(x = aid, y = fit.fit, 
