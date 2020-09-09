@@ -161,4 +161,4 @@ stargazer::stargazer(m3, type = "text")
 
 # Koeffisienten er signifikant  på 1 prosentsnivå og positiv. En skalaenhets økning i dødsfall øker sannsynligheten for at staten har obligatorisk samfunnstraff om en fyllekjører. 
 ```
-
+11. Hva er gjennomsnitt og media til variabelen beertax? Vis hvordan du kommer frem til det via kode og oppgi verdiene i en kommentar. 

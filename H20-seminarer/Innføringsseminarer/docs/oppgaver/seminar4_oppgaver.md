@@ -76,3 +76,6 @@ Sjekk ved hjelp av en tabell at det ble riktig.
 10. Kjør en binomisk logistisk regresjon med `comserd_d` som avhengig
     variabel og `unrate`, `perinc`, `mrall` og `mlda` som uavhengige
     variabler. Hva kan si om effekten av antall trafikkdødsfall?
+
+11. Hva er gjennomsnitt og media til variabelen beertax? Vis hvordan du
+    kommer frem til det via kode og oppgi verdiene i en kommentar.
