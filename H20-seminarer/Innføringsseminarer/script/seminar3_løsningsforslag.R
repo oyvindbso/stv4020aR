@@ -26,6 +26,7 @@ ggplot(aid) +
   facet_wrap(~as.factor(period))
   theme_minimal()
 
+## OPPGAVE 2: aid, economic open, budget_balance, inflation
 # Med korrelasjonsmatrise
 # For å kunne lage en korrelasjonsmatrise med flere variabler så krever
 # R at du oppretter et objekt som inneholder de variablene du ønsker
@@ -80,6 +81,8 @@ m3 <- lm(data = aid,
 # Presenterer resultatet i en tabell
 stargazer::stargazer(m1, m2, m3, type = "text")
 
+## EKSEMPLER PÅ KONTROLL AV FORUTSETNINGER 
+# Se oppsummeringsarket fra seminar 3 for mer
 # Sjekker linearitet på gdp_growth og policy: 
 ggplot(aid) + 
   geom_point(aes(y = gdp_growth, x = policy)) +
@@ -108,7 +111,7 @@ ggplot() +
                 color = "goldenrod2") 
 
 
-# Plotter resultater
+## PLOTTER RESULTATER FRA REGRESJONEN
 # 2. Lager plotdata
 plotdata <- data.frame(aid = seq(min(aid$aid, na.rm = TRUE),
                                  max(aid$aid, na.rm = TRUE), 1),
