@@ -33,14 +33,11 @@ ikke missing-data.
     av dette med kode.
 
 3.  Lag et spredningsplot (scatter-plot) med `beertax` på x-aksen, og
-    `mrall` på y-aksen. Tegn deretter en lineær regresjonslinje oppå
-    plottet.
+    `mrall` på y-aksen.
 
 4.  Lag et nytt datasett basert på `beer`, bestående av variablene
     `year`, `mrall`, `beertax`, `vmiles`, `unrate` og `perinc.` Lag en
-    korrelasjonsmatrise med utgangspunkt i det nye datasettet. Gjør
-    deretter en signifikanstest av sammenhengen mellom `beertax` og
-    `mrall`. Hva indikerer korrelasjonen mellom disse to variablene?
+    korrelasjonsmatrise med utgangspunkt i det nye datasettet.
 
 5.  Opprett et nytt datasett med alle observasjoner fra år 1982 i det
     opprinnelige datasettet, og et datasett med alle observasjoner fra
@@ -51,22 +48,20 @@ ikke missing-data.
 6.  Kjør en lineær regresjon med `mrall` som avhengig variabel og
     `beertax`, `vmiles`, `unrate` og `perinc` som uavhengige variabler.
     Lagre modellen som et objekt. Indikerer modellen at skatt på øl
-    reduserer dødsfall i trafikken? Tolk effekten substansielt.
+    reduserer dødsfall i trafikken?
 
 7.  Opprett en ny variabel i datasettet ditt, `state_fac`, ved å omkode
     variabelen `state` til en factor. Lag deretter et boxplot med
-    `state_fac` på x-aksen og `mrall` på y-aksen. Vil du si det er store
-    variasjoner i dødsrate mellom statene (du kan trykke på Zoom over
-    plottet for å se tydelig)? Lag deretter det samme plottet som i
-    oppgave 3, men legg til argumentet `facet_wrap(~state_fac)`. Hva
-    leser du fra dette plottet?
+    `state_fac` på x-aksen og `mrall` på y-aksen. Lag deretter det samme
+    plottet som i oppgave 3, men legg til argumentet
+    `facet_wrap(~state_fac)`. Hva leser du fra dette plottet?
 
 8.  Kjør en lineær regresjon med `mrall` som avhengig variabel og
     `beertax`, `vmiles`, `unrate`, `perinc` og `state_fac` som
     uavhengige variabler. Lagre modellen som et objekt. Indikerer
-    modellen at skatt på øl reduserer dødsfall i trafikken? Tolk
-    effekten substansielt. (P.S.: ved å legge til variabelen `state_fac`
-    spesifiserer vi en modell med det som kalles fixed effects).
+    modellen at skatt på øl reduserer dødsfall i trafikken? (P.S.: ved å
+    legge til variabelen `state_fac` spesifiserer vi en modell med det
+    som kalles fixed effects).
 
 9.  Lag en ny variabel `comserd_d` som tar verdien:
 
