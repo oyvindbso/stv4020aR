@@ -316,3 +316,8 @@ table(is.na(aid2$avg_eq))
 
 summary(aid2$avg_eq)
 
+
+## PLOTTER FRA OPPGAVE
+ggplot(aid) +
+  geom_point(aes(x = aid, y = gdp_growth, shape = as.factor(period),
+                 col = policy)) 
