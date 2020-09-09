@@ -87,7 +87,7 @@ snitt_data <- data.frame(log_gdp_pr_capita = mean(aid$log_gdp_pr_capita, na.rm =
 
 # Steg 3: legg predikerte verdier til i det fiktive datasettet
 # Bruker predict
-predict <- predict(m5, newdata = snitt_data, se.fit = TRUE, interval = c("confidence"))
+predict <- predict(m5, newdata = snitt_data, se.fit = TRUE)
 
 
 
