@@ -1,6 +1,6 @@
 ---
 title: "Seminar 2"
-output: github_document
+output: pdf_document
 ---
 
 ## Dagens seminar: En første dataanalyse med R  
