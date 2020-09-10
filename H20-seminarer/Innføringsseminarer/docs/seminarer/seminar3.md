@@ -511,10 +511,10 @@ car::durbinWatsonTest(m5b)
 
 ```
 ##  lag Autocorrelation D-W Statistic p-value
-##    1      0.02981496      1.939984   0.406
+##    1      0.02981496      1.939984    0.36
 ##  Alternative hypothesis: rho != 0
 ```
-For model 5 er Durbin-Watson testen ikke signifikant på konvensjonelle nivåer (p-verdien er 0.336). Samtidig ser vi at Durbin-Watson verdien er rett under 2. Durbin-Watson verdier i nærheten av 2 indikerer ingen autokorrelasjon (se Christophersen s. 78). 
+I utgangspunktet burde vi her kjørt Durbin-Watson-testen fra plm fordi aid-datasettet har paneldata-struktur så dette er bare et eksempel for å vise hvordan dere kan kjøre funksjonen . 
 
 ### Normalfordelte residualer:
 Residualene fra modellen er normalfordelt og har gjennomsnitt tilnærmet lik 0. 
