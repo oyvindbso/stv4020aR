@@ -591,7 +591,7 @@ car::durbinWatsonTest(m5b)
 ```
 
     ##  lag Autocorrelation D-W Statistic p-value
-    ##    1      0.02981496      1.939984    0.38
+    ##    1      0.02981496      1.939984   0.374
     ##  Alternative hypothesis: rho != 0
 
 For model 5 er Durbin-Watson testen ikke signifikant på konvensjonelle
