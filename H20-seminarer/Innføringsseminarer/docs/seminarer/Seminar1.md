@@ -7,6 +7,8 @@ output:
     keep_md: yes
     self_contained: no
     keep_html: no
+  pdf_document: 
+    toc: no
 ---
 
 
@@ -18,9 +20,9 @@ De fleste seminarer vil bestå av to deler:
 1. En introduksjon om dagens emner. 
 2. Oppgaver relatert til dagens emner. For å lære seg R så er det *helt* nødvendig å anvende kunnskapen.  
 
-I år har vi fire introduksjonsseminarer som vil bli etterfulgt av en digital prøve mandag 14. august. Prøven er fra kl 9 til 15, men det bør ikke ta så mye mer enn to timer å løse den. Vi gir dere god tid så vi kan ta høyde for tekniske problemer e.l. På introduksjonsseminarene skal vi lære alt fra å laste inn datasett til å kjøre egne analyser for så å plotte resultatene. Vi skal lære ting som vil være anvendbare langt utover statistisk analyse. 
+I år har vi fire introduksjonsseminarer som vil bli etterfulgt av en digital prøve mandag 14. august. Prøven er gjøre tilgjengelig i Canvaskl 9 og må leveres senest kl 15, men det bør ikke ta så mye mer enn to-tre timer å løse den. Vi gir dere god tid så vi kan ta høyde for tekniske problemer e.l. Dere har lov til å bruke alle hjelpemidler, men dere skal ikke samarbeide. Dere skal levere et kjørbart script som svarer på oppgavene på prøven. 
 
-Neste uke tilbyr vi fordypningsseminarer for de av dere som vil jobbe videre med R. Disse anbefales spesielt til dere som skal skrive en statistisk oppgave, men det er selvfølgelig ikke et krav for å delta. På fordypningsseminarene vil vi gå nærmere inn på R-kode for flernivå-analyse, faktoranalyse og paneldata. Vi håper så klart å se mange av dere der også. Det blir ikke noen prøve om innholdet i fordypningsseminarene.
+På introduksjonsseminarene skal vi lære alt fra å laste inn datasett til å kjøre egne analyser for så å plotte resultatene. Vi skal lære ting som vil være anvendbare langt utover statistisk analyse. Neste uke tilbyr vi fordypningsseminarer for de av dere som vil jobbe videre med R. Disse anbefales spesielt til dere som skal skrive en statistisk oppgave, men det er selvfølgelig ikke et krav for å delta. På fordypningsseminarene vil vi gå nærmere inn på R-kode for flernivå-analyse, faktoranalyse og paneldata. Vi håper så klart å se mange av dere der også. Det blir ikke noen prøve om innholdet i fordypningsseminarene.
 
 # Hjemmeoppgaven
 Om du ikke allerede har bestemt deg så begyn å tenk på hjemmeoppgaven nå. Om du skal skrive en statistisk oppgave så er det fint å ha hjemmeoppgaven i bakhodet når vi går gjennom ting på seminar. Ta gjerne en titt på [Harvard dataverse](https://dataverse.harvard.edu/dataverse/harvard). Mange forskere bruker Harvard dataverse til å publisere replikasjonsdata når de skriver artikler. Du kan søke på temaer du synes er interessante eller en spesiell artikkel du syns er spennende. 
