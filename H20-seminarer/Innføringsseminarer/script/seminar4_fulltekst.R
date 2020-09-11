@@ -20,6 +20,15 @@
  
 # Klarer dere dagens oppgaver så er dere godt rusta :) 
 
+# Noen tips på veien: 
+# - Husk å laste inn de nødvendige pakkene ved hjelp av library(). Gjør
+### det først i scriptet så er du ferdig med det. 
+# - Om en kodesnutt ikke vil kjøre så prøv 1) laste inn nødvendige pakker
+### igjen. 2) Kjør all koden før kodesnutten på ny. 3) Google! 
+# - Om du ikke vet hvilken funksjon du skal bruke for å løse en oppgave så
+### slå opp i materiale eller søk på nett.
+# - Dere har god tid, men begynn tidlig og lever tidlig. 
+
 library(tidyverse)
 
 aid <- read_csv("https://raw.githubusercontent.com/liserodland/stv4020aR/master/H20-seminarer/Innf%C3%B8ringsseminarer/data/aid.csv")
