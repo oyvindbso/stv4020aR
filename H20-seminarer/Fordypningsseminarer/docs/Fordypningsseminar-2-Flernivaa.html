@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Untitled</title>
+
+<script src="Fordypningsseminar-2-Flernivaa_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="Fordypningsseminar-2-Flernivaa_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="Fordypningsseminar-2-Flernivaa_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="Fordypningsseminar-2-Flernivaa_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="Fordypningsseminar-2-Flernivaa_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="Fordypningsseminar-2-Flernivaa_files/navigation-1.1/tabsets.js"></script>
+<link href="Fordypningsseminar-2-Flernivaa_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Fordypningsseminar-2-Flernivaa_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Untitled</h1>
+
+</div>
+
+
+<div id="flernivåanalyse" class="section level2">
+<h2>Flernivåanalyse</h2>
+<p>Den statistiske motivasjonen bak flernivåanalyse er å ta hensyn til avhengighet mellom observasjoner i en hierarkisk struktur. <em>I R:</em> Som de andre regresjonsformene vi har sett på, ligner syntaksen for flernivåanalyse på syntaksen for ols. Den største forskjellen ligger i spesifisering av nivå for variabler. Hensikten med dette dokumentet er å hjelpe deg til å forstå hvordan du kan oversette teorien fra forelesning/pensum om variabler på ulike nivå til R-syntaks i <code>lmer()</code> funksjonen fra pakken <code>lme4</code>. Dersom du ikke helt forstår hva som skjer i flernivå-scriptet, vil forhåpentligvis dette dokumentet være til hjelp, og vice versa. Installer og last inn <code>lme4</code> med koden under.</p>
+<pre class="r"><code># install.packages(&quot;lme4&quot;)
+library(lme4)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<p>Under finner dere syntaksen for flernivå med samme notasjon som på forelesning, oversatt til <code>lmer</code>. Jeg bruker <code>group_var</code> for å betegne variabelen som forteller hvilken gruppe observasjoner tilhører (den hierarkiske strukturen). <code>x</code> refererer til variabler på nivå 1, mens <code>z</code> referer til variabler på nivå 2 (skiller mellom z og x for å gjøre det lettere og oversette til <strong>R</strong>).</p>
+<p><strong>Lineær Regresjon:</strong> <span class="math display">\[Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + e_i\]</span> <code>lmer(y ~ (1|group_var), data = data)</code></p>
+<p><strong>Flernivå med kun random intercept:</strong> <span class="math display">\[Y_i = \beta_{0} + u_{0j} + e_{ij}\]</span> <code>lmer(y ~ 1 + (1|group_var))</code></p>
+<p><strong>Flernivå med uavh. var på mikronivå, fixed effects, random intercept:</strong> <span class="math display">\[Y_i = \beta_{0} + \beta_{1}X_{1ij} +  u_{0j} + e_{ij}\]</span> <code>lmer(y ~ (1|group_var) + x1, data = data)</code></p>
+<p><strong>Flernivå med uavh. var på mikronivå, random slopes:</strong> <span class="math display">\[Y_i = \beta_{0} + \beta_{1}X_{1ij} + u_{1j}X_{1ij} + u_{0j} +  e_{ij}\]</span> <code>lmer(y ~ x1 + (x1|group_var), data=data)</code></p>
+<p><strong>Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå:</strong> <span class="math display">\[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j} Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]</span> <code>lmer(y ~ x1 + (x1|group_var) + z2, data=data)</code></p>
+<p><strong>Flernivå med uavh. var på mikronivå med random effects, kryssnivåsamspill, og uavhengig variabel på makronivå:</strong> <span class="math display">\[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j}Z_{2j} + \beta_{3}X_{1ij}Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]</span> <code>lmer(y ~ x1*z2 + x1 + (x1|group_var) + z2, data=data)</code></p>
+<p>Som dere kanskje husker, kan vi bruke modellen med kun random intercept til å beregne intra-class correlation. For å gjøre dette deler vi varians på nivå 2 på summen av varians på nivå en og nivå 2:</p>
+<p><span class="math display">\[var(u_j)/(var(u_j) + var(e_{ij}))\]</span></p>
+<p>Dersom vi har brukt <code>lmer()</code> til å kjøre en flernivåmodell med kun random intercept, får vi outputen vi trenger til å regne ut ICC etter denne formelen med <code>summary()</code>. Vi kan også bruke <code>VarCorr(model, comp=</code>Variance<code>)</code>. Dere kan hente ut random slopes/intercepts med <code>ranef()</code>, mens faste effekter kan hentes ut med <code>coef()</code>.</p>
+<p>Her er en mer utdypende <a href="https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf">forklaring av lme4 pakken med eksempler</a>. Mye av teksten er teknisk, men se seksjon 5.2 dersom du tenker å kjøre en flernivåanalyse til hjemmeoppgaven for detaljer om diagnostikk for <code>lmer</code>.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

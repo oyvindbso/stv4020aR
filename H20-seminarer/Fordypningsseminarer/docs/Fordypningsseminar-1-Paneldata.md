@@ -6,7 +6,17 @@ Lise Rødland
 ## Tema
 
 I dette seminaret skal vi jobbe med en artikkel fra 2005 skrevet av
-Neumayer og spess.
+Neumayer og spess. Artikkelen heter *Do bilateral investment treaties
+increase foreign direct investment to developing countries?* og bruker
+paneldata til å undersøke effekten av bilaterale investeringsavtaler på
+hvor mye utenlandsinvesteringer utviklingsland mottar. Datasettet har
+jeg lastet ned fra [Harvard
+Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/HQJN8G).
+Jeg har bearbeidet datasettet litt før dette seminaret for at variablene
+skal ha litt mer intuitive navn. Du kan laste det bearbeidede datasettet
+ned fra
+[data-mappen](https://github.com/liserodland/stv4020aR/tree/master/H20-seminarer/Fordypningsseminarer/data/Paneldata)
+på github.
 
 ``` r
 # Laster inn nødvendige pakker
@@ -15,19 +25,19 @@ library(haven) # For å kunne lese inn .dta-filer
 library(tidyverse) # For å kunne bruke ggplot, dplyr og liknende
 ```
 
-    ## -- Attaching packages --------------------------------------------------------------------------------------------------------------------------- tidyverse 1.3.0 --
+    ## -- Attaching packages -------------------------------- tidyverse 1.3.0 --
 
     ## v ggplot2 3.3.2     v purrr   0.3.4
     ## v tibble  3.0.1     v dplyr   1.0.0
     ## v tidyr   1.1.0     v stringr 1.4.0
     ## v readr   1.3.1     v forcats 0.5.0
 
-    ## -- Conflicts ------------------------------------------------------------------------------------------------------------------------------ tidyverse_conflicts() --
+    ## -- Conflicts ----------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
 ``` r
-library(stargazer)
+library(stargazer) # For å kunne lage pene tabeller
 ```
 
     ## 
@@ -77,6 +87,11 @@ Datasettet inneholder følgende variabler:
     handelsorganisasjon)
   - `polcon3`: et mål på troverdigheten til politiske institusjoner når
     de forplikter seg til politiske tiltak
+
+Disse er litt forenklet forklart. Neumayer og Spess har blant annet
+vektet variabelen `bits` som måler antall investeringsavtaler et land
+har. Om du er interessert så kan du lese mer i [artikkelen deres i World
+Development](https://www-sciencedirect-com.ezproxy.uio.no/science/article/pii/S0305750X05001233).
 
 R har en pakke som heter `plm` og som er nyttig når en skal jobbe med
 paneldata. Først må du installere og laste inn pakken:
@@ -511,24 +526,35 @@ dette også en risiko.
 
 For å undersøke dette kan vi bruke elementet `facet_wrap(~country)` i
 `ggplot`. Under er to plot som viser utviklingen over tid for en
-variabel i hvert land.
+variabel i hvert land. I plottene under har jeg valgt et utvalg av land
+ved hjelp av `filter()` og `%in%` for å få et litt mer lesbart plot.
+Prøv gjerne å fjerne ulike elementer i plottet for å se hva de gjør.
 
 ``` r
-ggplot(data.complete) +
-  geom_point(aes(x = year, y = as.factor(wto_member))) +
+ggplot(data.complete%>% 
+         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
+                               "China", "Lithuania", "Mozambique", "Togo", 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) + # Velger ut utvalg av land
+  geom_point(aes(x = as.numeric(as.character(year)), y = as.factor(wto_member))) + # Bruker as.numeric(as.character(year)) fordi year er en faktor
+  facet_wrap(~country) + 
+  theme_bw() +
+  xlab("Year") + ylab("WTO membership") # Legger til aksetitler
+```
+
+![](../figures/paneldata_wtomember_land.jpg)
+
+``` r
+ggplot(data.complete%>% 
+         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
+                               "China", "Lithuania", "Mozambique", "Togo", 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
+  geom_point(aes(x = as.numeric(as.character(year)), y = bits)) +
   facet_wrap(~country) +
-  theme_bw()
+  theme_bw() +
+  xlab("Year") + ylab("Antall BITs")
 ```
 
-![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
-
-``` r
-ggplot(data.complete) +
-  geom_point(aes(x = year, y = bits)) +
-  facet_wrap(~country)
-```
-
-![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](../figures/paneldata_bits_land.jpg)
 
 ### Modeller med random effects
 
@@ -603,6 +629,69 @@ stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
     ## F Statistic                 918.259***   2,100.489***     2,173.457***     
     ## ===========================================================================
     ## Note:                                           *p<0.1; **p<0.05; ***p<0.01
+
+## Tolke effekter
+
+Koeffisientene fra modellene du kjører i plm kan tolkes som OLS
+koeffisienter.
+
+``` r
+library(prediction)
+
+data.complete$pred_fdi_inflow_ols <- predict(mod1ols)
+
+ggplot(data.complete%>% 
+         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
+                               "China", "Lithuania", "Mozambique", "Togo", 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
+  geom_line(aes(x =  as.numeric(year), y = pred_fdi_inflow_ols)) + 
+  geom_line(aes(x = as.numeric(year), y = fdi_inflow), linetype = "dotted") +
+  facet_wrap(~country) + 
+  theme_classic()
+```
+
+![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+data.complete$pred_fdi_inflow_fe <- predict(plm.fe.two)
+
+ggplot(data.complete%>% 
+         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
+                               "China", "Lithuania", "Mozambique", "Togo", 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
+  geom_line(aes(x =  as.numeric(year), y = pred_fdi_inflow_fe)) + 
+  geom_line(aes(x = as.numeric(year), y = fdi_inflow), linetype = "dotted") +
+  facet_wrap(~country) + 
+  theme_classic()
+```
+
+![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+data.complete$pred_fdi_inflow_re <- predict(plm.re.two)
+
+plot_data <- data.complete %>%
+  data.frame() %>% 
+  select(country, year, fdi_inflow, pred_fdi_inflow_fe, pred_fdi_inflow_ols, pred_fdi_inflow_re) %>% 
+  pivot_longer(cols = contains("fdi_inflow"), names_to = "model", "values_to" = "FDI_inflow") 
+
+
+ggplot(plot_data %>% 
+         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
+                               "China", "Lithuania", "Mozambique", "Togo", 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
+  geom_line(aes(x = as.numeric(as.character(year)), y = FDI_inflow, col = model)) +
+#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_re), color = "royalblue4") + 
+#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_fe), color = "violetred4") +
+#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_ols), color = "orange") + 
+  facet_wrap(~country) + 
+  theme_classic() +
+  scale_color_discrete(labels = c("True value", "Predicted FE", "Predicted pooled OLS", "Prediced RE")) +
+  xlab("Year") + ylab("FDI inflow") +
+  theme(legend.position = "right", legend.title = element_blank())
+```
+
+![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ## Hvilken modell skal vi bruke?
 
