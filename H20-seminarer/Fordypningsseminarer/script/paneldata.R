@@ -2,6 +2,8 @@
 ### FORDYPNINGSSEMINAR 1: PANELDATA I R ###
 ###########################################
 
+### Hvordan opprette prosjekt
+
 ### Laster inn nødvendige pakker
 # Husk å kjør install.packages("pakkenavn") først om det er første gang du bruker pakken
 library(haven) # For å kunne lese inn .dta-filer
@@ -55,6 +57,9 @@ length(unique(data.balanced.ind$country))
 
 length(unique(data.complete$year))
 length(unique(data.balanced.ind$year))
+
+# Går videre med data.complete, fjerner tidligere elementer
+rm(data.balanced.ind, data.balanced.time)
 
 ### POOLED OLS 
 # I plm får vi en vanlig OLS-modell om vi velger model = "pooling". 
