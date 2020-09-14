@@ -636,62 +636,39 @@ Koeffisientene fra modellene du kjører i plm kan tolkes som OLS
 koeffisienter.
 
 ``` r
-library(prediction)
-
+# I dette eksempelet tar jeg utgangspunkt i både tids- og enhetseffekter
+# Legger til predikerte verdier på avhengig variabel for random effects i datasett
+data.complete$pred_fdi_inflow_re <- predict(plm.re.two)
+# Legger til predikerte verdier for pooled OLS i datasett 
 data.complete$pred_fdi_inflow_ols <- predict(mod1ols)
-
-ggplot(data.complete%>% 
-         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
-                               "China", "Lithuania", "Mozambique", "Togo", 
-                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
-  geom_line(aes(x =  as.numeric(year), y = pred_fdi_inflow_ols)) + 
-  geom_line(aes(x = as.numeric(year), y = fdi_inflow), linetype = "dotted") +
-  facet_wrap(~country) + 
-  theme_classic()
-```
-
-![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
-
-``` r
+# Legger til predikerte verdier for fixed effects i datasett
 data.complete$pred_fdi_inflow_fe <- predict(plm.fe.two)
 
-ggplot(data.complete%>% 
-         filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
-                               "China", "Lithuania", "Mozambique", "Togo", 
-                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
-  geom_line(aes(x =  as.numeric(year), y = pred_fdi_inflow_fe)) + 
-  geom_line(aes(x = as.numeric(year), y = fdi_inflow), linetype = "dotted") +
-  facet_wrap(~country) + 
-  theme_classic()
-```
 
-![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
-
-``` r
-data.complete$pred_fdi_inflow_re <- predict(plm.re.two)
-
+# Jeg gjør om en dataframe fra wide til long for å kunne få ulik farge på de predikerte verdiene i plottet
 plot_data <- data.complete %>%
-  data.frame() %>% 
-  select(country, year, fdi_inflow, pred_fdi_inflow_fe, pred_fdi_inflow_ols, pred_fdi_inflow_re) %>% 
-  pivot_longer(cols = contains("fdi_inflow"), names_to = "model", "values_to" = "FDI_inflow") 
+  data.frame() %>% # Gjør om fra plm-objekt til data.frame
+  select(country, year, fdi_inflow, pred_fdi_inflow_fe, pred_fdi_inflow_ols, pred_fdi_inflow_re) %>%  # Velger ut de aktuelle variablene
+  pivot_longer(cols = contains("fdi_inflow"), names_to = "model", "values_to" = "FDI_inflow")  # omformer datasettet 
+# Argumentet cols = sier hvilke kolonner(variabler) som skal slås sammen til en kolonne
+# contains("fdi_inflow") betyr at jeg vil ha med alle variablene som inneholder fdi_inflow
 
 
 ggplot(plot_data %>% 
          filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
                                "China", "Lithuania", "Mozambique", "Togo", 
-                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +
-  geom_line(aes(x = as.numeric(as.character(year)), y = FDI_inflow, col = model)) +
-#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_re), color = "royalblue4") + 
-#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_fe), color = "violetred4") +
-#  geom_line(aes(x =  as.numeric(as.character(year)), y = pred_fdi_inflow_ols), color = "orange") + 
-  facet_wrap(~country) + 
+                               "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) +    # Tar med et utvalg av land
+  geom_line(aes(x = as.numeric(as.character(year)), y = FDI_inflow, col = model)) + # Plotter linjen
+  facet_wrap(~country) +                                                            # Lager et plot per land  
   theme_classic() +
-  scale_color_discrete(labels = c("True value", "Predicted FE", "Predicted pooled OLS", "Prediced RE")) +
+  scale_color_discrete(labels = c("True value", "Predicted FE", "Predicted pooled OLS", "Prediced RE")) + # Setter inn labels på fargeoversikt
   xlab("Year") + ylab("FDI inflow") +
   theme(legend.position = "right", legend.title = element_blank())
+
+ggsave("../figures/paneldata_pred_faktisk.jpg")
 ```
 
-![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](../figures/paneldata_pred_faktisk.jpg)
 
 ## Hvilken modell skal vi bruke?
 
