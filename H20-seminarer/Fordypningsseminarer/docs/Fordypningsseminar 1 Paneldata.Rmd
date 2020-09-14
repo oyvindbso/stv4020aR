@@ -349,7 +349,20 @@ stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
 
 
 ## Tolke effekter
-Koeffisientene fra modellene du kjører i plm kan tolkes som OLS koeffisienter, men kontrollert for enhets- eller landfaste effekter ved bruk av fixed effects. 
+Koeffisientene fra modellene du kjører i plm kan tolkes som OLS koeffisienter, men kontrollert for enhets- eller landfaste effekter ved bruk av fixed effects. Pakken `sjPlot`inneholder flere fine plot-funksjoner. 
+
+```{r}
+# Laster inn pakken 
+# husk å installere ved hjelp av install.packages("sjPlot") om ikke du har brukt den før
+library(sjPlot)
+
+# Plotter koeffisientene og 95 % KI fra modellen med enhetsfaste effekter 
+plot_model(plm.fe.ind, sort.est = TRUE)
+
+
+```
+
+
 ```{r, include = FALSE, eval = FALSE}
 plotdata <- data.frame(bits = seq(min(data$bits, na.rm = TRUE),
                                    max(data$bits, na.rm = TRUE), 2),
@@ -364,9 +377,6 @@ plotdata <- data.frame(bits = seq(min(data$bits, na.rm = TRUE),
                        country = "Colombia",
                        year = 1975)
 
-class(data$year)
-
-test <- predict(plm.fe.ind, se.fit = TRUE, newdata = plotdata)
 
 ```
 

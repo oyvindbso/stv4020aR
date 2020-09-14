@@ -931,7 +931,23 @@ stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
 
 Koeffisientene fra modellene du kjører i plm kan tolkes som OLS
 koeffisienter, men kontrollert for enhets- eller landfaste effekter ved
-bruk av fixed effects.
+bruk av fixed effects. Pakken `sjPlot`inneholder flere fine
+plot-funksjoner.
+
+``` r
+# Laster inn pakken 
+# husk å installere ved hjelp av install.packages("sjPlot") om ikke du har brukt den før
+library(sjPlot)
+```
+
+    ## Learn more about sjPlot with 'browseVignettes("sjPlot")'.
+
+``` r
+# Plotter koeffisientene og 95 % KI fra modellen med enhetsfaste effekter 
+plot_model(plm.fe.ind, sort.est = TRUE)
+```
+
+![](Fordypningsseminar-1-Paneldata_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ## Plotte faktisk verdi opp mot predikert verdi
 

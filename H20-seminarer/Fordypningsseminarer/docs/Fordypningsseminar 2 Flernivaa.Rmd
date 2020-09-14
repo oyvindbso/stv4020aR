@@ -1,10 +1,7 @@
 ---
 title: "R fordypningsseminar 2: Flernivåanalyse"
 output: 
-  html_document:
-    keep_md: yes
-    self_contained: no
-    keep_html: no
+  github_document
 ---
 ## Flernivåanalyse
 
@@ -126,7 +123,7 @@ m0var <- VarCorr(m0)
 # Så bruker vi print() og ber om å få varians
 print(m0var, comp = "Variance")
 ```
-I vårt eksempel ligger altså 20 % av variansen på nivå 2 (landnivå). 
+I vårt eksempel ligger altså 20 % av variansen på nivå 2 (landnivå). I følge Christophersen er det en veiledende hovedregel at ICC >= 0,05 indikerer at flernivåanalyse bør velges. 
 
 **Flernivå med uavh. variabel på nivå 1, fixed effects, random intercept:** 
 
@@ -135,6 +132,7 @@ m1 <- lmer(data = ess,
            trust_politicians ~ (1|country) + gender)
 
 summary(m1)
+
 ```
 **Flernivå med uavh. variabel på nivå 1, random slopes:**
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + u_{1j}X_{1ij} + u_{0j} +  e_{ij}\]
@@ -142,10 +140,12 @@ summary(m1)
 
 ```{r}
 m2 <- lmer(data = ess, 
-           trust_politicians ~ (gender|country) + gender)
+           trust_politicians ~ (gender|country) + gender,
+           na.action = "na.exclude")
 
 summary(m2)
 stargazer(m0, m1, m2, type = "text")
+
 ```
 
 Før vi ser nærmere på de andre variablene så skal vi hente inn litt informasjon på landnivå. Jeg har lastet ned informasjon om gini-koeffisienten i ulike land i 2016. Gini-koeffisienten er et mål på inntekstulikhet. Jeg laster inn OECD-datasettet og lagrer det som `gini` i Environment.
@@ -200,9 +200,8 @@ m3 <- lmer(data = ess2,
 m4 <- lmer(data = ess2, 
            trust_politicians ~ gender + (gender|country) + gini + gender*gini)
 
-stargazer(m0,m1,m2,m3,m4, type = "text")
 ```
-
+Med kryssnivåsamspill så lar vi nivå 2 konteksten påvirke effekten av nivå 1 variabelen på avhengig variabel. 
 Dere kan hente ut random slopes/intercepts med
 `ranef()`, mens faste effekter kan hentes ut med `coef()`.
 
@@ -214,11 +213,24 @@ coef(m1)
 # Random slopes i ranef() tilsvarer differensansen mellom interceptene vi får med coef()
 ``` 
 
-## PLOTTE EFFEKTER? 
+## Tolke resultater
+Estimatene i flernivåanalyser kan tolkes på samme måte som med OLS-regresjon. 
+
+## Modellevaluering
+### Blir variansen mindre? 
+AIC og BIC straffer modeller med mane uavhengige variabler og/eller mange nivå 1-enheter. 
+```{r}
+
+AIC(m0,m1,m2,m3,m4)
+BIC(m0,m1,m2,m3,m4)
+
+```
+
+
+## Plotte effekter? 
 ```{r}
 library(sjPlot)
 plot_model(m3, type = "pred")
-plot(m4)
 ```
 
 
