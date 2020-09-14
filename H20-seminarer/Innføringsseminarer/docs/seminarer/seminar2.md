@@ -760,10 +760,8 @@ variabler, `good_policy` og `good_policy2`, slik at observasjoner som
 har positive verdier på henholdsvis variablene `policy` og `policy2` får
 verdien 1, mens andre observasjoner får verdien 0. Bruk disse nye
 variablene som grupperingsvariabler, og lag et nytt datasett der du
-inkluderer en variabel som beregner korrelasjon mellom `aid` og
-`elrpolicy` for hver gruppe.
-
-$
+inkluderer en variabel som beregner korrelasjon mellom `aid` og `policy`
+for hver gruppe.
 
 ## Plotte-funksjonen `ggplot` <a name="ggplot"></a>
 

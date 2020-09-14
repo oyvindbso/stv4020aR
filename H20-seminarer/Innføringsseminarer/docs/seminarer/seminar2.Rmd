@@ -1,6 +1,6 @@
 ---
 title: "Seminar 2"
-output: pdf_document
+output: github_document
 ---
 
 ## Dagens seminar: En første dataanalyse med R  
@@ -303,16 +303,34 @@ De fleste land har vekst både over og under medianen. Dersom det hadde vært sv
 *` aid`, og `gdp_growth`
 * `aid` og `policy`
 * `policy` og `gdp_growth` 
-separat for hver region. Er det store forskjeller i korrelasjonene mellom regionene? Lag deretter to nye variabler, `good_policy` og `good_policy2`, slik at observasjoner som har positive verdier på henholdsvis variablene `policy` og `policy2` får verdien 1, mens andre observasjoner får verdien 0. Bruk disse nye variablene som grupperingsvariabler, og lag et nytt datasett der du inkluderer en variabel som beregner korrelasjon mellom `aid` og `elrpolicy` for hver gruppe.
+separat for hver region. Er det store forskjeller i korrelasjonene mellom regionene? Lag deretter to nye variabler, `good_policy` og `good_policy2`, slik at observasjoner som har positive verdier på henholdsvis variablene `policy` og `policy2` får verdien 1, mens andre observasjoner får verdien 0. Bruk disse nye variablene som grupperingsvariabler, og lag et nytt datasett der du inkluderer en variabel som beregner korrelasjon mellom `aid` og `policy` for hver gruppe.
 
 
-$
 ```{r, eval = F, include=F}
-aid %>% 
+# Laster inn tidyverse
+library(tidyverse)
+
+# Forslag til løsning for å se på forskjeller i korrelasjon mellom regioner
+aid_korr <- aid %>% 
   group_by(region) %>% 
   summarise(cor_aid_growth = cor(aid, gdp_growth, use = "pairwise"),
             cor_aid_policy = cor(aid, policy, use = "pairwise"),
             cor_policy_growth = cor(policy, gdp_growth, use = "pairwise"))
+aid_korr
+
+# Lager nye grupperingsvariabler
+aid <- aid %>% 
+  mutate(good_policy = ifelse(policy > 0, 1, 0),
+         good_policy2 = ifelse(policy2 > 0, 1, 0)) 
+
+# Lager nytt datasett for å se på forskjell mellom de med negativ og positiv verdi
+aid_korr2 <- aid %>% 
+  group_by(good_policy, good_policy2) %>% 
+  summarise(cor_aid_policy = cor(aid, policy))
+  
+aid_korr2
+
+  
 ```
 
 ## Plotte-funksjonen `ggplot` <a name="ggplot"></a>
