@@ -930,7 +930,8 @@ stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
 ## Tolke effekter
 
 Koeffisientene fra modellene du kjører i plm kan tolkes som OLS
-koeffisienter.
+koeffisienter, men kontrollert for enhets- eller landfaste effekter ved
+bruk av fixed effects.
 
 ## Plotte faktisk verdi opp mot predikert verdi
 

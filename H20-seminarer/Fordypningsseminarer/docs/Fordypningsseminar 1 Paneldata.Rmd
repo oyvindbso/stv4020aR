@@ -349,7 +349,7 @@ stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
 
 
 ## Tolke effekter
-Koeffisientene fra modellene du kjører i plm kan tolkes som OLS koeffisienter. 
+Koeffisientene fra modellene du kjører i plm kan tolkes som OLS koeffisienter, men kontrollert for enhets- eller landfaste effekter ved bruk av fixed effects. 
 ```{r, include = FALSE, eval = FALSE}
 plotdata <- data.frame(bits = seq(min(data$bits, na.rm = TRUE),
                                    max(data$bits, na.rm = TRUE), 2),
