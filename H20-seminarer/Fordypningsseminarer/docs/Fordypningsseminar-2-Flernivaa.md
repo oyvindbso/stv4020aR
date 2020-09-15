@@ -22,7 +22,7 @@ library(lme4) # For å kjøre flernivåmodeller
     ## Loading required package: Matrix
 
 ``` r
-library(tidyverse)
+library(tidyverse) # Bl.a. for å preppe data
 ```
 
     ## -- Attaching packages --------------------------------------------------------------------------------------------------------------------------- tidyverse 1.3.0 --
@@ -50,8 +50,24 @@ library(stargazer) # For pene tabeller
 
     ##  R package version 5.2.2. https://CRAN.R-project.org/package=stargazer
 
+``` r
+# install.packages("sjlabelled")
+library(sjlabelled) # For å hente ut informasjon om labels e.l. 
+```
+
+    ## 
+    ## Attaching package: 'sjlabelled'
+
+    ## The following object is masked from 'package:forcats':
+    ## 
+    ##     as_factor
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     as_label
+
 I dag og på torsdag/fredag skal vi bruke et datasett fra European Social
-Survey. Observasjonene i datasettet er individer og disse er nøsted
+Survey. Observasjonene i datasettet er individer og disse er nøstet
 innad i land. Nivå 1-enhetene vår er altså individer, mens nivå
 2-enhetene er land i Europa. Datasettet ligger på github. Last ned
 datasettet og last det inn i Rstudio.
@@ -128,22 +144,6 @@ laster inn pakken før vi ser nærmere på labels ved hjelp av funksjonen
 `get_label` og `get_labels`:
 
 ``` r
-# install.packages("sjlabelled")
-library(sjlabelled)
-```
-
-    ## 
-    ## Attaching package: 'sjlabelled'
-
-    ## The following object is masked from 'package:forcats':
-    ## 
-    ##     as_factor
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     as_label
-
-``` r
 get_label(ess$trust_eurparl)
 ```
 
@@ -184,22 +184,33 @@ lettere og oversette til **R**).
 \[Y_i = \beta_{0} + u_{0j} + e_{ij}\] `lmer(y ~ 1 + (1|group_var), data
 = data)`
 
+Denne kalles også ofte for en nullmodell.
+
 **Flernivå med uavh. variabel på nivå 1, fixed effects, random
-intercept:** \[Y_i = \beta_{0} + \beta_{1}X_{1ij} +  u_{0j} + e_{ij}\]
+intercept:**
+
+\[Y_i = \beta_{0} + \beta_{1}X_{1ij} +  u_{0j} + e_{ij}\]
+
 `lmer(y ~ (1|group_var) + x1, data = data)`
 
 **Flernivå med uavh. variabel på nivå1, random slopes:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + u_{1j}X_{1ij} + u_{0j} +  e_{ij}\]
+
 `lmer(y ~ x1 + (x1|group_var), data=data)`
 
 **Flernivå med uavh. var på mikronivå med random effects, og uavhengig
 variabel på makronivå:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j} Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]
+
 `lmer(y ~ x1 + (x1|group_var) + z2, data=data)`
 
 **Flernivå med uavh. var på mikronivå med random effects,
 kryssnivåsamspill, og uavhengig variabel på makronivå:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j}Z_{2j} + \beta_{3}X_{1ij}Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]
+
 `lmer(y ~ x1*z2 + x1 + (x1|group_var) + z2, data=data)`
 
 ### Beregne intraklassekorrelasjon
@@ -605,11 +616,6 @@ BIC(m0,m1,m2,m3,m4)
 
 ``` r
 library(sjPlot)
-```
-
-    ## Install package "strengejacke" from GitHub (`devtools::install_github("strengejacke/strengejacke")`) to load all sj-packages at once!
-
-``` r
 plot_model(m3, type = "pred")
 ```
 
