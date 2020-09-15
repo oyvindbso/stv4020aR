@@ -26,3 +26,12 @@ Noen eksempler (mulig disse også er lenket til via ISV sin side):
     government](https://www.gu.se/en/quality-government/qog-data)
   - [Afrobarometro](https://www.afrobarometer.org/)
   - [Latinobarómetro](https://www.latinobarometro.org/lat.jsp)
+
+For replikasjonsdata:
+
+  - Søk etter tema eller artikkel på [Harvard
+    dataverse](https://dataverse.harvard.edu/)
+  - Sjekk også tidsskriftet artikkelen er publisert i
+  - Sjekk fotnoter i artikkelen om det står noe om hvor data er gjort
+    tilgjenglig
+  - Ikke alle legger ut repliksjonsdata desverre

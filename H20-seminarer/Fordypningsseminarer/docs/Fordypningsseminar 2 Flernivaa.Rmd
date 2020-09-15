@@ -1,7 +1,7 @@
 ---
 title: "R fordypningsseminar 2: Flernivåanalyse"
 output: 
-  github_document
+  html_document
 ---
 ## Flernivåanalyse
 
@@ -19,11 +19,13 @@ hjelp, og vice versa. Installer og last inn `lme4` med koden under.
 ```{r}
 # install.packages("lme4")
 library(lme4) # For å kjøre flernivåmodeller
-library(tidyverse)
+library(tidyverse) # Bl.a. for å preppe data
 library(stargazer) # For pene tabeller
+# install.packages("sjlabelled")
+library(sjlabelled) # For å hente ut informasjon om labels e.l. 
 ```
 
-I dag og på torsdag/fredag skal vi bruke et datasett fra European Social Survey. Observasjonene i datasettet er individer og disse er nøsted innad i land. Nivå 1-enhetene vår er altså individer, mens nivå 2-enhetene er land i Europa. Datasettet ligger på github. Last ned datasettet og last det inn i Rstudio. 
+I dag og på torsdag/fredag skal vi bruke et datasett fra European Social Survey. Observasjonene i datasettet er individer og disse er nøstet innad i land. Nivå 1-enhetene vår er altså individer, mens nivå 2-enhetene er land i Europa. Datasettet ligger på github. Last ned datasettet og last det inn i Rstudio. 
 
 ```{r}
 # Laster inn Rdata
@@ -52,9 +54,6 @@ Datasettet inneholder følgende variabler:
 ESS dataene i dette formatet kommer med labels. Det kan være et nyttig supplement til kodeboken. En pakke som er fin å installere dersom datasettet du skal bruke har labels er `sjlabelled`. Vi installerer og laster inn pakken før vi ser nærmere på labels ved hjelp av funksjonen `get_label` og `get_labels`: 
 
 ```{r}
-# install.packages("sjlabelled")
-library(sjlabelled)
-
 get_label(ess$trust_eurparl)
 summary(ess$trust_eurparl)
 get_labels(ess$trust_eurparl)
@@ -70,24 +69,36 @@ hierarkiske strukturen). `x` refererer til variabler på nivå 1, mens `z`
 referer til variabler på nivå 2 (skiller mellom z og x for å gjøre det
 lettere og oversette til **R**).
 
+Først må vi imidlertid si noe om fixed effects. I flernivåanalyse referer en til en variabel som vi antar at har samme effekt i alle nivå 2-enheter som fixed effects. Dette er noe annet enn å innføre enhetsspesifikke konstantledd eller dummies som vi gjorde i paneldata. 
+
 **Flernivå med kun random intercept:**
 \[Y_i = \beta_{0} + u_{0j} + e_{ij}\] 
 `lmer(y ~ 1 + (1|group_var), data = data)`
 
+Denne kalles også ofte for en nullmodell. 
+
 **Flernivå med uavh. variabel på nivå 1, fixed effects, random intercept:** 
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} +  u_{0j} + e_{ij}\]
+
 `lmer(y ~ (1|group_var) + x1, data = data)` 
 
 **Flernivå med uavh. variabel på nivå1, random slopes:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + u_{1j}X_{1ij} + u_{0j} +  e_{ij}\]
+
 `lmer(y ~ x1 + (x1|group_var), data=data)`
 
 **Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j} Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]
+
 `lmer(y ~ x1 + (x1|group_var) + z2, data=data)`
 
 **Flernivå med uavh. var på mikronivå med random effects, kryssnivåsamspill, og uavhengig variabel på makronivå:**
+
 \[Y_i = \beta_{0} + \beta_{1}X_{1ij} + \beta_{2j}Z_{2j} + \beta_{3}X_{1ij}Z_{2j} + + u_{1j}X_{1ij} + u_{0j} + e_{ij}\]
+
 `lmer(y ~ x1*z2 + x1 + (x1|group_var) + z2, data=data)`
 
 ### Beregne intraklassekorrelasjon
@@ -114,6 +125,8 @@ summary(m0)
 # ICC
 1.220/(1.220 + 4.749)
 ```
+Denne summary-outputen er litt annerledes enn det vi har sett tidligere. I outputen her kan vi lese varianse på landnivå og residualvarians. Variansen til `Residual` (residualene/restleddene) gir oss variansen i tillit til politikere mellom individer i samme land, mens variansen til `country` gir oss variansen mellom land.   
+
 Vi kan også bruke `VarCorr(model, comp=`Variance`)`. 
 
 ```{r}
@@ -147,8 +160,9 @@ summary(m2)
 stargazer(m0, m1, m2, type = "text")
 
 ```
+**Kort om å merge datasett** 
 
-Før vi ser nærmere på de andre variablene så skal vi hente inn litt informasjon på landnivå. Jeg har lastet ned informasjon om gini-koeffisienten i ulike land i 2016. Gini-koeffisienten er et mål på inntekstulikhet. Jeg laster inn OECD-datasettet og lagrer det som `gini` i Environment.
+Før vi ser nærmere på de andre variablene så skal vi hente inn litt informasjon på landnivå. Jeg har lastet ned informasjon fra OECD om gini-koeffisienten i ulike land i 2016. Gini-koeffisienten er et mål på inntekstulikhet. Jeg laster inn OECD-datasettet og lagrer det som `gini` i Environment.
 
 ```{r}
 gini <- read.csv("../data/OECD_gini.csv") 
@@ -159,14 +173,14 @@ str(gini)
 str(ess)
 
 ```
-For å kombinere `gini`-dataene med `ess`-dataene så må vi ha en felles nøkkelvariabel som knytter observasjonene sammen. `cntry`-variablene i de to datasettene ligner på hverandre, men mens OECD bruker tre bokstaver i navnforkortelsen så bruker bare ESS bare to. Dette er ofte tilfellet når en forsøker å slå sammen data fra ulike kilder. Det finnes en pakke i R som heter `countrycode` som kan hjelpe oss med dette. Funksjonen `countrycode()` lar oss omkode landforkortelse fra en type til en annen. Vi laster inn pakken. Hvis ikke du har brukt den før så må du først installere den ved hjelp av `install.packages()`-funksjonen. 
+For å kombinere `gini`-dataene med `ess`-dataene så må vi ha en felles nøkkelvariabel som knytter observasjonene sammen. `cntry`-variablene i de to datasettene ligner på hverandre, men mens OECD bruker tre bokstaver i landforkortelsen så bruker bare ESS bare to. Dette er ofte tilfellet når en forsøker å slå sammen data fra ulike kilder. Det finnes en pakke i R som heter `countrycode` som kan hjelpe oss med dette. Funksjonen `countrycode()` lar oss omkode landforkortelse fra en type til en annen. Vi skal først laste inn pakken. Hvis ikke du har brukt den før så må du først installere den ved hjelp av `install.packages()`-funksjonen. 
 
 ```{r}
 # install.packages("countrycode")
 library(countrycode)
 ```
 
-Om du skriver `?codelist` så får du en oversikt over de ulike landforkortelsene som finnes i pakken. Jeg har kikket gjennom på forhånd og funnet ut at `iso3c` ser ut til å matche godt med forkortelsene i OECD-dataene og `iso2c` ser ut til å passe godt med ESS-dataene. Denne informasjonen bruker jeg til å lage en ny variabel `cntry2` i OECD-dataene (`gini`). Til slutt bruker jeg denne til å slå sammen de to datasettene.  
+Om du skriver `?codelist` så får du en oversikt over de ulike landforkortelsene som finnes i pakken. Jeg har kikket gjennom på forhånd og funnet ut at `iso3c` ser ut til å matche godt med forkortelsene i OECD-dataene og `iso2c` ser ut til å passe godt med ESS-dataene. Denne informasjonen bruker jeg til å lage en ny variabel `cntry2` i OECD-dataene (`gini`). Til slutt bruker jeg denne til å slå sammen de to datasettene ved hjelp av `left_join`.  
 
 ```{r}
 # Lager ny landkodevariabel
@@ -179,12 +193,12 @@ ess2 <- ess %>%
 # Sjekker om alle land har fått en giniverdi ved hjelp av is.na
 table(is.na(ess2$gini))
 
-# Dette ser fint ut
+# Ingen har missing så dette ser fint ut
 ```
 Nå som vi har slått sammen datasettene så kan vi også kjøre analyser med variabler på nivå 2 (landnivå her). 
 
 
-**Flernivå med uavh. var på mikronivå med random effects, og uavhengig variabel på makronivå:**
+**Flernivå med uavh. var på nivå 1 med random effects, og uavhengig variabel på nivå 2:**
 
 ```{r}
 m3 <- lmer(data = ess2, 
