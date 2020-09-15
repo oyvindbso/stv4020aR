@@ -2,7 +2,11 @@ Aktuelle datasett for hjemmeoppgaven
 ================
 
 Her er noen lenker dere kan ta utgangspunkt i for å finne aktuelle
-datasett til hjemmeoppgaven deres:
+datasett til hjemmeoppgaven deres. Listen er ikke uttømmende så det
+finnes sikkert mye bra som ikke er listet opp her også. Jeg har heller
+ikke brukt disse datasettene selv så dere må sette dere ned med kodebok
+og selv vurdere om de er relevante og av god nok kvalitet for din
+problemstilling. Vi begynner med instituttet og UB sine ressuser:
 
   - Dere finner mange datasett sortert på tema på [ISV sin side
     “Statistikk, datasett og ressuser på
