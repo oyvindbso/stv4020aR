@@ -2,6 +2,10 @@
 ### FORDYPNINGSSEMINAR 1: PANELDATA I R ###
 ###########################################
 
+### Intro til seminarene
+
+### Litt om mulige datakilder
+
 ### Hvordan opprette prosjekt
 
 ### Laster inn nødvendige pakker
@@ -21,6 +25,7 @@ tail(data)
 
 ### Viser panelstruktur
 
+
 ### Gjør om til plm-objekt
 # Dette kan unngås ved å spesifisere index i plm-modellene
 data.plm <- pdata.frame(data, index = c("country", "year"))
@@ -28,7 +33,6 @@ data.plm <- pdata.frame(data, index = c("country", "year"))
 class(data.plm)
 
 head(attr(data.plm, "index"))
-
 
 ### Sjekker om data er balansert
 is.pbalanced(data.plm)
@@ -70,10 +74,13 @@ mod1ols <- plm(data = data.complete,
                  bilateral_trade_agreements + wto_member + polcon3,
                na.action = "na.exclude", model = "pooling")
 
+summary(mod1ols)
+
 # Beregner PCSE:
 bkse <- round(sqrt(diag(vcovBK(mod1ols, cluster = "group"))), digits = 4)
 
-# Beregner HC1 standardfeil
+# Fra pakken sandwich
+# Beregner HC3 standardfeil
 hc3se <- round(sqrt(diag(vcovHC(mod1ols, type = "HC3"))), digits = 4)
 
 # Printer resultatene i en tabell
@@ -99,6 +106,7 @@ data.complete <- data.complete %>%
          resid_lag = lag(resid),
          fdi_inflow_pred = ols.predict)
 
+
 # Eye ball test av heteroskedastisitet
 ggplot(data.complete %>% 
          filter(country %in% c("Norway", "Ethiopia", "Chile", "Estonia",
@@ -107,6 +115,7 @@ ggplot(data.complete %>%
   geom_point(aes(col = country)) +
   geom_smooth(method = lm)
 
+class(data.complete$country)
 
 ### Kjører modeller med fixed effects
 # Med tversnittsfaste effekter (i dette tilfellet land)
@@ -133,8 +142,7 @@ plm.fe.two <- plm(data = data.complete,
 
 # Viser resultatene i en tabell
 stargazer(plm.fe.ind, plm.fe.time, plm.fe.two, type = "text",
-          column.labels = c("Tversnitts FE", "Tids FE", "Tversnitts og tids FE"),
-          omit = c("country", "year"))
+          column.labels = c("Tversnitts FE", "Tids FE", "Tversnitts og tids FE"))
 
 # Henter ut faste effekter:
 fixef(plm.fe.ind)[1:5] # Henter ut de fem første tversnittsfaste effektene
@@ -150,7 +158,7 @@ summary(fixef(plm.fe.two, effect = "time"))
 
 
 ## OBS! ved fixed effects - lite endring i variabel
-ggplot(data.complete%>% 
+ggplot(data.complete %>% 
          filter(country %in% c("Bagladesh", "Lesotho", "India", "Chile",
                                "China", "Lithuania", "Mozambique", "Togo", 
                                "Zambia", "Fiji", "Belize", "Peru", "Guyana"))) + # Velger ut utvalg av land
