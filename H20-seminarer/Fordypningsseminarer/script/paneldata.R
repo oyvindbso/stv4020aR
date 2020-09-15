@@ -109,13 +109,11 @@ data.complete <- data.complete %>%
 
 # Eye ball test av heteroskedastisitet
 ggplot(data.complete %>% 
-         filter(country %in% c("Norway", "Ethiopia", "Chile", "Estonia",
-                               "Chad", "Switzerland", "Spain")),
+         filter(country %in% c("Ethiopia", "Chile", "Estonia",
+                               "Chad")),
        aes(x = fdi_inflow_pred, y = resid)) +         # Velger noen land som jeg plotter for å ikke få et helt uoversiktelig plot
   geom_point(aes(col = country)) +
   geom_smooth(method = lm)
-
-class(data.complete$country)
 
 ### Kjører modeller med fixed effects
 # Med tversnittsfaste effekter (i dette tilfellet land)
@@ -196,7 +194,9 @@ plm.re.two <- plm(data = data.complete,
                     bilateral_trade_agreements + wto_member + polcon3,
                   na.action = "na.exclude", model = "random", effect = "twoways")
 
-stargazer::stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
+summary(plm.re.ind)
+
+stargazer(plm.re.ind, plm.re.time, plm.re.two, type = "text",
                      column.labels = c("Tversnitts RE", "Tids RE", "Tversnitts og tids RE"))
 
 
