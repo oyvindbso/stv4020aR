@@ -10,6 +10,7 @@ library(haven) # For å kunne lese inn .dta-filer
 library(tidyverse) # For å kunne bruke ggplot, dplyr og liknende
 library(stargazer) # For å kunne lage pene tabeller
 library(plm) # For å kjøre paneldatamodeller
+library(sandwich) # For å justere standardfeil
 
 ### Laster inn data 
 data <- read_dta("H20-seminarer/Fordypningsseminarer/data/neumayer_spess_2005.dta")
@@ -72,10 +73,13 @@ mod1ols <- plm(data = data.complete,
 # Beregner PCSE:
 bkse <- round(sqrt(diag(vcovBK(mod1ols, cluster = "group"))), digits = 4)
 
+# Beregner HC1 standardfeil
+hc3se <- round(sqrt(diag(vcovHC(mod1ols, type = "HC3"))), digits = 4)
+
 # Printer resultatene i en tabell
-stargazer(mod1ols, mod1ols, type = "text",
-          column.labels = c("Med PCSE", "Med vanlige SE"),
-          se = list(bkse))
+stargazer(mod1ols, mod1ols, mod1ols, type = "text",
+          column.labels = c("Med PCSE", "Med HC3 SE", "Med vanlige SE"),
+          se = list(bkse, hc3se))
 # Med argumentet se = list(bkse) forteller jeg stargazer at jeg i den første kolonnen
 # vil erstatte de opprinnelige standardfeilene med de panelkorrigerte standardfeilene
 # jeg regnet ut over. 
