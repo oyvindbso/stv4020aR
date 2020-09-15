@@ -1,0 +1,24 @@
+Aktuelle datasett for hjemmeoppgaven
+================
+
+Her er noen lenker dere kan ta utgangspunkt i for å finne aktuelle
+datasett til hjemmeoppgaven deres:
+
+  - Dere finner mange datasett sortert på tema på [ISV sin side
+    “Statistikk, datasett og ressuser på
+    nett»](https://www.sv.uio.no/isv/tjenester/kunnskap/datasett/)
+  - [UB sin fagside med lenker til noen datasett (se
+    nederst)](https://www.ub.uio.no/fag/samfunn-politikk/statsvit/)
+
+Noen eksempler (mulig disse også er lenket til via ISV sin side):
+
+  - [The Nonviolent and Violent Campaigns and Outcomes (NAVCO) Data
+    Project](https://www.du.edu/korbel/sie/research/chenow_navco_data.html)
+  - [Varities of democracy](https://www.v-dem.net/en/)
+  - [Data on armed conflict fra
+    PRIO](https://www.prio.org/Data/Armed-Conflict/)
+  - [European social survey](https://www.europeansocialsurvey.org/)
+  - [Quality of
+    government](https://www.gu.se/en/quality-government/qog-data)
+  - [Afrobarometro](https://www.afrobarometer.org/)
+  - [Latinobarómetro](https://www.latinobarometro.org/lat.jsp)
