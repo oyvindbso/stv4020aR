@@ -2,15 +2,18 @@
 ### FLERNIVÅANALYSE ###
 #######################
 
+# Laget du prosjekt i går? Husk å åpne prosjektfilen, ikke bare scriptet
+# Dette scriptet kan du eventuelt lagre i prosjektmappen din
+
 # Laster inn nødvendige pakker
 # install.packages("lme4")
-library(lme4) # For å kjøre flernivåmodeller
 library(tidyverse) # Bl.a. for å preppe data
 library(stargazer) # For pene tabeller
 # install.packages("sjlabelled")
 library(sjlabelled) # For å hente ut informasjon om labels e.l.
 library(lmtest) # For å kjøre likelihood ratio test
 library(countrycode) # For å endre landkoder
+library(lme4) # For å kjøre flernivåmodeller
 
 # Laster inn Rdata
 load("H20-seminarer/Fordypningsseminarer/data/ess.RData") # Her må du bytte ut mappestien "../data/" med stien til mappen du lagret data i
@@ -19,6 +22,7 @@ load("H20-seminarer/Fordypningsseminarer/data/ess.RData") # Her må du bytte ut 
 str(ess)
 
 # Sjekker ut noen av variablene
+# Dette går nok ikke med csv-filen
 get_label(ess$trust_eurparl)
 summary(ess$trust_eurparl)
 get_labels(ess$trust_eurparl)
@@ -119,6 +123,7 @@ ggplot(plot_data_m2) +
 ## Før vi går videre så skal vi legge til en nivå 2-variabel
 ## Laster inn data på nivå 2 
 gini <- read.csv("H20-seminarer/Fordypningsseminarer/data/OECD_gini.csv") 
+
 str(gini)
 
 # cntry i gini-dataene ligner på cntry i ess
