@@ -3,7 +3,7 @@
 #######################
 
 # Laget du prosjekt i går? Husk å åpne prosjektfilen, ikke bare scriptet
-# Dette scriptet kan du eventuelt lagre i prosjektmappen din
+# Scriptet fra github kan du eventuelt lagre i prosjektmappen din
 
 # Laster inn nødvendige pakker
 # install.packages("lme4")
@@ -141,7 +141,6 @@ ess2 <- ess_nolabel %>%
 
 # Sjekker om alle land har fått en giniverdi ved hjelp av is.na
 table(is.na(ess2$gini))
-
 # Ingen har missing så dette ser fint ut
 
 
@@ -171,7 +170,8 @@ ggplot(plot_data_m3) +
 plot_data_m3b <- data.frame(income_decile = mean(ess2$income_decile, na.rm = TRUE),
                            country = c(rep("Sweden", 10), rep("Switzerland", 10)),
                            gini = c(rep(seq(min(ess2$gini), 
-                                            max(ess2$gini), 0.0075), 2)))
+                                            max(ess2$gini), 0.0070), 2)))
+
 plot_data_m3b$pred <- predict(m3, plot_data_m3b)                        
 
 ggplot(plot_data_m3b) +
@@ -192,6 +192,8 @@ ggplot(plot_data_m3b) +
 m4 <- lmer(data = ess2, 
            trust_politicians ~ (income_feel|country) + income_feel*gini, 
            na.action = "na.exclude")
+
+summary(m4)
 
 plot_data_m4 <- data.frame(income_feel = rep(1:4, 4),
                             country = c(rep("Sweden", 8), rep("Switzerland", 8)),
@@ -264,7 +266,7 @@ stargazer(m0, m1, m2, type = "text")
 # Tar en LR-test
 lrtest(m1, m2)
 # Positiv og signifikant Lr-test betyr at den fullstendige modellen
-# er signifikant bedre tilpasset datamaterialet enn den reduserte
+# er signifikant bedre tilpasset datamaterialet enn den reduserte.
 
 ## Sentrering
 # I flernivåanalyse er det ganske vanlig å sentrere variabler
