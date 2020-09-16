@@ -271,3 +271,8 @@ lrtest(m1, m2)
 ess_nolabel$income_decile_sent <- ess_nolabel$income_decile - mean(ess_nolabel$income_decile, na.rm = TRUE)
 summary(ess_nolabel$income_decile_sent)
 # Gjennomsnittet er lik null 
+
+ess_nolabel$income_decile_stand <- (ess_nolabel$income_decile-mean(ess_nolabel$income_decile, na.rm = TRUE))/sd(ess_nolabel$income_decile, na.rm = TRUE)
+summary(ess_nolabel$income_decile_stand)
+sd(ess_nolabel$income_decile_stand, na.rm = TRUE)
+# Gjennomsnitt er lik null og standardavvik er lik 1
