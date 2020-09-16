@@ -28,7 +28,7 @@ summary(ess$trust_eurparl)
 get_labels(ess$trust_eurparl)
 
 # Labelled data er i utgangspunktet supert, men klassen "labelled" kan
-# også gi noen utfodringer. Jeg lager derfor et datasett uten labels:
+# også gi noen utfordringer. Jeg lager derfor et datasett uten labels:
 ess_nolabel <- remove_all_labels(ess)
 
 # I tillegg fjerner jeg de observasjonene som har missing på noen 
@@ -54,7 +54,7 @@ m1 <- lmer(data = ess_nolabel,
            na.action = "na.exclude")
 
 summary(m1)
-# I flernivåmodeller varierer koeffisientene på tvers av klasser. 
+# I flernivåmodeller kan koeffisientene variere på tvers av klasser. 
 # Koeffisientestimatet er derfor bare den forventede verdier på tvers av alle klasser. 
 # Følg med i forelesningen for mer info om hvordan tolke estimater. 
 
@@ -69,7 +69,7 @@ plot_data_m1 <- data.frame(income_decile = rep(1:10, 2),
                         country = c(rep("Sweden", 10), rep("Switzerland", 10)))
 
 # 3. Henter ut predikerte verdier på avhengig variabel og lagrer i plotdata
-plot_data_m1$pred <- predict(m1, plot_data)                        
+plot_data_m1$pred <- predict(m1, plot_data_m1)                        
 
 # 4. Plotter
 ggplot(plot_data_m1) +
@@ -104,7 +104,7 @@ plot_data_m2 <- data.frame(income_decile = rep(1:10, 2),
                         country = c(rep("Sweden", 10), rep("Switzerland", 10)))
 
 # 3. Lagrer predikerte verdier på AVAR i datasettet
-plot_data_m2$pred <- predict(m2, plot_data)                        
+plot_data_m2$pred <- predict(m2, plot_data_m2)                        
 
 # 4. Plotter
 ggplot(plot_data_m2) +
