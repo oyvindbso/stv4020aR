@@ -210,7 +210,7 @@ plot_data_m4$pred <- predict(m4, plot_data_m4)
 
 ggplot(plot_data_m4) +
   geom_line(aes(y = pred, x = income_feel, col = as.factor(gini))) +
-  facet_wrap(~country)+ 
+  facet_wrap(~country) + 
   theme_minimal() +
   theme_minimal() +
   xlab("Income feel") + 
