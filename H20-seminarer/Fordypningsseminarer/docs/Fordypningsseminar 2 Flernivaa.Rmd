@@ -3,8 +3,6 @@ title: "R fordypningsseminar 2: Flernivåanalyse"
 output:
   html_document:
     keep_md: yes
-    self_contained: no
-    keep_html: no
 ---
 ## Flernivåanalyse
 
