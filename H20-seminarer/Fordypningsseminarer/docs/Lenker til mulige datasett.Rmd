@@ -17,6 +17,8 @@ Noen eksempler (mulig disse også er lenket til via ISV sin side):
 - [Quality of government](https://www.gu.se/en/quality-government/qog-data) 
 - [Afrobarometro](https://www.afrobarometer.org/)
 - [Latinobarómetro](https://www.latinobarometro.org/lat.jsp)
+- [Political party database project (PPDB)](https://www.politicalpartydb.org/)
+- [Parliaments and government database (PARLGOV)](http://www.parlgov.org/)
 
 For replikasjonsdata: 
 
