@@ -84,16 +84,7 @@ trust_prin <- princomp(~.,    # Her skal vi ha en formel uten AVAR. Med "." sier
                          select(starts_with("trust")),
                        scores = TRUE, na.action = "na.omit")
 
-
-# Alternativ kode i pakken FactoMineR som gir et interessant plot: 
-trust_prin_alt <- PCA(ess_no%>%
-                        select(starts_with("trust")))
-## OBS!! Merk dere advarselen her.. 
-# Gå evnt. gjennom denne introen: 
-# https://learn.datacamp.com/courses/dimensionality-reduction-in-r
-# PCA graph of variables: 
-# Her ser vi at dimensjon nr 2 skiller de som har høy verdi på
-# satisfied fra de med lav verdi på tillit 
+loadings(trust_prin)
 
 ### Hvor mange faktorer skal vi ha?
 ## Kaisers kriterium: : De faktorene som har eigenvalue større
@@ -219,3 +210,14 @@ summary(ess_no$factor2_score)
 
 cor(ess_no$trust_legal, ess_no$factor2_score, use = "complete") 
 cor(ess_no$trust_polparties, ess_no$factor2_score, use = "complete")
+
+# Alternativ kode i pakken FactoMineR som gir et interessant plot: 
+trust_prin_alt <- PCA(ess_no%>%
+                        select(starts_with("trust")))
+## OBS!! Merk dere advarselen her.. 
+# Gå evnt. gjennom denne introen: 
+# https://learn.datacamp.com/courses/dimensionality-reduction-in-r
+# PCA graph of variables: 
+# Her ser vi at dimensjon nr 2 skiller de som har høy verdi på
+# satisfied fra de med lav verdi på tillit 
+
