@@ -21,11 +21,6 @@ load("H20-seminarer/Fordypningsseminarer/data/ess9no.Rdata")
 # En hensikt med faktoranalyse kan være å redusere dimensjoner
 dim(ess_no)
 str(ess_no)
-# Noe om dimensjoner?
-# Exactly! Explaining data variation and handling correlation 
-# efficiently are the two key reasons for conducting dimensionality 
-# reduction!
-
 
 # TRINN 1: Forberede dataene
 # Deskriptiv statistikk
@@ -142,6 +137,13 @@ fviz_screeplot(trust_prin,
 # For å se på hvilke faktorer de ulike indikatorene lader på:
 loadings(trust_prin) # Hva forteller denne oss?
 # Her ser vi at proporsjonell varians er delt likt mellom alle faktorene
+
+# Vi kan ha en ganske tydelig, men uhøytidelig, teoretisk antagelse om hvorfor 
+# våre variabler deler seg i tre faktorer: 
+## en faktor handler om nasjonal politikk (parlament, politiske partier, politikere) 
+## en handler om rettsvesen (rettssystem,politi)
+## en handler om internasjonale institusjoner (EU, FN).
+
 
 ## Vi velger antall faktorer, her 1, under 2, også 3.
 trust_factor1 <- factanal(~., 1, ess_no %>%
