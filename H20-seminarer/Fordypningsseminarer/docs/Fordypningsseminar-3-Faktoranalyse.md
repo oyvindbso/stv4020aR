@@ -661,4 +661,4 @@ trust_prin_alt <- PCA(ess_no%>%
 
 ![](../figures/pcagraphofvariables.png)
 
-Gå evnt. gjennom den gratis introen i web-kurset [Dimensionality reduction in R på Datacamp](https://learn.datacamp.com/courses/dimensionality-reduction-in-r)
+Gå evnt. gjennom den gratis introen i web-kurset [Dimensionality reduction in R på Datacamp](https://learn.datacamp.com/courses/dimensionality-reduction-in-r) for innsikt i hvordan det kan tolkes.

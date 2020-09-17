@@ -100,6 +100,7 @@ eigen
 
 # Summen av alle eigen-verdiene er lik antall indikatorer:
 sum(eigen$values)
+ 
 
 # Kaisers kriterium: Hver faktor bør forklare minst like mye som en enkeltstående indikator (>=1). 
 eigen$values
@@ -159,7 +160,18 @@ trust_factor3 <- factanal(~., 3, ess_no %>%
                             select(starts_with("trust")))
 
 print(loadings(trust_factor3), cutoff = .4)
- 
+# Fra faktorobjektet kan vi også hente ut uniqueness:
+trust_factor3$uniquenesses
+# Uniqueness er den delen av variansen som er unik for variabelen,
+# dvs. varians den ikke deler med de andre variablene. Uniqueness
+# er lik 1 - communality. Jo større unikhet, des mindre rolle spiller
+# variabelen i faktor modellen (se på ladning)
+
+uniqueness <- cbind(trust_factor3$loadings, 
+                    Uniqueness = trust_factor3$uniquenesses)
+
+stargazer::stargazer(uniqueness, type = "text")
+
 ## ROTASJON
 # For å få "renere" faktorer
 # Ortogonal
