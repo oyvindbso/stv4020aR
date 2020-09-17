@@ -115,7 +115,7 @@ fviz_screeplot(trust_prin,
 # Skal ta med faktorer frem til den unike variansen blir dominenerende, 
 # dvs. eigenvalue flater ut
 screeplot(trust_prin, type = "lines")
-# Kanskje egentlig 1 i følge scree-plottet? 
+# Kanskje egentlig 3 i følge scree-plottet? 
 fviz_screeplot(trust_prin,
                addlabels = TRUE,
                choice = "eigenvalue") +
@@ -156,7 +156,7 @@ print(loadings(trust_factor2), cutoff = .4)
 trust_factor3 <- factanal(~., 3, ess_no %>%
                             select(starts_with("trust")))
 
-print(loadings(trust_factor3), cutoff = .4)
+print(loadings(trust_factor3), cutoff = .5)
  
 ## ROTASJON
 # For å få "renere" faktorer
@@ -165,17 +165,17 @@ print(loadings(trust_factor3), cutoff = .4)
 # sterkt på bare en faktor
 
 # Ortogonal rotasjon (ikke korrelert)
-varimax(loadings(trust_factor2), normalize = TRUE)
+varimax(loadings(trust_factor3), normalize = TRUE)
 # Hver indikator lader enten høyt eller lavt på en faktor, 
 # men kan lade høyt/lavt på flere faktorer
 
-quartimax(loadings(trust_factor2), normalize = TRUE)
+quartimax(loadings(trust_factor3), normalize = TRUE)
 # Hver indikator lader høyt på bare en faktor, men kan lade
 # moderat også på andre
 
 # Oblique (korrelert)
-oblimin(loadings(trust_factor2))
-promax(loadings(trust_factor2))
+oblimin(loadings(trust_factor3))
+promax(loadings(trust_factor3))
 
 # For å oversikt over rotasjonsmuligheter: 
 ?quartimax
@@ -187,29 +187,30 @@ ess$international_trust <- (ess$trust_unitednations + ess$trust_eurparl) / 2
 
 
 ## Opprette faktorindekser
-trust_factor2score <- factanal(~., 2, ess_no %>%
+trust_factor3score <- factanal(~., 3, ess_no %>%
                             select(starts_with("trust")),
                           scores = "regression", # Her kan vi velge mellom regression og Bartlett
                           na.action = "na.exclude")
 
-loadings(trust_factor2score)
+loadings(trust_factor3score)
 
 # Ser hva som er lagret i modellen:
-names(trust_factor2score)
+names(trust_factor3score)
 
 # Sjekker ut scores-elementet
-trust_factor2score$scores
+trust_factor3score$scores
 
 # Lagrer faktor-skår i data
 # Husk na.action = "na.exclude" i modellen over.
-ess_no$factor1_score <- trust_factor2score$scores[, 1]
-ess_no$factor2_score <- trust_factor2score$scores[, 2]
+ess_no$politicaltrust_score <- trust_factor3score$scores[, 1]
+ess_no$legaltrust_score <- trust_factor3score$scores[, 2]
+ess_no$inttrust_score <- trust_factor3score$scores[, 2]
 
-summary(ess_no$factor1_score)
-summary(ess_no$factor2_score)
+summary(ess_no$politicaltrust_score)
+summary(ess_no$legaltrust_score)
 
-cor(ess_no$trust_legal, ess_no$factor2_score, use = "complete") 
-cor(ess_no$trust_polparties, ess_no$factor2_score, use = "complete")
+cor(ess_no$trust_legal, ess_no$legaltrust_score, use = "complete") 
+cor(ess_no$trust_polparties, ess_no$legaltrust_score, use = "complete")
 
 # Alternativ kode i pakken FactoMineR som gir et interessant plot: 
 trust_prin_alt <- PCA(ess_no%>%
