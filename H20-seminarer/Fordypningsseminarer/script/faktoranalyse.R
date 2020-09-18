@@ -12,11 +12,13 @@ library(factoextra) # Litt mer intuitive varianter av. bla scree plot
 library(GPArotation) # For rotasjon
 library(ggcorrplot) # For korrelasjonsplot
 
-## Start med samme data fra European Social Survey bare for norge (ess_no). 
+## Start med samme data fra European Social Survey, men bare for norge (ess_no). 
 ## Last ned fra data-mappen på github, lagre data i prosjektmappen din (working directory)
 # og kjør følgende kode:
 
 load("H20-seminarer/Fordypningsseminarer/data/ess9no.Rdata")
+
+# (Hvilken kode du bruker avhenger så vanlig av hvilket filformat du velger)
 
 # En hensikt med faktoranalyse kan være å redusere dimensjoner
 dim(ess_no)
