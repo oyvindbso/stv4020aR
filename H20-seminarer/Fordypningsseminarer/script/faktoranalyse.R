@@ -89,11 +89,6 @@ trust_prin <- princomp(~.,    # Her skal vi ha en formel uten AVAR. Med "." sier
                          select(starts_with("trust")),
                        scores = TRUE, na.action = "na.exclude")
 
-loadings(trust_prin)
-# Faktor ladningene kan sees på som korrelasjonene mellom hver variabel og 
-# faktoren. Jo høyere en variabel lader på en faktor, jo mer relevant er den
-# for å definere konseptet faktoren skal fange opp.
-
 ### Hvor mange faktorer skal vi ha?
 ## Kaisers kriterium: De faktorene som har eigenvalue større
 # enn 1, skal tas med
@@ -134,18 +129,22 @@ fviz_screeplot(trust_prin,
 
 # A priori test: argumenter teoretisk
 
-# For å se på hvilke faktorer de ulike indikatorene lader på:
-loadings(trust_prin) # Hva forteller denne oss?
-# Her ser vi at proporsjonell varians er delt likt mellom alle faktorene
-
 # Vi kan ha en ganske tydelig, men uhøytidelig, teoretisk antagelse om hvorfor 
 # våre variabler deler seg i tre faktorer: 
 ## en faktor handler om nasjonal politikk (parlament, politiske partier, politikere) 
 ## en handler om rettsvesen (rettssystem, politi)
 ## en handler om internasjonale institusjoner (EU, FN).
 
+# For å se på hvilke faktorer de ulike indikatorene lader på:
+loadings(trust_prin)
+# Faktor ladningene kan sees på som korrelasjonene mellom hver variabel og 
+# faktoren. Jo høyere en variabel lader på en faktor, jo mer relevant er den
+# for å definere konseptet faktoren skal fange opp. Negative faktorladninger
+# indikerer at de som får høy verdi på faktorene har lav verdi på variabelen.
 
-## Vi velger antall faktorer, her 1, under 2, også 3.
+# Her ser vi at proporsjonell varians er delt likt mellom alle faktorene
+
+## Vi velger antall faktorer, her 1, under 2, og til slutt 3.
 trust_factor1 <- factanal(~., 1, ess_no %>%
                             select(starts_with("trust")))
 
