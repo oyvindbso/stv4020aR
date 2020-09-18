@@ -39,7 +39,7 @@ get_labels(ess_no$trust_legal)
 # Har vi mye missing? Hva skal vi gjøre med det?
 table(complete.cases(ess_no %>% 
                        select(starts_with("trust"))))
-# Ser at 387 observasjoner har missing på en eller flere av
+# Ser at 287 observasjoner har missing på en eller flere av
 # variablene våre. Dette kan være lurt å diskutere i hjemmeoppgaven,
 # spesielt dersom du velger å fjerne de med na ved hjelp av na.omit()
 
