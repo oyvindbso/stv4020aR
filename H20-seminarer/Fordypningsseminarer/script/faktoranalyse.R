@@ -68,7 +68,7 @@ ggcorrplot(korrel, show.diag = TRUE, lab = TRUE,
 # uten målefeil av de andre variablene.
 KMO(korrel) 
 # Bør være minst 0.5 
-# OVerall MSA = 0.84
+# Overall MSA = 0.84
 
 ### Bartletts signifikanstest
 # Tester om korr.matrise er sign. forskjellig fra null:
@@ -88,6 +88,8 @@ trust_prin <- princomp(~.,    # Her skal vi ha en formel uten AVAR. Med "." sier
                        ess_no %>%
                          select(starts_with("trust")),
                        scores = TRUE, na.action = "na.exclude")
+
+names(trust_prin)
 
 ### Hvor mange faktorer skal vi ha?
 ## Kaisers kriterium: De faktorene som har eigenvalue større
@@ -164,6 +166,7 @@ trust_factor3 <- factanal(~., 3, ess_no %>%
                             select(starts_with("trust")))
 
 print(loadings(trust_factor3), cutoff = .4)
+
 # Fra faktorobjektet kan vi også hente ut uniqueness:
 trust_factor3$uniquenesses
 # Uniqueness er den delen av variansen som er unik for variabelen,
@@ -178,8 +181,9 @@ stargazer::stargazer(uniqueness, type = "text")
 
 ## ROTASJON
 # For å få "renere" faktorer
+
 # Ortogonal
-# For å tolke faktorene substansielt bør hver indiator lade
+# For å tolke faktorene substansielt bør hver indikator lade
 # sterkt på bare en faktor
 
 # Ortogonal rotasjon (ikke korrelert)
@@ -187,9 +191,12 @@ varimax(loadings(trust_factor3), normalize = TRUE)
 # Hver indikator lader enten høyt eller lavt på en faktor, 
 # men kan lade høyt/lavt på flere faktorer
 
-quartimax(loadings(trust_factor3), normalize = TRUE)
+quarti <- quartimax(loadings(trust_factor3), normalize = TRUE)
 # Hver indikator lader høyt på bare en faktor, men kan lade
 # moderat også på andre
+
+# Eksempel dersom du ønsker å sammenligne roterte og uroterte ladinger
+rotasjon_tab <- cbind(trust_factor3$loadings, quarti$loadings)
 
 # Oblique (korrelert)
 oblimin(loadings(trust_factor3))
@@ -203,6 +210,7 @@ ess_no$political_trust <- (ess_no$trust_parliament + ess_no$trust_politicians + 
 ess_no$legal_trust <- (ess_no$trust_legal + ess_no$trust_police) / 2
 ess_no$international_trust <- (ess_no$trust_un + ess_no$trust_ep) / 2
 
+summary(ess_no$political_trust)
 
 ## Opprette faktorindekser
 trust_factor3score <- factanal(~., 3, ess_no %>%
@@ -210,7 +218,7 @@ trust_factor3score <- factanal(~., 3, ess_no %>%
                           scores = "regression", # Her kan vi velge mellom regression og Bartlett
                           na.action = "na.exclude")
 
-loadings(trust_factor3score)
+print(loadings(trust_factor3score))
 
 # Ser hva som er lagret i modellen:
 names(trust_factor3score)
@@ -231,7 +239,7 @@ cor(ess_no$trust_legal, ess_no$legaltrust_score, use = "complete")
 cor(ess_no$trust_polparties, ess_no$legaltrust_score, use = "complete")
 
 # Alternativ kode i pakken FactoMineR som gir et interessant plot: 
-trust_prin_alt <- PCA(ess_no%>%
+trust_prin_alt <- PCA(ess_no %>%
                         select(starts_with("trust")))
 ## OBS!! Merk dere advarselen her.. 
 # Gå evnt. gjennom denne introen: 
