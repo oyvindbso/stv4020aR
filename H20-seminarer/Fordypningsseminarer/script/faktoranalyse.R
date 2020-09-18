@@ -88,6 +88,9 @@ trust_prin <- princomp(~.,    # Her skal vi ha en formel uten AVAR. Med "." sier
                        scores = TRUE, na.action = "na.exclude")
 
 loadings(trust_prin)
+# Faktor ladningene kan sees på som korrelasjonene mellom hver variabel og 
+# faktoren. Jo høyere en variabel lader på en faktor, jo mer relevant er den
+# for å definere konseptet faktoren skal fange opp.
 
 ### Hvor mange faktorer skal vi ha?
 ## Kaisers kriterium: De faktorene som har eigenvalue større
